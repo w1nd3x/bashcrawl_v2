@@ -1,0 +1,141 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+# 
+
+gameover () {
+    # create the remains of the princess
+    echo "You see a very fancy dress lying on the floor." > dress
+    echo "You find the following items littered around the dress:  " >> dress
+    echo $(sed "s/HP: .*$//; s/Inventory: //" ~/.stats) >> dress
+
+    curr=`basename $PWD`
+    while [ "$curr" != "room" ]; do
+        pushd .. &> /dev/null
+        dirs -c
+        curr=`basename $PWD`
+    done
+    sed s"/HP: .*$/HP: 15|15/; s/Inventory: .*$/Inventory: /" ~/.stats > mv ~/.stats.tmp ~/.stats
+}
+
+# This is the function that initiates combat (might want 
+# a better name).
+# 
+# $1: Player to-hit
+# $2: Enemy to-hit
+# $3: Enemy HP
+# $4: Enemy Atk
+# @return: 0 if fled, 1 if victorious
+#
+roll() {
+    HP=$(sed "s/HP: //; s/|.*//; s/Inventory:.*//; s/blessing//" ~/.stats)    
+    ENEMYHP=$3
+    printf "You have $HP HP\n"
+    if grep  --quiet --only-matching 'spectacles' ~/.stats; then
+        printf "Your opponent has $ENEMYHP HP\n"
+    fi
+    printf "Would you like to attack?  y/n  "
+    read RESP
+    if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
+        let "NUM = $RANDOM % 20"
+        let NUM=NUM+$1
+        let "MONSTER = $RANDOM % 20"
+        let MONSTER=MONSTER+$2
+        echo "Your opponent rolled " $MONSTER
+        echo "You rolled " $NUM
+        resolve $1 $2 $ENEMYHP $4
+        return $?
+    else   
+        printf "You turn and run!\n"
+        return 0
+    fi
+}
+
+resolve() {
+    HP=$(sed "s/HP: //; s/|.*//; s/Inventory:.*//; s/blessing//" ~/.stats)    
+    export ATK=5
+    export ENEMYHP=$3
+    if ! grep  --quiet --only-matching 'frying pan' ~/.stats; then
+        printf "You do not have a weapon!\n\n"
+        printf "Your attacks will be less effective.\n"
+
+        let ATK=ATK-2
+    fi
+    if [[ $MONSTER -eq $NUM ]]; then
+        printf "You each parry one another's attacks.  Roll again...\n"
+	    roll $@
+        return $?
+    fi
+    
+    if [[ $MONSTER -lt $NUM ]]; then
+        printf "BAM! You got solid contact!!!\n\n"
+        let ENEMYHP=ENEMYHP-$ATK
+        if [ "$ENEMYHP" -le 0 ]; then
+            printf "It doesn't look like they're getting back up...\n"
+            return 1
+        fi
+        roll $1 $2 $ENEMYHP $4
+
+    else
+        printf "The enemy deflects your attack\n\nYou take $4 points damage.\n"
+        let HP=HP-$4
+        sed "s/HP: .*|/HP: $(echo $HP)|/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+        if [ "$HP" -le 0 ]; then
+            printf "You have been defeated.\n\n\nGAME OVER!\n\n"
+            gameover
+            exit 0
+        fi
+	    roll $@
+        return $?
+    fi
+}
+
+# 
+# $1: the treasure you're adding
+# $2: any flavor text you want to add
+addTreasure() {
+cat << EOF > treasure
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+    if ! grep --only-matching "$1" ~/.stats &>/dev/null; then
+    cat <<eof
+You found a **$1**!!
+
+$2
+
+You can always check your wealth with this command:
+
+cat ~/.stats
+
+eof
+mv treasure .treasure
+sed "s/Inventory:/Inventory: $1,/; s/,\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+else
+    echo "This treasure has already been taken."
+fi
+
+EOF
+chmod +x treasure
+}

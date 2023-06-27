@@ -1,0 +1,16 @@
+It's a beautiful day and you've just remembered 
+you're a princess and finding this chocolate has 
+been hard.  You remember there's a chair in the 
+Main Hall and you have a fuzzy recollection that 
+one of the commands you know will get man to 
+fetch that chair for you...
+
+Man will look through the instructions for you 
+to try to find a command that you would like.
+You can ask him by using:
+    apropos <descriptor>
+
+Try to figure out how to move the chair here
+by asking man with apropos:
+    apropos move
+

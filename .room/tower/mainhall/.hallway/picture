@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+# 
+if test -f "./.picture"; then
+    cat << eof
+The frame is solidly back in place, there's nothing else to be done.
+eof
+else
+    cat << eof
+
+You see a picture frame hanging slightly askew in the hallway.
+
+eof
+    printf "Do you want to adjust the frame? y/n  "
+    read RESP
+
+    if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+        cat << eof
+
+As you move the frame back into place a small book falls 
+down from behind it.
+
+eof
+    
+        printf "Do you want to pick up the book? y/n  "
+        read RESP
+        if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+            sed "s/Inventory:/Inventory: book,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+            cat << eof
+You pick up the book, maybe you'll find a use for it 
+somewhere during your journey
+eof
+        else
+            cat << eof
+You leave the book on the floor.
+eof
+            cat << eof > book
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+# 
+cat << eof2 
+
+You decide to pick up the book after all.
+
+Maybe you'll find some use for it on your journey.
+
+eof2
+sed "s/Inventory:/Inventory: book,/; s/,\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+rm book
+eof
+            chmod +x book
+        fi
+        mv picture .picture
+    else
+        cat << eof
+
+You leave the frame hanging askew.
+eof
+    fi
+fi

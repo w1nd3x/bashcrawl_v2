@@ -1,0 +1,60 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+MAX_HP=$(sed "s/HP: .*|//; s/Inventory:.*//; s/blessing//" ~/.stats)
+HP=$(sed "s/HP: //; s/|.*//; s/Inventory:.*//; s/blessing//" ~/.stats)
+if ["$MAX_HP" -eq "$HP"]; then
+    cat << EOF
+
+You're already feeling pretty refreshed.
+
+You'll leave this drink for someone else.
+
+EOF
+else
+    cat <<EOF
+
+You take a long refreshing swig of a nice cold drink.
+You feel suddenly rejuvenated.
+
+You can check your health with:
+
+cat ~/.stats
+
+EOF
+    sed "s/HP: .*/HP: $(echo $MAX_HP)|$(echo $MAX_HP)/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+fi
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.

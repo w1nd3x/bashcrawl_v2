@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+
+source ~/.combat
+# this runs after the thief has been defeated
+# and this file has been renamed to 'rags'
+if [ "$0" = "./rags" ]; then
+    cat << eof
+You sift through the rags left behind by the thief.
+
+You find nothing of interest.
+
+eof
+    exit 0
+fi
+
+cat << eof
+A bandit lurks in the forest.
+
+eof
+printf "Do you approach? y/n  "
+
+read RESP
+
+if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+    cat << eof
+The bandit rushes forward, yelling:
+
+YOU DON'T DESERVE CHOCOLATE!!!!
+
+eof
+    roll 0 0 10 8
+    if test \$? = 1; then 
+        printf "You strike the bandit in the head and they scramble away!"
+            mv bandit rags
+    fi
+else
+    cat << eof
+You cautiously avoid the bandit, you are after all,
+a princess.
+
+eof
+
+fi
+    

@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+if test -d ../cave; then
+    printf "\nThe path has already been revealed.\n\n"
+    exit 0
+fi
+if test -f ../canopy/.solved; then
+    cat << EOF
+A light shines up from the canopy and the thicket 
+as you place your palm against the false tree.
+
+Something new has been revealed in the forest.
+
+EOF
+mv ../.cave ../cave
+else 
+    cat << EOF
+This tree is definitely fake, but there is no
+reaction when you touch it.  
+
+Perhaps you should investigate the canopy.
+
+EOF
+fi

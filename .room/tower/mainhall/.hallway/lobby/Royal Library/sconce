@@ -1,0 +1,184 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+# 
+if test -d "./Secret Room"; then
+
+    cat << eof > "./Secret Room/scroll"
+#
+# You pulled the sconce and slipped into the secret
+# room.  The room contains many objects, some less
+# friendly looking than others...
+#
+# You can create your own objects if you want 
+# using:
+#   touch <name>
+
+eof
+
+    cat << eof > "./Secret Room/mirror"
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+if test -f "./0/1/1/1/0/0/1/1/secrets"; then
+    mkdir "./Super Secret Room"
+    mv ~/.courtyard ~/courtyard
+    cat << eof2
+The floor begins to glow and a door springs up
+from out of the ground.
+eof2
+    cat << eof2 > "./Super Secret Room/scroll"
+#
+# Your perseveracnce is impressive.  You've 
+# arrived at the end of the libraries secrets.
+#
+# Before you lies an almost empty table containing a
+# single note.
+#
+# You can rapidly return to the mainhall of the castle
+# (the castle's home directory) using:
+#       cd ~
+#
+
+eof2
+
+    cat << eof2 > "./Super Secret Room/note"
+#
+# You are one persistent princess >:(
+# 
+# Luckily the librarian tipped us off and we
+# managed to get away.
+# 
+# You'll never find our forest hideout.
+eof2
+
+    cat << eof2 > "./Super Secret Room/treasure"
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+if ! grep --only-matching treasure ~/.stats &>/dev/null; then
+    cat <<eof3
+You found a dusty old **tome**.
+
+You can always check your wealth with this command:
+
+cat ~/.stats
+
+eof3
+mv treasure .treasure
+sed "s/Inventory:/Inventory: tome,/; s/,\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+else
+    echo "This treasure has already been taken."
+fi
+eof2
+chmod +x "./Super Secret Room/treasure"
+else
+    cat << eof2
+You see words rise from the surface of the mirror
+    Create "secrets" deep within this room traveling
+    through ./0/1/1/1/0/0/1/1/
+
+You may want to consult with man to figure out how to
+make parent directories when using mkdir
+
+
+eof2
+fi
+eof
+
+    chmod +x "./Secret Room/mirror"
+    cat << eof > "./Secret Room/bandit"
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+source ~/.combat
+
+if [ "\$0" = ".bandit" ]; then
+    printf "The bandit is long gone\n\n"
+    exit 0
+fi
+cat << eof2
+
+A bandit stands brazenly in the middle of the castle.
+
+How did they even manage to get into the middle of 
+this fortress?
+
+They yell out, 
+    "THERE IS NO CHOCOLATE, ONLY PAIN!"
+
+
+eof2
+printf "Do you want to approach? y/n  "
+read RESP
+if [ "\$RESP" = "y" -o "\$RESP" = "Y" ];then
+    printf "You charge the bandit.\n"
+    roll 0 0 5 3
+    if test \$? = 1; then
+        addTreasure "bracelet" ""
+        mv bandit .bandit
+    fi
+else
+    printf "You get the heck out of there!\n\n"
+fi
+eof
+    chmod +x "./Secret Room/bandit"
+    cat << eof
+
+You pull on the sconce and you hear a 
+loud grinding sound emanating behind 
+the door you created.
+
+eof
+else
+    cat << eof
+You hear an eerie voice rise from the sconce.
+
+"I can only open the door, you have to make it"
+
+
+eof
+
+fi

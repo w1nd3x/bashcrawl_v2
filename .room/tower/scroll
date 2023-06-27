@@ -1,0 +1,23 @@
+#
+# That blow to the head may have caused more damage than you thought.
+# It's hard to tell what's a doorway and what's an object.
+#
+# You can look around a little harder like this:
+# 
+# ls -F
+# 
+# Directories (the rooms) end with a / symbol.
+# 
+# Encounters (programs) end with a * symbol.
+#
+# You can avoid having to type ls -F every time by running the
+# following:
+#
+# alias ls='ls -F'
+#
+# This is known as a shell or command alias.  With this alias,
+# typing simply ls by itself will run ls -F. Try it out!
+# 
+# Once you've experimented a bit head to the next room.
+#
+

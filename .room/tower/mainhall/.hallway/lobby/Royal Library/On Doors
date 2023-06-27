@@ -1,0 +1,12 @@
+#
+# Doors are relatively simple to make.
+#
+# If you would like to travel into new rooms, 
+# just make one.  You can create new rooms (directories)
+# using:
+#       mkdir <directory> (don't include the <,>)
+#
+# The library will reveal all sorts of knowledge if you 
+# can create the "Secret Room" and the activate the sconce.
+#
+

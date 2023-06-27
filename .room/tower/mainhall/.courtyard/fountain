@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+if grep  --quiet --only-matching 'blessing' ~/.stats; then
+    printf "\nThe fountain appears more intricate after you placed the necklace.\n\n"
+    exit 0
+fi
+cat << EOF
+
+You walk up to the fountain and see a small 
+indentation in the shape of a necklace that
+is currently empty.
+
+EOF
+printf "Do you put your necklace into the indent? y/n  "
+read RESP
+
+if [ "$RESP" = "y" -o "$RESP" = "Y"  ]; then
+    if grep  --quiet --only-matching 'necklace' ~/.stats; then
+        cat << EOF 
+
+You place the necklace into the statue and feel 
+a calming breeze wash through the courtyard.
+
+You feel oddly at peace and ready to continue 
+your journey
+
+EOF
+        echo "blessing" >> ~/.stats
+    else
+        cat << EOF
+
+You don't have anything that would fit in that
+space.
+EOF
+    fi
+else
+    cat << EOF
+
+Your stuff is yours!! There's no way some crummy
+fountain could wear jewelry better than you.
+
+EOF
+
+fi

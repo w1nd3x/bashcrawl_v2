@@ -1,0 +1,96 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+# 
+source ~/.combat
+
+if [ "$0" = "./unconscious librarian" ]; then
+    cat << eof
+You got that librarin good.  You wouldn't be 
+surprised if they woke up and didn't remember 
+the castle.
+
+eof
+    exit 0
+fi
+
+cat << eof
+An angry looking librarian stares at you intently.
+
+Suddenly they scream,
+    "I KNOW YOU HAVE MY MISSING BOOK, WHERE IS IT!!"
+
+eof
+printf "Do you want to approach? y/n  "
+read RESP
+
+if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
+    printf "Do you have the book? y/n  "
+    read RESP
+    if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+        if grep --quiet --only-matching book ~/.stats;then
+            cat << eof
+You toss the book at the librarian and while they look 
+slightly appeased, they still come at you with a hard 
+back copy of "The Wise Man's Fear".
+eof
+            roll 3 0 5 2
+        else
+            cat << eof
+You approach as if you have the missing book, and 
+the librarian looks at you hopefully.  When you 
+fail to produce the book they rage even harder and
+start swinging at you with the hard cover version 
+of "Rhythm of War".
+eof
+            roll "-1" 0 5 2
+        fi
+    else
+        cat << eof
+You don't have the book.
+
+You try to say as much, but the librarian snarl in a
+rage and starts throwing copies of "A Storm of Swords"
+at you.
+eof
+        roll 1 0 5 2
+    fi
+    if test $? = 1; then 
+        addTreasure "spectacles" ""
+        mv librarian "unconscious librarian"
+    fi
+else
+    cat << eof
+You wisely turn and flee.  Quickly cd to the previous
+directory.
+
+eof
+fi
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#

@@ -1,0 +1,76 @@
+#!/bin/bash
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#    
+# if we haven't revealed this file yet, print this out
+if [ "$0" = "./.butler" ]; then
+    cat << EOF
+
+Well aren't you curious. 
+
+Unfortunately there's nothing to be found here just yet.
+
+Why don't you try heading towards the kitchens.
+
+EOF
+else
+    cat <<EOF
+# A well-dressed butler comes running in from the 
+# tower.
+#
+# It's your faithful manservant, creatively named man, 
+# returning to assist you.
+#
+# If you ever need help understanding what your 
+# commands can do just ask man.
+#
+#   EXAMPLE: You would like to know about the command 'ls'
+#       man ls
+# 
+#       Man will now list off everything he knows relating to 'ls'
+#
+#   To search through a manual:
+#       type / followed by something you want to look for.
+#
+#   To finish looking at man's instructions just 
+#       type the letter 'q'
+# 
+# OK Princess, search through ls' man page to find the option 
+# to 'color' ls entries! Use this option with your ls command 
+# to see what happens.
+#
+
+EOF
+fi
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.

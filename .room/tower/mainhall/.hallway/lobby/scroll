@@ -1,0 +1,11 @@
+#
+# You notice some slightly more complex objects
+# as you enter the lobby.
+#
+# If you find that you need to investigate something
+# that has spaces or special characters in it's name
+# try putting quotes around the words.
+#
+#   EXAMPLE:
+#       cd "Royal Library"
+#

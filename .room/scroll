@@ -1,0 +1,19 @@
+
+# 
+# You are awake and you are one cranky princess.
+# It's time to head to the kitchens and get some chocolate.
+#
+# To look around a room, type:  ls
+# To move around, type (don't include the <,>):  cd <directory>
+#
+# Try looking around this room.
+# Then move into one of the next rooms.
+#
+# EXAMPLE:
+#
+# $ ls 
+# $ cd tower
+#
+# Remember to look around with ``ls`` when you get into the next room!
+#
+

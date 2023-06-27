@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+if [ "$0" = ".relax" ]; then
+    cat << EOF
+
+You've already taken your break.
+
+It's time to get that chocolate.
+
+EOF
+    exit 0
+fi
+
+if test -f chair; then
+    cat << EOF
+You take a short lounge on the chair and enjoy 
+the warm air.  You are after all a princess.
+
+You deserve a nice break.
+
+You feel better than you have in a long time.
+
+EOF
+    sed "s/HP:.*/HP: 30|30/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+    mv relax .relax
+else
+    cat << EOF
+
+There's nowhere for you to sit, you can't relax
+standing up...
+
+EOF
+
+fi
+    

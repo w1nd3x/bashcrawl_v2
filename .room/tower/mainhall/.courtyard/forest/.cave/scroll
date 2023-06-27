@@ -1,0 +1,16 @@
+# You arrive in a dark cave 
+#
+# There are a bunch of things scattered about, one of them is an encounter 
+# that the thieves have disguised as a normal object. 
+# 
+# Once you know which one they've altered, you can change it back with the
+# commdand:
+#
+#       chmod [ugoa][+-=][rwxXst] <filename>
+# 
+# Man can help you figure out what you how to use the command (it should only 
+# use one character from each group of square brackets)
+# 
+# You will need to add execute permissions to make it run.
+
+

@@ -1,0 +1,85 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+if test -f umbrella; then
+    if ! test -f ../../../../../umbrella; then
+        cat << EOF
+Finally feeling a little dry you are able to 
+thoroughly search the area.  
+
+You manage to find an altar with three differently
+shaped holes, a circle, a square, and a diamond.
+
+The circle is already in place.
+
+It would be real handy if man knew a command that 
+allowed you to "copy" objects into new ones...
+
+
+EOF
+
+echo "REAL OBJECT" > circle
+cat << EOF > altar
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+if [ -f .solved ]; then
+    printf "\nThe altar continues to shine, pointing into the thicket\n\n"
+    exit 0
+fi
+if [ -f circle ] && [ -f square ] && [ -f diamond ]; then
+    if [ \$(echo circle) -eq "REAL OBJECT" ] && [ \$(echo square) -eq "REAL OBJECT" ] && [ \$(echo diamond) -eq "REAL OBJECT" ]; then
+        printf "\nThe altar glows with an ethereal light that points into the thicket.\n\n"
+        touch .solved
+    else
+        printf "\nThe altar rejects your offering\n\nMake sure to "copy" the original circle\n\n"
+    fi
+else
+    printf "\nThe altar remains still and unchanging\n\n"
+fi
+
+
+EOF
+    chmod +x altar
+    else
+        cat << EOF
+Something feels off about this umbrella
+
+You should have man pop back up to your room and make
+that this is the right one (there should only be one umbrella)
+
+
+EOF
+    fi
+else
+    cat << EOF
+
+You aren't finding anything in this rain, you 
+could really use that umbrella.
+
+EOF
+
+fi
+    
