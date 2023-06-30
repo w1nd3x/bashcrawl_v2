@@ -14,7 +14,72 @@ if [[ $(/usr/bin/id -u) -ne 0 ]]; then
     echo "This game must be run with sudo"
     exit
 fi
-# if ; then 
+
+usage() {
+  cat << EOF
+Usage: bashcrawl COMMAND
+
+    start [SEED]  
+      Begins a new game session with the specified seed. If no seed is 
+      provided 0 will be used.
+
+    remove
+      Removes all the game data files, let's you start a fresh game.
+    
+    help
+      Prints this help message
+
+EOF
+}
+
+SEED=0
+# Determine the number of arguments passed to the script
+# If a number was passed update the user id for a (possibly)
+# new game
+if [ $# -ne 0 ]; then
+  case $1 in
+    start)
+      if [ $# -eq 2 ]; then 
+        printf "Creating a new game with seed $2\n"
+        SEED=$2
+      else
+        printf "Creating a new game with a seed of $SEED\n"
+        printf "If you are running this for SY205 you should remove the game and start again with your id\n"
+        printf "Press enter to continue...\n"
+        read RESP
+      fi
+      ;;
+    resume)
+      printf "Continuing from where you left off.\n"
+      ;;
+    remove)
+      printf "This will delete all of your current progress\nWould you like to continue?  y / n  "
+      read RESP
+      if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+        rm -rf .jail
+        rm -f .stats
+        printf "You're previous progress has been removed\n"
+        printf "You can now start a new game\n"
+        exit 0
+      else
+        printf "We are not deleting anything\n"
+        exit 0
+      fi
+      ;;
+    help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      usage
+      exit 1
+      ;;
+    esac
+else
+  usage
+  exit 0
+fi
 
 # fi
 # This will catch any errors that are thrown by the script
@@ -40,22 +105,9 @@ cleanup() {
 # restore it once we're done.
 export OLD_HOME=$HOME
 
-# Determine the number of arguments passed to the script
-# If a number was passed update the user id for a (possibly)
-# new game
-if [ $# -eq 0 ]
-  then
-    echo "No arguments supplied"
-fi
-
 # Check if the player stats file exists (for old games)
 STATFILE=./.stats   # Create a variable for the stats file
-if test -f "$STATFILE"; then
-    echo Implement the statfile logic
-    # the file exists so we'll extract which checkpoints 
-    # have been hit and update the gamestate accordingly
-
-else 
+if ! test -f "$STATFILE"; then
     # the file doesn't exist so we'll create it and populate
     # it with the starting information
     # This uses what's known as a heredoc, it starts with a '<<' 
@@ -67,6 +119,7 @@ Inventory:
 Purse: 0
 Modifier: 
 EOF
+
 fi 
 
 # Set a new HOME environment variable.  When we open the new 

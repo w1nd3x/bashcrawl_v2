@@ -41,14 +41,50 @@ eof
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
 #
-if test -f "./0/1/1/1/0/0/1/1/secrets"; then
+if test -f "./secret"; then
     mkdir "./Super Secret Room"
-    mv ~/.courtyard ~/courtyard
     cat << eof2
 The floor begins to glow and a door springs up
 from out of the ground.
 eof2
-    cat << eof2 > "./Super Secret Room/scroll"
+    cat << eof2 > "./Super Secret Room/More Doors"
+
+To uncover the final secret of the library, you 
+must create doors from this room to 0/1/1/1/0/0/1/1.
+
+Then you must create a 'secret' at the end of all 
+those doors.
+
+Once you've done that offer the tome at the stand
+to reach the final secret.
+
+HINT: You may want to consult with Man to determine
+how to create 'parent' directories with mkdir.
+
+eof2
+    cat << eof2 > "./Super Secret Room/stand"
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+printf "Will you offer the tome at the stand? y / n  "
+read RESP
+if [ "\\\$RESP" = 'y' -o "\\\$RESP" = 'Y' ]; then
+    if grep -o -q tome ~/.stats &>/dev/null; then
+        if [ -f ./0/1/1/1/0/0/1/1/secret ]; then
+            printf "\nYou place the tome on the stand and the room explodes with light.\nA final doorway stands before you.\n"
+            mkdir "The Final Secret"
+            mv ~/.courtyard ~/courtyard
+            cat << eof3 > "./The Final Secret/scroll"
 #
 # Your perseveracnce is impressive.  You've 
 # arrived at the end of the libraries secrets.
@@ -61,9 +97,8 @@ eof2
 #       cd ~
 #
 
-eof2
-
-    cat << eof2 > "./Super Secret Room/note"
+eof3
+            cat << eof3 > "./The Final Secret/note"
 #
 # You are one persistent princess >:(
 # 
@@ -71,9 +106,9 @@ eof2
 # managed to get away.
 # 
 # You'll never find our forest hideout.
-eof2
 
-    cat << eof2 > "./Super Secret Room/treasure"
+eof3
+            cat << eof3 > "./The Final Secret/treasure"
 #!//bin/sh
 #
 # If you are reading this, you have wandered out of bounds
@@ -87,8 +122,8 @@ eof2
 # When you're ready to continue playing the game, though, stick to
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
-if ! grep --only-matching treasure ~/.stats &>/dev/null; then
-    cat <<eof3
+if ! grep -o treasure ~/.stats &>/dev/null; then
+    cat <<eof4
 You found a **hedgehog**.
 
 How did this little guy get in here?
@@ -97,23 +132,96 @@ You can always check your wealth with this command:
 
 cat ~/.stats
 
-eof3
-sed "s/Inventory:/Inventory: hedgehog,/; s/,\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+eof4
+sed "s/Inventory:/Inventory: hedgehog,/; s/,\\\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
 mv ~/.workshop ~/workshop
 else
     echo "This treasure has already been taken."
 fi
+eof3
+            chmod +x "./The Final Secret/treasure"
+        else
+            printf "\nYou place the tome on the stand, but nothing happens.\nConsult with the books to determine the path forward.\n\n"
+        fi
+    else
+        printf "\nYou do not have the tome to offer at the stand.\n\n"
+    fi
+else
+    printf "\nYou step away from the stand.\n\n"
+fi
 eof2
-chmod +x "./Super Secret Room/treasure"
+    chmod +x "./Super Secret Room/stand"
+cat << eof2 > "./Super Secret Room/bandit"
+#!//bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+source ~/.combat
+
+if [ "\\\$0" = ".bandit" ]; then
+    printf "The bandit is long gone\n\n"
+    exit 0
+fi
+cat << eof3
+
+A bandit stands brazenly in the middle of the castle.
+
+How did they even manage to get into the middle of 
+this fortress?
+
+They yell out, 
+    "YOU CAN'T GET AWAY NOW!"
+
+
+eof3
+printf "Do you want to approach? y/n  "
+read RESP
+if [ "\\\$RESP" = "y" -o "\\\$RESP" = "Y" ];then
+    printf "You charge the bandit.\n"
+    roll 0 0 10 3
+    if test \\\$? = 1; then
+        printf "\nYou have defeated the bandit\n\n"
+        addTreasure "seasoning" "It looks like you could really upgrade the frying pan with this!"
+        mv bandit .bandit
+    fi
+else
+    printf "You get the heck out of there!\n\n"
+fi
+eof2
+    chmod +x "./Super Secret Room/bandit"
+cat << eof2 > "./Super Secret Room/scroll"
+# You step into yet another secret room in the 
+# library.  You see a large stand dominating the
+# center of the room.
+#
+# Man offers some helpful advice:
+#   "You can quickly complete commands by pressing
+#    the tab key. Try it now"
+#
+#   Type "cat M" then press tab.
+#
+
+eof2
+
+   
+
+
 else
     cat << eof2
 You see words rise from the surface of the mirror
-    Create "secrets" deep within this room traveling
-    through ./0/1/1/1/0/0/1/1/
-
-You may want to consult with man to figure out how to
-make parent directories when using mkdir
-
+    Create a "secret" in this room to continue onward.
+    
+    Then take another look into the mirror.
 
 eof2
 fi
@@ -157,10 +265,12 @@ printf "Do you want to approach? y/n  "
 read RESP
 if [ "\$RESP" = "y" -o "\$RESP" = "Y" ];then
     printf "You charge the bandit.\n"
-    roll 0 0 5 3
+    roll 0 0 10 3
     if test \$? = 1; then
-        addTreasure "seasoning" "It looks like you could really upgrade the frying pan with this!"
+        addCoins 5
         mv bandit .bandit
+        printf "\nYou have defeated the bandit!!\n"
+        printf "\nYou found five coins!\n\n"
     fi
 else
     printf "You get the heck out of there!\n\n"

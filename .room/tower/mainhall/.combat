@@ -100,6 +100,8 @@ resolve() {
     fi
 }
 
+# 
+# $1: The number of coins to add
 addCoins() {
     COINS=$(awk '/Purse:/ { print $2 }' ~/.stats)
     let COINS=COINS+$1

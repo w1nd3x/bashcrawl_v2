@@ -6,4 +6,4 @@ This is a game to teach you the basics of using a Linux terminal.
 
 To start playing, open a terminal.
 
-`sudo ./start`
+`sudo ./bashcrawl start <student id>`

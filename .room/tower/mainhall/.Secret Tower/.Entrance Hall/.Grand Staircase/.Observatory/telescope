@@ -12,49 +12,71 @@
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
 #
+source ~/.combat
 
 cat << eof
 
 The telescope uses the associated star charts around
-the room in order to make its predictions about the 
-future.
+the room in order to provide wisdom from the stars.
 
 To use the telescope add or remove the charts that 
 it directs you to.
 
 eof
 
-printf "\nWould you like to make a prediction? y / n  "
+printf "\nWould you like to make seek the stars guidance? y / n  "
 read RESP
 if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
-    if test -f "Messier Catalogue"; then
+    STAGE=0
+    if test -f .stage; then
+        STAGE=$(echo .stage)
+    if test -f "Messier Catalogue" && [ $STAGE -eq 0 ]; then
+        printf "\nYou load up the chart and look through the telescope."
+        printf "\nIn the stars, you see a figure twisted like the trunk of a tree."
+        printf "\n\nTo make further predictions you'll need to create the \"Caldwell Catalogue\" chart"
+        printf "\nand remove the \"Messier Catalogue\" chart\n\n"
+        echo 1 > .stage
+    elif [ $STAGE -eq 0 ]
+        printf "\nThe first chart you need is the \"Messier Catalogue\"\n\n"
+        printf "\nYou'll have to create that chart to use the observatory\n"
+    elif [ -f "Caldwell Catalogue" ] && ! [ -f "Messier Catalogue" ] && [ $STAGE -eq 1 ]; then
+        printf "\nYou load up the chart and look through the telescope."
+        printf "\nIn the stars, you see beautiful hair spilling over a tree... weird."
+        printf "\n\nTo make further predictions you'll need to create the \"Hipparcos Catalgue\" chart"
+        printf "\nand remove the \"Caldwell Catalogue\" chart\n\n"
+        echo 2 > .stage
+    elif [ $STAGE -eq 1]
+        printf "\n\nTo make further predictions you'll need to create the \"Caldwell Catalogue\" chart"
+        printf "\nand remove the \"Messier Catalogue\" chart\n\n"
+    elif [ -f "Hipparcos Catalgue"] && ! [ -f "Caldwell Catalogue"] && [ $STAGE -eq 2 ]; then
+        printf "\nYou load up the chart and look through the telescope."
+        printf "\nIn the stars, you see a powerful item hidden in a 'passage'."
+        printf "\n\nTo make further predictions you'll need to create the \"Tycho Catalogue\" chart"
+        printf "\nand remove the \"Hipparcos Catalgue\" chart\n\n"
+        echo 3 > .stage
+    elif [ $STAGE -eq 2 ]
+        printf "\n\nTo make further predictions you'll need to create the \"Hipparcos Catalgue\" chart"
+        printf "\nand remove the \"Caldwell Catalogue\" chart\n\n"
+    elif [ -f "Tycho Catalogue" ] && ! [ -f "Hipparcos Catalgue" ] && [ $STAGE -eq 3 ]; then
+        printf "\nYou load up the chart and look through the telescope."
+        printf "\nIn the stars, you see a powerful item hidden in a 'passage'."
+        printf "\n\nTo make further predictions you'll need to create the \"Millennium Star Atlas\" chart"
+        printf "\nand remove the \"Tycho Catalogue\" chart\n\n"
+        echo 4 > .stage
+    elif [ $STAGE -eq 3 ]
+        printf "\n\nTo make further predictions you'll need to create the \"Tycho Catalogue\" chart"
+        printf "\nand remove the \"Hipparcos Catalgue\" chart\n\n"
+    elif [ -f "Tycho Catalogue" ] && ! [ -f "Hipparcos Catalgue" ] && [ $STAGE -eq 4 ]; then
+        printf "\nYou load up the chart and look through the telescope."
+        printf "\nIn the stars, you see a powerful item hidden in a 'passage'."
+        echo 5 > .stage
+        addTreasure "star" "How did this fit in a chest??"
+    elif [ $STAGE -eq 4 ]
+        printf "\n\nTo make further predictions you'll need to create the \"Millennium Star Atlas\" chart"
+        printf "\nand remove the \"Tycho Catalogue\" chart\n\n"
+    elif [ $STAGE -eq 5 ]
+        printf "\nYou've exhausted what the stars can show you.\n\n"
     fi
-    printf "\nThe first chart you need is the \"Messier Catalogue\"\n\n"
-    printf "\nYou'll have to add that chart\n"
-    # Caldwell Catalogue
-    # Hipparcos Catalogue
-    # Tycho Catalogue
-    # NGC (New General Catalogue)
-    # IC (Index Catalogue)
-    # Yale Bright Star Catalogue
-    # SAO (Smithsonian Astrophysical Observatory Star Catalog)
-    # PGC (Principal Galaxies Catalogue)
-    # UGC (Uppsala General Catalogue)
-    # Hubble Space Telescope Guide Star Catalog (GSC)
-    # Sloan Digital Sky Survey (SDSS)
-    # Millennium Star Atlas
-    # Skalnate Pleso Atlas of the Heavens
-    # Uranometria
-    # Deep Sky Field Guide
-    # Megastar
-    # Sky Atlas 2000.0
-    # Cartes du Ciel (Sky Charts)
-    # The Cambridge Double Star Atlas
-
-    # 
-    addTreasure "star" "How did this fit in a chest??"
-    touch .solved
-
 else
     printf "\n\nMaybe some other time.\n\n"
     exit 0

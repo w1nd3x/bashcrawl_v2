@@ -19,7 +19,7 @@ You found a beautiful **cape**.
 
 You can always check your wealth with this command:
 
-cat ~/.stats
+cat ~/.stats (You may want to add an alias for this)
 
 eof
 sed "s/Inventory:/Inventory: cape,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats

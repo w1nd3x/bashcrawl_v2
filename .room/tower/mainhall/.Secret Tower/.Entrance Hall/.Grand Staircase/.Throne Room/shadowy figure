@@ -43,6 +43,12 @@ if ! grep -o controller ~/.stats &>/dev/null; then
     exit 0
 fi
 
+if ! grep -o HanoiTower ~/.stats &>/dev/null; then
+    printf "\nYou attempt to approach the throne but you are thrown back \n\n"
+    printf "\nYou see the image of a tower.\n\n"
+    exit 0
+fi
+
 # start the encounter
 cat << eof
 

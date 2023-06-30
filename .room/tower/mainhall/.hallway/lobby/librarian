@@ -16,7 +16,7 @@ source ~/.combat
 
 if [ "$0" = "./unconscious librarian" ]; then
     cat << eof
-You got that librarin good.  You wouldn't be 
+You got that librarian good.  You wouldn't be 
 surprised if they woke up and didn't remember 
 the castle.
 
@@ -38,7 +38,7 @@ if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
     printf "Do you have the book? y/n  "
     read RESP
     if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
-        if grep --quiet --only-matching book ~/.stats;then
+        if grep -q -o book ~/.stats;then
             cat << eof
 You toss the book at the librarian and while they look 
 slightly appeased, they still come at you with a hard 
@@ -66,7 +66,7 @@ eof
         roll 1 0 5 2
     fi
     if test $? = 1; then 
-        addTreasure "spectacles" "You can see so much more now!"
+        addTreasure "tome" "A dusty and old looking volume"
         mv librarian "unconscious librarian"
     fi
 else
