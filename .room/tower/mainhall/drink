@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -12,9 +12,9 @@
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
 #
-MAX_HP=$(sed "s/HP: .*|//; s/Inventory:.*//; s/blessing//" ~/.stats)
-HP=$(sed "s/HP: //; s/|.*//; s/Inventory:.*//; s/blessing//" ~/.stats)
-if ["$MAX_HP" -eq "$HP"]; then
+MAX_HP=$(awk '/HP:/ { print $4 }' ~/.stats)
+HP=$(awk '/HP:/ { print $2 }' ~/.stats)
+if [ "$MAX_HP" = "$HP" ]; then
     cat << EOF
 
 You're already feeling pretty refreshed.
@@ -33,7 +33,7 @@ You can check your health with:
 cat ~/.stats
 
 EOF
-    sed "s/HP: .*/HP: $(echo $MAX_HP)|$(echo $MAX_HP)/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+    sed "s/HP: .*/HP: $(echo $MAX_HP) \/ $(echo $MAX_HP)/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
 fi
 #
 #

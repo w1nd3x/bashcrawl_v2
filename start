@@ -14,7 +14,9 @@ if [[ $(/usr/bin/id -u) -ne 0 ]]; then
     echo "This game must be run with sudo"
     exit
 fi
+# if ; then 
 
+# fi
 # This will catch any errors that are thrown by the script
 # as well as catch an exit condition to restore the terminal
 # to normal
@@ -26,6 +28,7 @@ cleanup() {
     # restore the old HOME variable
     export HOME=$OLD_HOME
     cp .jail/room/tower/mainhall/.stats .stats 2>/dev/null
+    mv .jail/bin/busybox busybox
     # destroy all the folders for the game
     # umount .jail/{dev,proc,sys}/
     sudo rm -rf ./.jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
@@ -59,8 +62,10 @@ else
     # followed by a delimiting operator.  In this case the delimiting 
     # operator is EOF.
     cat << EOF > .stats
-HP: 15|15
-Inventory:
+HP: 15 / 15
+Inventory: 
+Purse: 0
+Modifier: 
 EOF
 fi 
 
@@ -71,8 +76,17 @@ export HOME=$(pwd)/.jail/room/tower/mainhall
 # create the directories necessary for a chroot jail
 # apropos(1), groff(1), less(1), manpath(1), nroff(1), troff(1), whatis(1)
 mkdir -p .jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev}
-cp /bin/{basename,cut,col,manpath,whatis,less,grotty,nroff,tbl,sh,perl,groff,troff,grops,man,mandb,apropos,bash,pwd,ls,cat,mv,cp,chmod,file,mkdir,sed,grep,rm,echo,touch,clear,env} .jail/bin/
-for i in $(ldd /bin/{basename,cut,col,manpath,whatis,less,grotty,nroff,tbl,sh,perl,groff,troff,grops,man,mandb,apropos,bash,pwd,ls,cat,mv,cp,chmod,file,mkdir,sed,grep,rm,echo,touch,clear,env} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
+
+# cp $(which bash) .jail/bin
+mv busybox .jail/bin/busybox
+for i in $(.jail/bin/busybox --list)
+do
+    ln -s /bin/busybox .jail/bin/$i
+done
+#cp /bin/{awk,wc,realpath,basename,cut,col,manpath,whatis,less,grotty,nroff,tbl,sh,perl,groff,troff,grops,man,mandb,apropos,bash,pwd,ls,cat,mv,cp,chmod,file,mkdir,sed,grep,rm,echo,touch,clear,env} .jail/bin/
+# for i in $(ldd /bin/{awk,wc,realpath,basename,cut,col,manpath,whatis,less,grotty,nroff,tbl,sh,perl,groff,troff,grops,man,mandb,apropos,bash,pwd,ls,cat,mv,cp,chmod,file,mkdir,sed,grep,rm,echo,touch,clear,env} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
+cp $(which file) .jail/bin/
+for i in $(ldd $(which file) | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
 do
     j=$(echo $i | sed "s/=>.*//")
     i=$(echo $i | sed "s/.*=>//")
@@ -94,22 +108,18 @@ fi
 cp .stats .jail/room/tower/mainhall/.stats
 
 # copy over stuff so man works
-cp --parents /usr/lib/man-db/zsoelim .jail
-cp --parents /usr/lib/man-db/manconv .jail
-cp --parents /usr/share/man-db/chconfig .jail
-cp --parents /etc/manpath.config .jail
-cp --parents /var/cache/man/index.db .jail
+mkdir -p .jail/usr/share/man
+tar -C .jail/usr/share/man -xvzf catpages.tar.gz &>/dev/null
+
 cp -r --parents /etc/magic .jail
 cp -r --parents /usr/share/misc/magic .jail
-cp -r --parents /etc/groff .jail
-cp -r --parents /usr/share/man/man1 .jail
-cp -r --parents /usr/share/groff .jail
 cp -r --parents /lib/terminfo .jail
 cp  --parents /usr/share/misc/magic.mgc .jail
+
 # mount --bind /dev .jail/dev/
 # mount --bind /proc .jail/proc/
 # mount --bind /sys .jail/sys
 #cp -r /usr/libexec/man-db .jail/usr/libexec
 
-sudo chroot .jail /bin/env -i HOME=/room/tower/mainhall TERM="$TERM" PS1='\$ ' PATH=/bin /bin/bash
+sudo chroot .jail /bin/env -i HOME=/room/tower/mainhall TERM="$TERM" PS1='\$ ' ENV=/room/tower/mainhall/.bashrc PATH=/bin /bin/ash
 

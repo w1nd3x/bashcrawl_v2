@@ -1,0 +1,79 @@
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+
+printf "\nWould you like to upgrade your weapon? y / n  "
+read RESP
+if [ "$RESP" = "y" -o "$RESP" = "Y" ] ;then
+    MONEY=$(awk'/Purse:/ { print $2 }' ~/.stats)
+    WEAPON=""
+    ITEM=""
+    COST=""
+    UPGRADE=""
+    if grep -o "frying pan" ~/.stats &>/dev/null; then
+        WEAPON="frying pan"
+        UPGRADE="seasoned pan"
+        COST=5
+        ITEM="seasoning" 
+    elif grep -o "seasoned pan" ~/.stats &>/dev/null; then
+        WEAPON="seasoned pan"
+        UPGRADE="enchanted pan"
+        COST=15
+        ITEM="" 
+    elif grep -o "enchanted pan" ~/.stats &>/dev/null; then
+        WEAPON="enchanted pan"
+        UPGRADE="flaming pan"
+        COST=15
+        ITEM="fire crystal"
+    elif grep -o "flaming pan" ~/.stats &>/dev/null; then
+        WEAPON="flaming pan"
+        UPGRADE="nuclear pan"
+        COST=1337
+        ITEM="uranium"
+    elif grep -o "nuclear pan" ~/.stats &>/dev/null; then
+        printf "\nYour weapon is fully upgraded.\n"
+        return
+    fi
+    cat <<eof
+
+Kronk looks at your $WEAPON,
+
+    "Upgrading that's gonna take quite a bit of work..
+    I'll need.. uhh.. about $COST coins and '$ITEM'."
+
+eof
+    printf "Would you like to upgrade your $WEAPON?  "
+    read RESP
+    if [ "$RESP" = "y" -o "$RESP" = "Y" ] ;then
+        # test that the player has the coin and the item
+        if grep --only-matching "$ITEM" ~/.stats &>/dev/null && [ $MONEY -ge $COST ]; then
+            sed "s/$WEAPON/$UPGRADE/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+            let MONEY=MONEY-$COST
+            sed "s/Purse: .*/Purse: $MONEY/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+        fi
+    fi
+fi
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!//bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -27,7 +27,7 @@ if test -d "./Secret Room"; then
 eof
 
     cat << eof > "./Secret Room/mirror"
-#!/bin/bash
+#!//bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -74,7 +74,7 @@ eof2
 eof2
 
     cat << eof2 > "./Super Secret Room/treasure"
-#!/bin/bash
+#!//bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -89,15 +89,17 @@ eof2
 # We're happy to provide hints.
 if ! grep --only-matching treasure ~/.stats &>/dev/null; then
     cat <<eof3
-You found a dusty old **tome**.
+You found a **hedgehog**.
+
+How did this little guy get in here?
 
 You can always check your wealth with this command:
 
 cat ~/.stats
 
 eof3
-mv treasure .treasure
-sed "s/Inventory:/Inventory: tome,/; s/,\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+sed "s/Inventory:/Inventory: hedgehog,/; s/,\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+mv ~/.workshop ~/workshop
 else
     echo "This treasure has already been taken."
 fi
@@ -119,7 +121,7 @@ eof
 
     chmod +x "./Secret Room/mirror"
     cat << eof > "./Secret Room/bandit"
-#!/bin/bash
+#!//bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -157,7 +159,7 @@ if [ "\$RESP" = "y" -o "\$RESP" = "Y" ];then
     printf "You charge the bandit.\n"
     roll 0 0 5 3
     if test \$? = 1; then
-        addTreasure "bracelet" ""
+        addTreasure "seasoning" "It looks like you could really upgrade the frying pan with this!"
         mv bandit .bandit
     fi
 else

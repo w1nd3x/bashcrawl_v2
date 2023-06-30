@@ -1,0 +1,61 @@
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+
+source ~/.combat
+# this runs after the thief has been defeated
+# and this file has been renamed to 'rags'
+if [ "$0" = "./pieces" ]; then
+    cat << eof
+You sift through the pieces of the statue.
+
+You find nothing of interest.
+
+eof
+    exit 0
+fi
+
+cat << eof
+
+You see a strange looking statue sitting in the 
+corner of the room.
+
+
+eof
+printf "Do you approach? y/n  "
+
+read RESP
+
+if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+    cat << eof
+The statue lurches then moves forward raising 
+its sword.
+
+
+eof
+    roll 0 0 20 5
+    if test \$? = 1; then 
+        printf "\nThe statue falls to pieces before you!\n\n"
+        mv "suspicious statue" pieces
+        addTreasure "armor" "It appears to be armor that magically adjusts to the wearer."
+    fi
+else
+    cat << eof
+You cautiously avoid the statue, you don't trust the
+way its helmet is tilting...
+
+eof
+
+fi
+    

@@ -1,1 +1,19 @@
-A room filled with traps that the students need to navigate carefully. They might need to use commands like cp, mv, or rm strategically to bypass or disable the traps.
+ _________________________________________________
+|  _____________________________________________  |
+| |                |_____________|              | |
+| |       ___      ,-------------.              | |
+| |      |   |     |_____________|   Pretendo   | |
+| |   ___|   |___  ,-------------.              | |
+| |  |    ,-.    | |SELECT  START|  ___   ___   | |
+| |  |___ `-' ___| :=============: |,-.| |,-.|  | |
+| |      |   |     |  ===   ===  | |._,| |._,|  | |
+| |      |___|     :=============: '---' '---'  | |
+| |________________|_____________|_____B_____A__| |
+|_________________________________________________|
+
+# You enter the trap room and see a large device in 
+# the center of the room. Engraved on a plaque in 
+# front of the device are the words,
+#   "You look like you could use 30 more lives.
+#    Input the code and receive the reward."
+

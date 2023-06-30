@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -66,7 +66,7 @@ eof
         roll 1 0 5 2
     fi
     if test $? = 1; then 
-        addTreasure "spectacles" ""
+        addTreasure "spectacles" "You can see so much more now!"
         mv librarian "unconscious librarian"
     fi
 else

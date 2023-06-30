@@ -1,0 +1,134 @@
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#  
+source ~/.combat
+if ! grep -o tanuki ~/.stats &>/dev/null; then
+    printf "\nYou attempt to approach the throne but you are thrown back \n\n"
+    printf "\nYou see the image of a tanuki that for an unexplainable reason reminds you of the kitchens.\n\n"
+    exit 0
+fi
+
+if ! grep -o hedgehog ~/.stats &>/dev/null; then
+    printf "\nYou attempt to approach the throne but you are thrown back \n\n"
+    printf "\nYou see the image of a hedgehog that for an unexplainable reason reminds you of the library.\n\n"
+    exit 0
+fi
+
+if ! grep -o corgi ~/.stats &>/dev/null; then
+    printf "\nYou attempt to approach the throne but you are thrown back \n\n"
+    printf "\nYou see the image of a corgi that for an unexplainable reason reminds you of the forest.\n\n"
+    exit 0
+fi
+
+if ! grep -o star ~/.stats &>/dev/null; then
+    printf "\nYou attempt to approach the throne but you are thrown back \n\n"
+    printf "\nYou see the image of a star that reminds you of the observatory.\n\n"
+    exit 0
+fi
+
+if ! grep -o controller ~/.stats &>/dev/null; then
+    printf "\nYou attempt to approach the throne but you are thrown back \n\n"
+    printf "\nYou see the image of a controller that reminds you of traps.\n\n"
+    exit 0
+fi
+
+# start the encounter
+cat << eof
+
+The shadowy figure steps into the light and it's...
+
+An Evil Witch
+
+The witch's skin is gnarled like the bark of a tree,
+with a nose that looks reminiscent of a small tree
+branch.  You even think you see some leaves dotting 
+witch's dress.  Most striking of all though is the 
+large bald spot on the witch's head.  When the witch
+notices you they scream,
+
+    "GIVE ME YOUR HAIR!!!!!"
+
+eof
+printf "Do you engage? y / n  "
+
+read RESP
+
+if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+
+    roll 0 0 50 5
+    if test $? = 1; then 
+        cat << EOF
+
+The Witch falls to the ground utterly defeated.
+
+Now nothing stands between you and your reward.
+
+Suddenly the Witch begins to sob,
+    "I know I'm ugly... and evil, but I thought
+    if I stole your chocolate I could trade it for 
+    your beautiful princess hair... and learn how
+    to love myself. *sob* "
+
+EOF
+        printf "Will you take pity on the witch and offer up your hair?  y \ n "
+        read RESP
+        if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+            cat << EOF
+
+You take pity on the poor Witch and offer up your long
+beautiful hair.
+
+The witch laughs maniacally, 
+    "Thank you princess, now to use my hair for evil!"
+
+The witch runs off, but luckily she leaves behind your
+chocolate... overall it's a win.
+
+EOF
+        else
+            cat << EOF
+
+You feel no pity for the evil witch.  You leave the 
+witch in a puddle of their own tears and stride on 
+to retrieve your chocolate.
+
+EOF
+        fi
+        # create the chocolate
+        cat << EOF > chocolate
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#  
+
+EOF        
+    fi
+else
+    cat << eof
+You sprint away, something is clearly wrong.
+
+
+eof
+
+fi

@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+if [ -f .correct ]; then
+    COR=$(echo .correct)
+    if [ $COR -eq 0 ] || [ $COR -eq 1 ]; then
+        printf "\nA happy chime sounds from the device, it looks like you're on the right track.\n\n"
+        let "COR=COR+1"
+        echo $COR > .correct
+    else
+        printf "\nYou hear a loud buzz from the device and a shock emanates from it.\n"
+        printf "\nYou hear a whisper from the device,\n\t\"Konami\"\n\nYou take 1 damage.\n\n"
+        echo "0" > .correct
+    fi
+else
+    echo "1" >  .correct
+fi

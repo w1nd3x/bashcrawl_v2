@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -13,7 +13,7 @@
 # We're happy to provide hints.
 #
 
-if ! grep --only-matching "frying pan" ~/.stats &>/dev/null; then
+if ! grep -o "frying pan" ~/.stats &>/dev/null; then
     cat <<eof
 You found a **frying pan**!!
 
@@ -25,7 +25,7 @@ You can always check your wealth with this command:
 cat ~/.stats
 
 eof
-mv treasure .treasure
+
 sed "s/Inventory:/Inventory: frying pan,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
 else
     echo "This treasure has already been taken."

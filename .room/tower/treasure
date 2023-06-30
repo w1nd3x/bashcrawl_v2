@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -13,7 +13,7 @@
 # We're happy to provide hints.
 #
 
-if ! grep --only-matching necklace ~/.stats &>/dev/null; then
+if ! grep -o necklace ~/.stats &>/dev/null; then
     cat <<eof
 You have found a diamond **necklace**!"
 
@@ -23,8 +23,7 @@ You can always check your wealth with this command:
 cat ~/.stats
 
 eof
-mv treasure .treasure
-sed "s/Inventory:/Inventory: necklace,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+    sed "s/Inventory:/Inventory: necklace,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
 else
     echo "This treasure has already been taken."
 fi

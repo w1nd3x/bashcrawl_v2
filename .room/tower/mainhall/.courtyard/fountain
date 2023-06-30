@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -27,7 +27,7 @@ printf "Do you put your necklace into the indent? y/n  "
 read RESP
 
 if [ "$RESP" = "y" -o "$RESP" = "Y"  ]; then
-    if grep  --quiet --only-matching 'necklace' ~/.stats; then
+    if grep  -q -o 'necklace' ~/.stats; then
         cat << EOF 
 
 You place the necklace into the statue and feel 
@@ -37,7 +37,7 @@ You feel oddly at peace and ready to continue
 your journey
 
 EOF
-        echo "blessing" >> ~/.stats
+        sed "s/Modifier: /Modifier: blessing,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
     else
         cat << EOF
 

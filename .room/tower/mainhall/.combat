@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -38,10 +38,10 @@ gameover () {
 # @return: 0 if fled, 1 if victorious
 #
 roll() {
-    HP=$(sed "s/HP: //; s/|.*//; s/Inventory:.*//; s/blessing//" ~/.stats)    
+    HP=$(awk '/HP:/ { print $2 }' ~/.stats)    
     ENEMYHP=$3
     printf "You have $HP HP\n"
-    if grep  --quiet --only-matching 'spectacles' ~/.stats; then
+    if grep  -q --only-matching 'spectacles' ~/.stats; then
         printf "Your opponent has $ENEMYHP HP\n"
     fi
     printf "Would you like to attack?  y/n  "
@@ -62,10 +62,10 @@ roll() {
 }
 
 resolve() {
-    HP=$(sed "s/HP: //; s/|.*//; s/Inventory:.*//; s/blessing//" ~/.stats)    
+    HP=$(awk '/HP:/ { print $2 }' ~/.stats)   
     export ATK=5
     export ENEMYHP=$3
-    if ! grep  --quiet --only-matching 'frying pan' ~/.stats; then
+    if ! grep  -q -o 'frying pan' ~/.stats; then
         printf "You do not have a weapon!\n\n"
         printf "Your attacks will be less effective.\n"
 
@@ -81,7 +81,7 @@ resolve() {
         printf "BAM! You got solid contact!!!\n\n"
         let ENEMYHP=ENEMYHP-$ATK
         if [ "$ENEMYHP" -le 0 ]; then
-            printf "It doesn't look like they're getting back up...\n"
+            #printf "It doesn't look like they're getting back up...\n"
             return 1
         fi
         roll $1 $2 $ENEMYHP $4
@@ -89,15 +89,21 @@ resolve() {
     else
         printf "The enemy deflects your attack\n\nYou take $4 points damage.\n"
         let HP=HP-$4
-        sed "s/HP: .*|/HP: $(echo $HP)|/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+        sed "s/HP: .*\//HP: $(echo $HP) \//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
         if [ "$HP" -le 0 ]; then
             printf "You have been defeated.\n\n\nGAME OVER!\n\n"
             gameover
-            exit 0
+            return 0
         fi
 	    roll $@
         return $?
     fi
+}
+
+addCoins() {
+    COINS=$(awk '/Purse:/ { print $2 }' ~/.stats)
+    let COINS=COINS+$1
+    sed "s/Purse:.*/Purse: $COINS/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
 }
 
 # 
@@ -105,7 +111,7 @@ resolve() {
 # $2: any flavor text you want to add
 addTreasure() {
 cat << EOF > treasure
-#!/bin/bash
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -119,7 +125,7 @@ cat << EOF > treasure
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
 #
-    if ! grep --only-matching "$1" ~/.stats &>/dev/null; then
+    if ! grep -o "$1" ~/.stats &>/dev/null; then
     cat <<eof
 You found a **$1**!!
 

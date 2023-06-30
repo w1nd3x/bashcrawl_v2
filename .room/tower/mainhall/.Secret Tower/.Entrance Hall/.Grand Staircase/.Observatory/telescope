@@ -1,0 +1,74 @@
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+
+cat << eof
+
+The telescope uses the associated star charts around
+the room in order to make its predictions about the 
+future.
+
+To use the telescope add or remove the charts that 
+it directs you to.
+
+eof
+
+printf "\nWould you like to make a prediction? y / n  "
+read RESP
+if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
+    if test -f "Messier Catalogue"; then
+    fi
+    printf "\nThe first chart you need is the \"Messier Catalogue\"\n\n"
+    printf "\nYou'll have to add that chart\n"
+    # Caldwell Catalogue
+    # Hipparcos Catalogue
+    # Tycho Catalogue
+    # NGC (New General Catalogue)
+    # IC (Index Catalogue)
+    # Yale Bright Star Catalogue
+    # SAO (Smithsonian Astrophysical Observatory Star Catalog)
+    # PGC (Principal Galaxies Catalogue)
+    # UGC (Uppsala General Catalogue)
+    # Hubble Space Telescope Guide Star Catalog (GSC)
+    # Sloan Digital Sky Survey (SDSS)
+    # Millennium Star Atlas
+    # Skalnate Pleso Atlas of the Heavens
+    # Uranometria
+    # Deep Sky Field Guide
+    # Megastar
+    # Sky Atlas 2000.0
+    # Cartes du Ciel (Sky Charts)
+    # The Cambridge Double Star Atlas
+
+    # 
+    addTreasure "star" "How did this fit in a chest??"
+    touch .solved
+
+else
+    printf "\n\nMaybe some other time.\n\n"
+    exit 0
+fi
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.

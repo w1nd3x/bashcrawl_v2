@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -31,7 +31,7 @@ EOF
 
 echo "REAL OBJECT" > circle
 cat << EOF > altar
-#!/bin/bash
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -50,7 +50,7 @@ if [ -f .solved ]; then
     exit 0
 fi
 if [ -f circle ] && [ -f square ] && [ -f diamond ]; then
-    if [ \$(echo circle) -eq "REAL OBJECT" ] && [ \$(echo square) -eq "REAL OBJECT" ] && [ \$(echo diamond) -eq "REAL OBJECT" ]; then
+    if [ "\$(cat circle)" = "REAL OBJECT" ] && [ "\$(cat square)" = "REAL OBJECT" ] && [ "\$(cat diamond)" = "REAL OBJECT" ]; then
         printf "\nThe altar glows with an ethereal light that points into the thicket.\n\n"
         touch .solved
     else

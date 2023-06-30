@@ -1,0 +1,104 @@
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#  
+
+# Create the Secret Hideout
+mkdir "Secret Hideout"
+
+# Create the scroll
+cat << EOF > "./Secret Hideout/scroll"
+# 
+# You've finally made your way into the enemy hideout!
+# 
+# You can't believe they would take the chocolate all 
+# the way into the forest.
+# 
+
+EOF
+# Create a cave boss
+cat << EOF > "./Secret Hideout/Cave Boss"
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#  
+source ~/.combat
+
+# start the encounter
+cat << eof
+
+
+
+eof
+printf "Do you engage? y / n  "
+
+read RESP
+
+if [ "\$RESP" = "y" -o "\$RESP" = "Y" ]; then
+
+    roll 0 0 50 5
+    if test \$? = 1; then 
+        printf "\nYou've taken down the cave boss and as you look around you see that there is still no chocolate!!\n\n"
+        mv thief rags
+        mv "~/Secret Tower" "~/Secret Tower"
+        addTreasure "corgi" "The queen won't be happy to find out about this."
+    fi
+else
+    cat << eof
+You sprint away, you'll stop this group another day.
+
+eof
+
+fi
+EOF
+chmod +x "./Secret Hideout/Cave Boss"
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#  _                         _ 
+# | |                       | |
+# | |__   __ _ _ __ _ __ ___| |
+# | '_ \ / _` | '__| '__/ _ \ |
+# | |_) | (_| | |  | | |  __/ |
+# |_.__/ \__,_|_|  |_|  \___|_|
+#
+#
+#

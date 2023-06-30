@@ -1,0 +1,81 @@
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+# 
+source ~/.combat
+
+# this runs after the thief has been defeated
+# and this file has been renamed to 'rags'
+if [ "$0" = "./rags" ]; then
+    cat << eof
+You sift through the rags left behind by the bandit.
+
+You find nothing of interest.
+
+eof
+    exit 0
+fi
+
+# start the thief encounter
+cat << eof
+A bandit appears.
+
+eof
+printf "Do you approach? y/n  "
+
+read RESP
+
+if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+    cat << eof
+
+The bandit rushes forward, yelling:
+
+
+
+eof
+    roll 0 0 6 3
+    if test \$? = 1; then 
+        printf "The bandit falls away... I don't think they're getting back up!"
+        mv bandit rags
+        printf "The bandit dropped five coins!"
+        addCoins 5
+    fi
+else
+    cat << eof
+You cautiously avoid the bandit.
+
+eof
+
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Hmm, that didn't work.
+# Remember, when files end in a * 
+# it means they are applications.
+#
+#
+#
