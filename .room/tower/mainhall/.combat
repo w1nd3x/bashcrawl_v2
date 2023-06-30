@@ -41,7 +41,7 @@ roll() {
     HP=$(awk '/HP:/ { print $2 }' ~/.stats)    
     ENEMYHP=$3
     printf "You have $HP HP\n"
-    if grep  -q --only-matching 'spectacles' ~/.stats; then
+    if grep  -q -o 'spectacles' ~/.stats; then
         printf "Your opponent has $ENEMYHP HP\n"
     fi
     printf "Would you like to attack?  y/n  "
