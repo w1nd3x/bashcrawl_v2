@@ -23,7 +23,18 @@ Why don't you try heading towards the kitchens.
 
 EOF
 else
-    cat <<EOF
+    if grep -o -q -E "ls.*--color" .ash_history; then
+        # Add seasoning
+        sed "s/Inventory:/Inventory: seasoning,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+        cat << EOF
+# The butler gives you some seasoning.  
+# 
+# 
+# 
+
+EOF
+    else
+        cat <<EOF
 # A well-dressed butler comes running in from the 
 # tower.
 #
@@ -50,6 +61,7 @@ else
 #
 
 EOF
+    fi
 fi
 #
 #

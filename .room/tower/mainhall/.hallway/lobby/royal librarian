@@ -15,14 +15,33 @@
 source ~/.combat
 
 if [ "$0" = "./unconscious librarian" ]; then
-    cat << eof
+    if ! grep -o -q "spectacles" ~/.stats &>/dev/null; then
+        if ! grep -o -q "rubber gloves" ~/.stats &>/dev/null; then
+            cat << EOF
+You notice that the librarian has an impressive pair
+of spectacles.  You reach down to pick them up and a 
+jolt of electricity shocks you.  Guess you won't be 
+getting those specs today.
+
+EOF
+        else
+            cat << EOF
+You put on your rubber gloves and pluck the spectacles
+off the librarian.  You'll be able to see so much more
+with these.
+
+EOF
+            sed "s/Inventory:/Inventory: spectacles,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+        fi
+    else
+        cat << eof
 You got that librarian good.  You wouldn't be 
 surprised if they woke up and didn't remember 
 the castle.
 
 eof
-    exit 0
-fi
+    fi
+else
 
 cat << eof
 An angry looking librarian stares at you intently.
@@ -67,7 +86,7 @@ eof
     fi
     if test $? = 1; then 
         addTreasure "tome" "A dusty and old looking volume"
-        mv librarian "unconscious librarian"
+        mv "royal librarian" "unconscious librarian"
     fi
 else
     cat << eof
@@ -75,6 +94,7 @@ You wisely turn and flee.  Quickly cd to the previous
 directory.
 
 eof
+fi
 fi
 #
 #

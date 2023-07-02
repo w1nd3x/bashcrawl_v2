@@ -38,13 +38,11 @@ read RESP
 if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
     cat << eof
 
-The bandit rushes forward, yelling:
-
-
+The bandit rushes forward!
 
 eof
     roll 0 0 6 3
-    if test \$? = 1; then 
+    if test $? = 1; then 
         printf "The bandit falls away... I don't think they're getting back up!"
         mv bandit rags
         printf "The bandit dropped five coins!"

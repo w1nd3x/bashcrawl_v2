@@ -13,19 +13,32 @@
 # We're happy to provide hints.
 #
 
-if ! grep -o "fire crystal" ~/.stats &>/dev/null; then
+if ! grep -o "rubber gloves" ~/.stats &>/dev/null; then
     cat <<eof
-You found a beautiful **fire crystal**.
+You found **rubber gloves**!!
+
+This gloves are insulated to prevent shocks!
 
 You can always check your wealth with this command:
 
 cat ~/.stats
 
 eof
-sed "s/Inventory:/Inventory: fire crystal,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+
+sed "s/Inventory:/Inventory: rubber gloves,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
 else
     echo "This treasure has already been taken."
 fi
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
 #
 #
 #

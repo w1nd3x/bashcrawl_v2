@@ -27,7 +27,7 @@ if test -d "./Secret Room"; then
 eof
 
     cat << eof > "./Secret Room/mirror"
-#!//bin/sh
+#!/bin/sh
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -50,16 +50,17 @@ eof2
     cat << eof2 > "./Super Secret Room/More Doors"
 
 To uncover the final secret of the library, you 
-must create doors from this room to 0/1/1/1/0/0/1/1.
+must create doors from this room to: 
+    mousehole/burrow/sidehall/outlet/nest.
 
-Then you must create a 'secret' at the end of all 
-those doors.
+Then you must create a 'decoy' in the nest.
 
 Once you've done that offer the tome at the stand
 to reach the final secret.
 
 HINT: You may want to consult with Man to determine
-how to create 'parent' directories with mkdir.
+how to create 'parent' directories with mkdir.  You 
+can find more info in the Royal Library tome, ""
 
 eof2
     cat << eof2 > "./Super Secret Room/stand"
@@ -80,7 +81,7 @@ printf "Will you offer the tome at the stand? y / n  "
 read RESP
 if [ "\\\$RESP" = 'y' -o "\\\$RESP" = 'Y' ]; then
     if grep -o -q tome ~/.stats &>/dev/null; then
-        if [ -f ./0/1/1/1/0/0/1/1/secret ]; then
+        if [ -f ./mousehole/burrow/sidehall/outlet/nest/decoy ]; then
             printf "\nYou place the tome on the stand and the room explodes with light.\nA final doorway stands before you.\n"
             mkdir "The Final Secret"
             mv ~/.courtyard ~/courtyard
@@ -134,6 +135,10 @@ cat ~/.stats
 
 eof4
 sed "s/Inventory:/Inventory: hedgehog,/; s/,\\\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+NUM1=((\\\$ID+3))
+NUM2=((\\\$ID+4))
+CHECKPOINT="\\\$(get_secrets \\\$NUM1)_\\\$(get_secrets \\\$NUM2)"
+printf "Checkpoint 2: \\\$CHECKPOINT\n" >> ~/.progress
 mv ~/.workshop ~/workshop
 else
     echo "This treasure has already been taken."
@@ -191,7 +196,7 @@ if [ "\\\$RESP" = "y" -o "\\\$RESP" = "Y" ];then
     roll 0 0 10 3
     if test \\\$? = 1; then
         printf "\nYou have defeated the bandit\n\n"
-        addTreasure "seasoning" "It looks like you could really upgrade the frying pan with this!"
+        addCoins 5
         mv bandit .bandit
     fi
 else
@@ -208,7 +213,7 @@ cat << eof2 > "./Super Secret Room/scroll"
 #   "You can quickly complete commands by pressing
 #    the tab key. Try it now"
 #
-#   Type "cat M" then press tab.
+#   Type "cat sc" then press tab.
 #
 
 eof2

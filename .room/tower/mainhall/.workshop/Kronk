@@ -16,7 +16,7 @@
 printf "\nWould you like to upgrade your weapon? y / n  "
 read RESP
 if [ "$RESP" = "y" -o "$RESP" = "Y" ] ;then
-    MONEY=$(awk'/Purse:/ { print $2 }' ~/.stats)
+    MONEY=$(awk '/Purse:/ { print $2 }' ~/.stats)
     WEAPON=""
     ITEM=""
     COST=""
@@ -44,6 +44,9 @@ if [ "$RESP" = "y" -o "$RESP" = "Y" ] ;then
     elif grep -o "nuclear pan" ~/.stats &>/dev/null; then
         printf "\nYour weapon is fully upgraded.\n"
         return
+    else
+        printf "It doesn't look like you have a weapon to upgrade\n"
+        exit 0
     fi
     cat <<eof
 
@@ -57,10 +60,13 @@ eof
     read RESP
     if [ "$RESP" = "y" -o "$RESP" = "Y" ] ;then
         # test that the player has the coin and the item
-        if grep --only-matching "$ITEM" ~/.stats &>/dev/null && [ $MONEY -ge $COST ]; then
+        if grep -o "$ITEM" ~/.stats &>/dev/null && [ $MONEY -ge $COST ]; then
             sed "s/$WEAPON/$UPGRADE/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
             let MONEY=MONEY-$COST
             sed "s/Purse: .*/Purse: $MONEY/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+            printf "\nYou upgraded your $WEAPON to a $UPGRADE!!\n\n"
+        else
+            printf "\nYou're missing some of the requirements to upgrade this item.\n\n"
         fi
     fi
 fi

@@ -1,0 +1,16 @@
+# Are you tired of constantly typing in overly 
+# long commands?  Does having to type in 
+#       cat ~/.stats
+# after every encounter bum you out?  It may be
+# time for aliases then.  The alias command allows
+# you to define a shortcut to a command.  If you
+# find that you frequently don't put the s at the
+# end of ls you can create an alias
+#       alias l='ls'
+# 
+# Note that aliases only last until the end of a 
+# terminal session (until you close the terminal)
+# so if you want them to last longer you'll have 
+# to edit the '.bashrc'. 
+#
+# For more information see ""  

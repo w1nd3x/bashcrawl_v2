@@ -13,21 +13,6 @@
 # We're happy to provide hints.
 # 
 
-gameover () {
-    # create the remains of the princess
-    echo "You see a very fancy dress lying on the floor." > dress
-    echo "You find the following items littered around the dress:  " >> dress
-    echo $(sed "s/HP: .*$//; s/Inventory: //" ~/.stats) >> dress
-
-    curr=`basename $PWD`
-    while [ "$curr" != "room" ]; do
-        pushd .. &> /dev/null
-        dirs -c
-        curr=`basename $PWD`
-    done
-    sed s"/HP: .*$/HP: 15|15/; s/Inventory: .*$/Inventory: /" ~/.stats > mv ~/.stats.tmp ~/.stats
-}
-
 # This is the function that initiates combat (might want 
 # a better name).
 # 
@@ -40,6 +25,10 @@ gameover () {
 roll() {
     HP=$(awk '/HP:/ { print $2 }' ~/.stats)    
     ENEMYHP=$3
+    TOHIT=$1
+    if grep  -q -o 'blessing' ~/.stats; then
+        let TOHIT=TOHIT+2
+    fi
     printf "You have $HP HP\n"
     if grep  -q -o 'spectacles' ~/.stats; then
         printf "Your opponent has $ENEMYHP HP\n"
@@ -48,7 +37,7 @@ roll() {
     read RESP
     if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
         let "NUM = $RANDOM % 20"
-        let NUM=NUM+$1
+        let NUM=NUM+$TOHIT
         let "MONSTER = $RANDOM % 20"
         let MONSTER=MONSTER+$2
         echo "Your opponent rolled " $MONSTER
@@ -61,15 +50,41 @@ roll() {
     fi
 }
 
+get_secrets() {
+    input="~/.secrets.txt"
+    secretArray=()
+    while read -r line
+    do
+        secretArray+=("$line")
+    done < "$input"
+    index=$(expr $1 + 1337)
+    index=$(expr $index - 64017)
+    index=$(expr $index % ${#secretArray[@]})
+    echo "${secretArray[$index]}"
+}
+
+
 resolve() {
     HP=$(awk '/HP:/ { print $2 }' ~/.stats)   
-    export ATK=5
+    export ATK=3
+    export DEF=0
     export ENEMYHP=$3
-    if ! grep  -q -o 'frying pan' ~/.stats; then
+    if grep  -q -o 'frying pan' ~/.stats; then
+        ATK=5
+    elif grep -q -o 'seasoned pan' ~/.stats; then
+        ATK=7
+    elif grep -q -o 'enchanted pan' ~/.stats; then
+        ATK=9
+    elif grep -q -o 'flaming pan' ~/.stats; then
+        ATK=12
+    elif grep -q -o 'nuclear pan' ~/.stats; then
+        ATK=1337
+    else
         printf "You do not have a weapon!\n\n"
         printf "Your attacks will be less effective.\n"
-
-        let ATK=ATK-2
+    fi
+    if grep -q -o 'armor' ~/.stats; then
+        DEF=2
     fi
     if [[ $MONSTER -eq $NUM ]]; then
         printf "You each parry one another's attacks.  Roll again...\n"
@@ -87,8 +102,9 @@ resolve() {
         roll $1 $2 $ENEMYHP $4
 
     else
-        printf "The enemy deflects your attack\n\nYou take $4 points damage.\n"
-        let HP=HP-$4
+        let DAMAGE=$4-$DEF
+        printf "The enemy deflects your attack\n\nYou take $DAMAGE points damage.\n"
+        let HP=HP-$DAMAGE
         sed "s/HP: .*\//HP: $(echo $HP) \//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
         if [ "$HP" -le 0 ]; then
             printf "You have been defeated.\n\n\nGAME OVER!\n\n"
@@ -127,7 +143,7 @@ cat << EOF > treasure
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
 #
-    if ! grep -o "$1" ~/.stats &>/dev/null; then
+if ! grep -o "$1" ~/.stats &>/dev/null; then
     cat <<eof
 You found a **$1**!!
 
@@ -138,8 +154,8 @@ You can always check your wealth with this command:
 cat ~/.stats
 
 eof
-mv treasure .treasure
-sed "s/Inventory:/Inventory: $1,/; s/,\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+    mv treasure .treasure
+    sed "s/Inventory:/Inventory: $1,/; s/,\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
 else
     echo "This treasure has already been taken."
 fi

@@ -47,6 +47,10 @@ eof
         printf "You strike the thief in the head and they scramble away!\n"
         mv thief rags
         addTreasure "tanuki" "How did this get in there???"
+        NUM1=$(($ID+1))
+        NUM2=$(($ID+2))
+        CHECKPOINT="$(get_secrets $NUM1)_$(get_secrets $NUM2)"
+        printf "Checkpoint 1: $CHECKPOINT\n" >> ~/.progress
     fi
 else
     cat << eof

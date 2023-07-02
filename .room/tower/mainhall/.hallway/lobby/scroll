@@ -2,10 +2,11 @@
 # You notice some slightly more complex objects
 # as you enter the lobby.
 #
-# If you find that you need to investigate something
-# that has spaces or special characters in it's name
-# try putting quotes around the words.
+# If you find that you want to interact with a file 
+# or folder that has spaces or special characters in 
+# it you can surround it in double quotes.
 #
-#   EXAMPLE:
+#   EXAMPLES:
+#       "./royal librarian"
 #       cd "Royal Library"
 #

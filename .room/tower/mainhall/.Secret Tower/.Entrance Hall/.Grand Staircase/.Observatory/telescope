@@ -29,32 +29,33 @@ read RESP
 if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
     STAGE=0
     if test -f .stage; then
-        STAGE=$(echo .stage)
+        STAGE=$(cat .stage)
+    fi
     if test -f "Messier Catalogue" && [ $STAGE -eq 0 ]; then
         printf "\nYou load up the chart and look through the telescope."
         printf "\nIn the stars, you see a figure twisted like the trunk of a tree."
         printf "\n\nTo make further predictions you'll need to create the \"Caldwell Catalogue\" chart"
         printf "\nand remove the \"Messier Catalogue\" chart\n\n"
         echo 1 > .stage
-    elif [ $STAGE -eq 0 ]
+    elif [ $STAGE -eq 0 ]; then
         printf "\nThe first chart you need is the \"Messier Catalogue\"\n\n"
         printf "\nYou'll have to create that chart to use the observatory\n"
-    elif [ -f "Caldwell Catalogue" ] && ! [ -f "Messier Catalogue" ] && [ $STAGE -eq 1 ]; then
+    elif test -f "Caldwell Catalogue"  && ! test -f "Messier Catalogue"  && test $STAGE -eq 1 ; then
         printf "\nYou load up the chart and look through the telescope."
         printf "\nIn the stars, you see beautiful hair spilling over a tree... weird."
         printf "\n\nTo make further predictions you'll need to create the \"Hipparcos Catalgue\" chart"
         printf "\nand remove the \"Caldwell Catalogue\" chart\n\n"
         echo 2 > .stage
-    elif [ $STAGE -eq 1]
+    elif [ $STAGE -eq 1 ]; then
         printf "\n\nTo make further predictions you'll need to create the \"Caldwell Catalogue\" chart"
         printf "\nand remove the \"Messier Catalogue\" chart\n\n"
-    elif [ -f "Hipparcos Catalgue"] && ! [ -f "Caldwell Catalogue"] && [ $STAGE -eq 2 ]; then
+    elif [ -f "Hipparcos Catalgue" ] && ! [ -f "Caldwell Catalogue" ] && [ $STAGE -eq 2 ]; then
         printf "\nYou load up the chart and look through the telescope."
         printf "\nIn the stars, you see a powerful item hidden in a 'passage'."
         printf "\n\nTo make further predictions you'll need to create the \"Tycho Catalogue\" chart"
         printf "\nand remove the \"Hipparcos Catalgue\" chart\n\n"
         echo 3 > .stage
-    elif [ $STAGE -eq 2 ]
+    elif [ $STAGE -eq 2 ]; then
         printf "\n\nTo make further predictions you'll need to create the \"Hipparcos Catalgue\" chart"
         printf "\nand remove the \"Caldwell Catalogue\" chart\n\n"
     elif [ -f "Tycho Catalogue" ] && ! [ -f "Hipparcos Catalgue" ] && [ $STAGE -eq 3 ]; then
@@ -63,18 +64,18 @@ if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
         printf "\n\nTo make further predictions you'll need to create the \"Millennium Star Atlas\" chart"
         printf "\nand remove the \"Tycho Catalogue\" chart\n\n"
         echo 4 > .stage
-    elif [ $STAGE -eq 3 ]
+    elif [ $STAGE -eq 3 ]; then
         printf "\n\nTo make further predictions you'll need to create the \"Tycho Catalogue\" chart"
         printf "\nand remove the \"Hipparcos Catalgue\" chart\n\n"
-    elif [ -f "Tycho Catalogue" ] && ! [ -f "Hipparcos Catalgue" ] && [ $STAGE -eq 4 ]; then
+    elif [ -f "Millennium Star Atlas" ] && ! [ -f "Tycho Catalogue" ] && [ $STAGE -eq 4 ]; then
         printf "\nYou load up the chart and look through the telescope."
         printf "\nIn the stars, you see a powerful item hidden in a 'passage'."
         echo 5 > .stage
         addTreasure "star" "How did this fit in a chest??"
-    elif [ $STAGE -eq 4 ]
+    elif [ $STAGE -eq 4 ]; then
         printf "\n\nTo make further predictions you'll need to create the \"Millennium Star Atlas\" chart"
         printf "\nand remove the \"Tycho Catalogue\" chart\n\n"
-    elif [ $STAGE -eq 5 ]
+    elif [ $STAGE -eq 5 ]; then
         printf "\nYou've exhausted what the stars can show you.\n\n"
     fi
 else

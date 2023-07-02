@@ -126,9 +126,38 @@ EOF
 # When you're ready to continue playing the game, though, stick to
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
-#  
+#
+cat << eof
+You take a bite of the chocolate and know 
+immediately that it was all worth it.  This is 
+easily the best chocolate that you have ever had.
 
-EOF        
+eof
+
+printf "Press enter to continue\n\n"
+read RESP
+
+
+cat << eof
+
+Congratulations!!!!
+
+You've completed the game.
+
+There is so much more to learn about the terminal
+and so many more ways that it can make the work 
+that you do on a computer easier and more enjoyable.
+
+You should now have the skills necessary to go even
+further.
+
+eof
+
+EOF 
+        NUM1=$(($ID+7))
+        NUM2=$(($ID+8))
+        CHECKPOINT="$(get_secrets $NUM1)_$(get_secrets $NUM2)"
+        printf "Checkpoint 4: $CHECKPOINT\n" >> ~/.progress       
     fi
 else
     cat << eof
