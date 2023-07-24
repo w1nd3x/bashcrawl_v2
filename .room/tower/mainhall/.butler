@@ -23,7 +23,7 @@ Why don't you try heading towards the kitchens.
 
 EOF
 else
-    if grep -o -q -E "ls.*--color" .ash_history; then
+    if grep -o -q -E "ls.*--color" .bash_history; then
         # Add seasoning
         sed "s/Inventory:/Inventory: seasoning,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
         cat << EOF

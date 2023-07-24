@@ -13,7 +13,7 @@
 # We're happy to provide hints.
 #
 if [ -f .correct ]; then
-    COR=$(echo .correct)
+    COR=$(cat .correct)
     if [ $COR -eq 5 ] || [ $COR -eq 7 ]; then
         printf "\nA happy chime sounds from the device, it looks like you're on the right track.\n\n"
         let "COR=COR+1"
