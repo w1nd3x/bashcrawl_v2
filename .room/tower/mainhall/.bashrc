@@ -42,7 +42,7 @@ apropos() {
     return
   else
     RES=""
-    for i in $(ls /usr/share/man/catpages)
+    for i in $(/bin/ls /usr/share/man/catpages)
     do
       if awk 'NR==4{gsub(/^ +| +$/,"")}NR==4{printf $0}' /usr/share/man/catpages/$i | grep -o $@  &>/dev/null; then 
         RES="found"
@@ -84,7 +84,7 @@ mv() {
       fi
       # check that FROM is the top of the stack
       FROM_DIR=$(realpath $1 | sed "s/$FROM//")
-      for i in $(ls "$FROM_DIR"); do
+      for i in $(/bin/ls "$FROM_DIR"); do
         if [[ $FROM -gt $i ]]; then
           printf "\nYou have to move the lowest value from the room before you can pull larger values\n\n"
           cd "$ORIG_PWD"
@@ -93,7 +93,7 @@ mv() {
       done
       # check that TO is going to be the lowest value
       TO_DIR=$(realpath $2 | sed "s/$TO//")
-      for i in $(ls "$TO_DIR"); do
+      for i in $(/bin/ls "$TO_DIR"); do
         if [[ $TO -gt $i ]]; then
           printf "\nYou can't move a larger value onto the top of a smaller value!\n\n"
           cd "$ORIG_PWD"
