@@ -27,7 +27,7 @@ man() {
     printf "What manual page do you want?\nFor example, try 'man man'. \n"
     return
   fi
-  for i in $(ls /usr/share/man/catpages)
+  for i in $(/bin/ls /usr/share/man/catpages)
   do
     if test $i = "$@"; then
       cat "/usr/share/man/catpages/$i" | less
