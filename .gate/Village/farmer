@@ -1,0 +1,86 @@
+#!/bin/sh
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+
+# farmer lost something you need to find with grep / find
+if [ -f report.txt ]; then
+	cat << EOF
+You see a farmer lost in thought and leaning
+against a rake.  As you approach the farmer
+snaps out of their daze and looks up at you.
+
+When you ask what's wrong the farmer informs
+you that their daughter left to the next 
+town over and they haven't been able to the 
+plans for the new field since.
+
+Maybe she left them in the fields...
+
+EOF
+
+else
+    cat << EOF
+The farmer looks visibly relieved.
+
+review the report to determine the size
+of the field
+
+EOF
+fi
+MAX_HP=$(awk '/HP:/ { print $4 }' ~/.stats)
+HP=$(awk '/HP:/ { print $2 }' ~/.stats)
+if [ "$MAX_HP" = "$HP" ]; then
+    cat << EOF
+
+You're already feeling pretty refreshed.
+
+You'll leave this drink for someone else.
+
+EOF
+else
+    cat <<EOF
+
+You take a long refreshing swig of a nice cold drink.
+You feel suddenly rejuvenated.
+
+You can check your health with:
+
+cat ~/.stats
+
+EOF
+    sed "s/HP: .*/HP: $(echo $MAX_HP) \/ $(echo $MAX_HP)/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+fi
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.
