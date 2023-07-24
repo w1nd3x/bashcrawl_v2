@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -35,7 +35,7 @@ cat << EOF > "./Secret Hideout/scroll"
 EOF
 # Create a cave boss
 cat << EOF > "./Secret Hideout/Cave Boss"
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.

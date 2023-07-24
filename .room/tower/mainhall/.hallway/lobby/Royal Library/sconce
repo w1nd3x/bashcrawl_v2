@@ -1,4 +1,4 @@
-#!//bin/sh
+#!//bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -27,7 +27,7 @@ if test -d "./Secret Room"; then
 eof
 
     cat << eof > "./Secret Room/mirror"
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -64,7 +64,7 @@ can find more info in the Royal Library tome, ""
 
 eof2
     cat << eof2 > "./Super Secret Room/stand"
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -110,7 +110,7 @@ eof3
 
 eof3
             cat << eof3 > "./The Final Secret/treasure"
-#!//bin/sh
+#!//bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -157,7 +157,7 @@ fi
 eof2
     chmod +x "./Super Secret Room/stand"
 cat << eof2 > "./Super Secret Room/bandit"
-#!//bin/sh
+#!//bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -234,7 +234,7 @@ eof
 
     chmod +x "./Secret Room/mirror"
     cat << eof > "./Secret Room/bandit"
-#!//bin/sh
+#!//bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
