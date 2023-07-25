@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -51,11 +51,11 @@ roll() {
 }
 
 get_secrets() {
-    input="~/.secrets.txt"
+    input="/room/tower/mainhall/.secrets.txt"
     secretArray=()
     while read -r line
     do
-        secretArray+=("$line")
+	secretArray+=("$line")
     done < "$input"
     index=$(expr $1 + 1337)
     index=$(expr $index - 64017)
@@ -129,7 +129,7 @@ addCoins() {
 # $2: any flavor text you want to add
 addTreasure() {
 cat << EOF > treasure
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -113,7 +113,7 @@ EOF
         fi
         # create the chocolate
         cat << EOF > chocolate
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.

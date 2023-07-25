@@ -19,7 +19,7 @@ usage() {
   cat << EOF
 Usage: bashcrawl COMMAND
 
-    start [SEED]  
+    start {}  
       Begins a new game session with the specified seed. If no seed is 
       provided 0 will be used.
 
@@ -81,7 +81,6 @@ else
   exit 0
 fi
 
-# fi
 # This will catch any errors that are thrown by the script
 # as well as catch an exit condition to restore the terminal
 # to normal
@@ -93,7 +92,6 @@ cleanup() {
     # restore the old HOME variable
     export HOME=$OLD_HOME
     cp .jail/room/tower/mainhall/.stats .stats 2>/dev/null
-    mv .jail/bin/busybox busybox
     # destroy all the folders for the game
     # umount .jail/{dev,proc,sys}/
     sudo rm -rf ./.jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
@@ -131,7 +129,7 @@ export HOME=$(pwd)/.jail/room/tower/mainhall
 mkdir -p .jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev}
 
 # cp $(which bash) .jail/bin
-mv busybox .jail/bin/busybox
+cp busybox .jail/bin/busybox
 for i in $(.jail/bin/busybox --list)
 do
     ln -s /bin/busybox .jail/bin/$i
@@ -139,7 +137,8 @@ done
 #cp /bin/{awk,wc,realpath,basename,cut,col,manpath,whatis,less,grotty,nroff,tbl,sh,perl,groff,troff,grops,man,mandb,apropos,bash,pwd,ls,cat,mv,cp,chmod,file,mkdir,sed,grep,rm,echo,touch,clear,env} .jail/bin/
 # for i in $(ldd /bin/{awk,wc,realpath,basename,cut,col,manpath,whatis,less,grotty,nroff,tbl,sh,perl,groff,troff,grops,man,mandb,apropos,bash,pwd,ls,cat,mv,cp,chmod,file,mkdir,sed,grep,rm,echo,touch,clear,env} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
 cp $(which file) .jail/bin/
-for i in $(ldd $(which file) | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
+cp $(which bash) .jail/bin/
+for i in $(ldd .jail/bin/{file,bash} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
 do
     j=$(echo $i | sed "s/=>.*//")
     i=$(echo $i | sed "s/.*=>//")
@@ -174,5 +173,5 @@ cp  --parents /usr/share/misc/magic.mgc .jail
 # mount --bind /sys .jail/sys
 #cp -r /usr/libexec/man-db .jail/usr/libexec
 
-sudo chroot .jail /bin/env -i HOME=/room/tower/mainhall TERM="$TERM" PS1='\$ ' ENV=/room/tower/mainhall/.bashrc PATH=/bin /bin/ash
+sudo chroot .jail /bin/env -i HOME=/room/tower/mainhall TERM="$TERM" PS1='\$ ' ENV=/room/tower/mainhall/.bashrc PATH=/bin /bin/bash
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
 #
@@ -23,7 +23,7 @@ Why don't you try heading towards the kitchens.
 
 EOF
 else
-    if grep -o -q -E "ls.*--color" .ash_history; then
+    if grep -o -q -E "ls.*--color" .bash_history; then
         # Add seasoning
         sed "s/Inventory:/Inventory: seasoning,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
         cat << EOF

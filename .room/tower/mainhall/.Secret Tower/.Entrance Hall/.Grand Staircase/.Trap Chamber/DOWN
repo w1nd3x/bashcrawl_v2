@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -13,7 +13,7 @@
 # We're happy to provide hints.
 #
 if [ -f .correct ]; then
-    COR=$(echo .correct)
+    COR=$(cat .correct)
     if [ $COR -eq 2 ] || [ $COR -eq 3 ]; then
         printf "\nA happy chime sounds from the device, it looks like you're on the right track.\n\n"
         let "COR=COR+1"

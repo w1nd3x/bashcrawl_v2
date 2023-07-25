@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -18,7 +18,7 @@ if [ -f .solved ]; then
     exit 0
 fi
 if [ -f .correct ]; then
-    COR=$(echo .correct)
+    COR=$(cat .correct)
     if [ $COR -eq 10 ]; then
         printf "\nConfetti falls from the ceiling and the device opens to reveal a chest\n\n"
         addTreasure "controller" "Are we allowed to include this??? Like legally?"
