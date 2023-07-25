@@ -1,0 +1,170 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+
+# farm-hand needs to know how many different columns of crops there are listed in the report,
+# as well as the total number of plots
+if  ! test -f report.txt; then
+	cat << nonstarter
+Howdy do, princess! As much as I'd love to sit down and chat,
+I'd advise you come back and talk to me once you've talked to my boss [the farmer] and gotten the report!
+
+Take care!
+nonstarter
+
+elif ! test -f farm-hands-scribbles.txt; then
+    cat << rows
+Gee, that's a mighty-fine report you got there! Tell ya what though, 
+I've got both my hands full here, would you mind helping me out with a few facts?
+
+The farmer is insisting that I order a new sign for each row of crops,
+but with his rate of expansion, I don't even know how much we have! 
+Can you remind me how many rows of crops we have? If you don't know off the top of your head,
+I would advise you hit "CTRL+C" and come back and talk to me once you do!
+
+(You can always hit CTRL+C to send an interrupt signal to a running process, usually killing it)
+
+How many rows of crops are in the farm?
+
+rows
+
+read row_guess
+if [ ! $row_guess -eq 30 ] ; then
+	cat << bad_guess
+Not sure so about that one, majesty. Listen, I'll let you in on a little secret: 
+The farmer has invested in the new "-l" upgrade for his "wc" tool,
+why don't you try using those on the report?
+
+Try again:
+bad_guess
+read row_guess
+
+fi
+
+while [ ! $row_guess -eq 30 ] ; do
+	echo "ehhhh, pretty sure that's not it. Wanna give it another go?"
+	read row_guess
+done
+	cat << correct
+Hey I think that's it! alrightttt, I'll go ahead and place that order! 
+In the meantime, here's my rough sketch of the fields [farm-hands-scribbles.txt]. 
+Talk to me again in a second once you've looked over the sketch, and I'll have another question for you. TTYL!
+
+correct
+
+cat report.txt | tr -dc 'X' > farm-hands-scribbles.txt
+
+elif ! test -f compost_bin; then
+	cat << compost
+Back again, thanks for not abandoning me. The farmer is preparing for a massive overhaul of each and every plot, 
+meaning he needs a complete inventory of the number of the number of plots he has.
+Now, I would think that a farmer would normally have something like that on hand,
+but he's been a little all over the place since his daughter went missing. She was really the rock around here.
+
+Can you let me know how many plots there are in the fields?
+I'm pretty sure you can do this with either the official report 
+or my chicken-scratch, but it may be easier with the latter.
+
+How many plots are in the field?
+compost
+
+num_plots=$(cat farm-hands-scribbles.txt | wc -c )
+read plot_guess
+
+if [ ! $plot_guess -eq $num_plots ] ; then
+	cat << bad_plot
+I kinda remember a different number than that. I know that my handwriting isn't the best,
+but I know those scribbles contain the correct number of plots. Why don't you try using
+another feature of your "wc" tool, one that'll let you count the number of X's!
+
+Try again: 
+bad_plot
+
+	read plot_guess
+	fi
+
+while [ ! $plot_guess -eq $num_plots ] ; do
+	echo "nah, that can't be it... I'm pretty sure I'll recognize the number. Keep guessing!"
+	read plot_guess
+done
+
+	cat << EOF
+
+Hey now, that's it! You've been such a big help, thank you so much.
+Things around here have been rather bleak. I try to stay positive, but you know, 
+there's only so much that one person can do. 
+
+Here, would you mind doing one last favor for me?
+The shepherd has been asking around for a bin of compost to put in his field,
+do you think you could give this bin to him?  
+I would do it myself, but, to be honest, he give me the heebie-jeebies.
+
+Cheers!
+
+EOF
+
+for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
+	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+	echo -n "DDT" >> compost_bin
+	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+done
+
+for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
+	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+	echo -n "Chlorpyrifos" >> compost_bin
+	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+done
+for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
+	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+	echo -n "Aldrin" >> compost_bin
+	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+done
+
+else
+	cat << EOF
+
+Argh, I love this job but I swear it'll be the death of me someday!
+Either that, or I'll end up with nothing behind the eyes like my boss.
+
+Ya know, he used to be able to light up a room like no one else.
+
+Anyways, I'll talk to you soon...
+
+EOF
+
+fi
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.

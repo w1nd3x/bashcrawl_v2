@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -14,53 +14,95 @@
 #
 
 # farmer lost something you need to find with grep / find
-if [ -f report.txt ]; then
+if  ! test -f report.txt; then
 	cat << EOF
+
 You see a farmer lost in thought and leaning
 against a rake.  As you approach the farmer
 snaps out of their daze and looks up at you.
 
 When you ask what's wrong the farmer informs
 you that their daughter left to the next 
-town over and they haven't been able to the 
+town over and they haven't been able to find the 
 plans for the new field since.
 
 Maybe she left them in the fields...
 
 EOF
+rm -r fields/grains 2> /dev/null
+rm -r fields/vegetables 2> /dev/null
+rm -r fields/fruits 2> /dev/null
+rm -r fields/herbs 2> /dev/null
+rm -r fields/spices 2> /dev/null
+crops="grains herbs spices fruits vegetables"
+grains="barley wheat sorghum rice millet rye"
+herbs="rosemary dill mint basil chives oregano"
+spices="cumin nutmeg pepper fennel chili mustard"
+fruits="grape strawberry blueberry kiwi dragonfruit banana"
+vegetables="pumpkin lettuce leek squash radish spinach"
+echo -en "FARM STRUCTURE:\n\n" > report.txt.tmp
+for c in $crops; do
+	for g in ${!c}; do
+		mkdir -p "fields/$c/$g"
+		report_text="-"
+		for i in $(seq 1 $(expr $RANDOM % 90 + 10)); do
+			#report_text+="$i-"
+			report_text+="X-"
+			echo "Well, it's a plant and some dirt." > "fields/$c/$g/plot_$i"
+			echo "Don't quite know what you expected" >> "fields/$c/$g/plot_$i"
+			echo " " >> "fields/$c/$g/plot_$i"
+			head -n20 /dev/urandom >> "fields/$c/$g/plot_$i" 
+		done
+		echo  -en "$report_text\n" >> report.txt.tmp
+	done
+done
+
+report_path="fields/"
+crop=$(expr $RANDOM % 5)
+num=$(expr $RANDOM % 6)
+crop_arr=($crops)
+report_path+="${crop_arr[$crop]}/"
+crop_arr=(${!crop_arr[$crop]})
+report_path+="${crop_arr[$num]}"
+#echo $report_path
+mv report.txt.tmp "$report_path/report.txt"
+
+num=$(ls $report_path | wc -l)
+plot_num=$(expr $RANDOM % $num)
+echo "If you are reading this, let the good Professor Benjamin know that ENS Metcalf will be getting the last laugh for murdering Fernando and Alonzo" >> "$report_path/plot_$plot_num"
+
+elif test -f .sheptalk_4 ; then
+	cat << donezo
+The farmer returns to where you are to thank you one last time for your efforts.
+He insists that they have much work to do, and while appreciative, 
+your presence is not making it any easier. It's tough to see him like this,
+so you decide to head on out from the village.
+donezo
 
 else
-    cat << EOF
-The farmer looks visibly relieved.
 
-review the report to determine the size
-of the field
+	cat << EOF
+
+The farmer looks visibly relieved. 
+He tells you to go talk to the farm-hand,
+as they've been looking for the plans for a while.
+
+You try to compliment the farmer on the sheer size of his enterprise, 
+but he's having none of it. 
+They're not a particularly prideful type, these farmers. 
+
+Before you can say much more to him, he trudges off, closing the gate behind him.
+Looks like you won't be able to return to the miles of crops he calls home anytime soon.
 
 EOF
+
+rm -r fields/grains 2> /dev/null
+rm -r fields/vegetables 2> /dev/null
+rm -r fields/fruits 2> /dev/null
+rm -r fields/herbs 2> /dev/null
+rm -r fields/spices 2> /dev/null
 fi
-MAX_HP=$(awk '/HP:/ { print $4 }' ~/.stats)
-HP=$(awk '/HP:/ { print $2 }' ~/.stats)
-if [ "$MAX_HP" = "$HP" ]; then
-    cat << EOF
 
-You're already feeling pretty refreshed.
-
-You'll leave this drink for someone else.
-
-EOF
-else
-    cat <<EOF
-
-You take a long refreshing swig of a nice cold drink.
-You feel suddenly rejuvenated.
-
-You can check your health with:
-
-cat ~/.stats
-
-EOF
-    sed "s/HP: .*/HP: $(echo $MAX_HP) \/ $(echo $MAX_HP)/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
-fi
 #
 #
 #
