@@ -134,11 +134,11 @@ You can always check your wealth with this command:
 cat ~/.stats
 
 eof4
-sed "s/Inventory:/Inventory: hedgehog,/; s/,\\\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
-NUM1=((\\\$ID+3))
-NUM2=((\\\$ID+4))
-CHECKPOINT="\\\$(get_secrets \\\$NUM1)_\\\$(get_secrets \\\$NUM2)"
-printf "Checkpoint 2: \\\$CHECKPOINT\n" >> ~/.progress
+sed "s/Inventory:/Inventory: hedgehog,/; s/,\\\\\\\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+NUM1=\\\\\\\$((\\\\\\\$ID+3))
+NUM2=\\\\\\\$((\\\\\\\$ID+4))
+CHECKPOINT="\\\\\\\$(get_secrets \\\\\\\$NUM1)_\\\\\\\$(get_secrets \\\\\\\$NUM2)"
+printf "Checkpoint 2: \\\\\\\$CHECKPOINT\n" >> ~/.progress
 mv ~/.workshop ~/workshop
 else
     echo "This treasure has already been taken."

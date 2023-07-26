@@ -15,24 +15,28 @@ if [[ $(/usr/bin/id -u) -ne 0 ]]; then
     exit
 fi
 
+if [ -z "${ID}" ]; then
+    export ID=0
+fi
+
 usage() {
   cat << EOF
 Usage: bashcrawl COMMAND
 
-    start {}  
-      Begins a new game session with the specified seed. If no seed is 
-      provided 0 will be used.
+    start GAME-TYPE  
+      Begins or resumes a new game session of the specified type.
+      Valid type are Basic, Advanced, or Net
 
-    remove
-      Removes all the game data files, let's you start a fresh game.
+    remove GAME-TYPE
+      Removes all the game data files for the specified type.
     
     help
       Prints this help message
 
 EOF
 }
-
-SEED=0
+TYPE=0
+JAIL=".jail"
 # Determine the number of arguments passed to the script
 # If a number was passed update the user id for a (possibly)
 # new game
@@ -40,29 +44,48 @@ if [ $# -ne 0 ]; then
   case $1 in
     start)
       if [ $# -eq 2 ]; then 
-        printf "Creating a new game with seed $2\n"
-        SEED=$2
+        case $2 in
+          Basic)
+            TYPE=0
+            JAIL=".jail"
+            ;;
+          Advanced)
+            TYPE=1
+            JAIL=".adv_jail"
+            ;;
+          Net)
+            TYPE=2
+            JAIL=".net_jail"
+            ;;
+          *)
+            echo "Unknown game type: $2"
+            usage
+            exit 1
+            ;;
+        esac
+        printf ""
       else
-        printf "Creating a new game with a seed of $SEED\n"
-        printf "If you are running this for SY205 you should remove the game and start again with your id\n"
-        printf "Press enter to continue...\n"
-        read RESP
+        printf "You need to specify the game type (Basic, Advanced, Net)\n\n"
+        usage
+	      exit 0
       fi
       ;;
-    resume)
-      printf "Continuing from where you left off.\n"
-      ;;
     remove)
-      printf "This will delete all of your current progress\nWould you like to continue?  y / n  "
-      read RESP
-      if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
-        rm -rf .jail
-        rm -f .stats
-        printf "You're previous progress has been removed\n"
-        printf "You can now start a new game\n"
-        exit 0
+      if [ $# -eq 2 ]; then 
+        printf "This will delete all of your current progress\nWould you like to continue?  y / n  "
+        read RESP
+        if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+          rm -rf .jail
+          rm -f .stats
+          printf "You're previous progress has been removed\n"
+          exit 0
+        else
+          printf "We are not deleting anything\n"
+          exit 0
+        fi
       else
-        printf "We are not deleting anything\n"
+        printf "\nYou need to specify the game type (Basic, Advanced, Net)\n\n"
+        usage
         exit 0
       fi
       ;;
@@ -91,87 +114,119 @@ cleanup() {
     # script cleanup
     # restore the old HOME variable
     export HOME=$OLD_HOME
-    cp .jail/room/tower/mainhall/.stats .stats 2>/dev/null
-    # destroy all the folders for the game
-    # umount .jail/{dev,proc,sys}/
-    sudo rm -rf ./.jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
-    
+    if test $TYPE = 0; then
+      cp .jail/room/tower/mainhall/.stats .stats 2>/dev/null
+      # destroy all the folders for the game
+      # umount .jail/{dev,proc,sys}/
+      sudo rm -rf ./.jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
+    elif test $TYPE = 1; then
+      #cp .adv_jail/ 2>/dev/null
+      # destroy all the folders for the game
+      # umount .jail/{dev,proc,sys}/
+      sudo rm -rf ./.adv_jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
+    elif test $TYPE = 2; then
+      #cp .net
+      # destroy all the folders for the game
+      # umount .jail/{dev,proc,sys}/
+      sudo rm -rf ./.net_jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
+    fi
     echo Thanks for playing, come back soon
 }
-
+  
 # Save off the original value of the HOME variable so we can 
 # restore it once we're done.
 export OLD_HOME=$HOME
 
-# Check if the player stats file exists (for old games)
-STATFILE=./.stats   # Create a variable for the stats file
-if ! test -f "$STATFILE"; then
-    # the file doesn't exist so we'll create it and populate
-    # it with the starting information
-    # This uses what's known as a heredoc, it starts with a '<<' 
-    # followed by a delimiting operator.  In this case the delimiting 
-    # operator is EOF.
-    cat << EOF > .stats
-HP: 15 / 15
-Inventory: 
-Purse: 0
-Modifier: 
-EOF
-
-fi 
-
-# Set a new HOME environment variable.  When we open the new 
-# shell for the game it will pull from the bashrc in the new
-# HOME directory.
-export HOME=$(pwd)/.jail/room/tower/mainhall  
 # create the directories necessary for a chroot jail
 # apropos(1), groff(1), less(1), manpath(1), nroff(1), troff(1), whatis(1)
-mkdir -p .jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev}
+mkdir -p $JAIL/{bin,lib64,lib,dev,etc,usr,proc,sys,dev}
 
 # cp $(which bash) .jail/bin
-cp busybox .jail/bin/busybox
-for i in $(.jail/bin/busybox --list)
+cp busybox $JAIL/bin/busybox
+for i in $($JAIL/bin/busybox --list)
 do
-    ln -s /bin/busybox .jail/bin/$i
+    ln -s /bin/busybox $JAIL/bin/$i
 done
 #cp /bin/{awk,wc,realpath,basename,cut,col,manpath,whatis,less,grotty,nroff,tbl,sh,perl,groff,troff,grops,man,mandb,apropos,bash,pwd,ls,cat,mv,cp,chmod,file,mkdir,sed,grep,rm,echo,touch,clear,env} .jail/bin/
 # for i in $(ldd /bin/{awk,wc,realpath,basename,cut,col,manpath,whatis,less,grotty,nroff,tbl,sh,perl,groff,troff,grops,man,mandb,apropos,bash,pwd,ls,cat,mv,cp,chmod,file,mkdir,sed,grep,rm,echo,touch,clear,env} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
-cp $(which file) .jail/bin/
-cp $(which bash) .jail/bin/
-for i in $(ldd .jail/bin/{file,bash} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
+cp $(which file) $JAIL/bin/
+cp $(which bash) $JAIL/bin/
+for i in $(ldd $JAIL/bin/{file,bash} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
 do
     j=$(echo $i | sed "s/=>.*//")
     i=$(echo $i | sed "s/.*=>//")
     if test -f "$i"; then
         if test $i = $j; then
-            cp $i .jail/lib64/
+            cp $i $JAIL/lib64/
         else
-            cp --parents $i .jail
+            cp --parents $i $JAIL
         fi
     fi
 done
-if test -d .jail/room; then
-    # room already exists so do nothing
-    echo " "
-else
-    cp -r .room .jail/room
-    cp welcome_message .jail
-fi
-cp .stats .jail/room/tower/mainhall/.stats
+
+
+case $TYPE in
+  0)
+    # Check if the player stats file exists (for old games)
+    STATFILE=./.stats   # Create a variable for the stats file
+    if ! test -f "$STATFILE"; then
+      # the file doesn't exist so we'll create it and populate
+      # it with the starting information
+      # This uses what's known as a heredoc, it starts with a '<<' 
+      # followed by a delimiting operator.  In this case the delimiting 
+      # operator is EOF.
+      cat << EOF > .stats
+HP: 15 / 15
+Inventory: 
+Purse: 0
+Modifier:
+EOF
+    fi 
+
+    # Set a new HOME environment variable.  When we open the new 
+    # shell for the game it will pull from the bashrc in the new
+    # HOME directory.
+    export HOME=/room/tower/mainhall  
+    if test -d $JAIL/room; then
+      # room already exists so do nothing
+      echo "Resuming your previous game, good luck!"
+    else
+      echo "Starting a new game"
+      cp -r .room .jail/room
+      cp welcome_message .jail
+    fi
+    cp .stats .jail/room/tower/mainhall/.stats
+
+    ;;
+  1)
+    export HOME=$(pwd)/.adv_jail/gate
+    if test -d $JAIL/gate; then
+      # gate already exists so do nothing
+      echo "Resuming your previous game, good luck!"
+    else
+      echo "Starting a new game"
+      cp -r .gate $JAIL/gate
+    fi
+    ;;
+  2)
+    ;;
+esac
+
+
 
 # copy over stuff so man works
-mkdir -p .jail/usr/share/man
-tar -C .jail/usr/share/man -xvzf catpages.tar.gz &>/dev/null
+mkdir -p $JAIL/usr/share/man
+tar -C $JAIL/usr/share/man -xvzf catpages.tar.gz &>/dev/null
 
-cp -r --parents /etc/magic .jail
-cp -r --parents /usr/share/misc/magic .jail
-cp -r --parents /lib/terminfo .jail
-cp  --parents /usr/share/misc/magic.mgc .jail
+cp -r --parents /etc/magic $JAIL
+cp -r --parents /usr/share/misc/magic $JAIL
+cp -r --parents /lib/terminfo $JAIL
+cp  --parents /usr/share/misc/magic.mgc $JAIL
 
 # mount --bind /dev .jail/dev/
 # mount --bind /proc .jail/proc/
 # mount --bind /sys .jail/sys
 #cp -r /usr/libexec/man-db .jail/usr/libexec
 
-sudo chroot .jail /bin/env -i HOME=/room/tower/mainhall TERM="$TERM" PS1='\$ ' ENV=/room/tower/mainhall/.bashrc PATH=/bin /bin/bash
+sudo chroot $JAIL /bin/env -i ID="$ID" HOME=$HOME TERM="$TERM" PS1='\$ ' ENV=$HOME/.bashrc PATH=/bin /bin/bash
 
