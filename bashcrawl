@@ -71,19 +71,51 @@ if [ $# -ne 0 ]; then
       fi
       ;;
     remove)
-      if [ $# -eq 2 ]; then 
-        printf "This will delete all of your current progress\nWould you like to continue?  y / n  "
-        read RESP
-        if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
-          rm -rf .jail
-          rm -f .stats
-          printf "You're previous progress has been removed\n"
-          exit 0
-        else
-          printf "We are not deleting anything\n"
-          exit 0
-        fi
-      else
+       if [ $# -eq 2 ]; then 
+        case $2 in
+          Basic)
+            printf "This will delete all of your current progress\nWould you like to continue?  y / n  "
+            read RESP
+            if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+              rm -rf .jail
+              printf "Your previous progress has been removed\n"
+              exit 0
+            else
+              printf "We are not deleting anything\n"
+              exit 0
+            fi
+            ;;
+          Advanced)
+            printf "This will delete all of your current progress\nWould you like to continue?  y / n  "
+            read RESP
+            if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+              rm -rf .adv_jail
+              printf "Your previous progress has been removed\n"
+              exit 0
+            else
+              printf "We are not deleting anything\n"
+              exit 0
+            fi
+            ;;
+          Net)
+            printf "This will delete all of your current progress\nWould you like to continue?  y / n  "
+            read RESP
+            if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
+              rm -rf .net_jail
+              printf "Your previous progress has been removed\n"
+              exit 0
+            else
+              printf "We are not deleting anything\n"
+              exit 0
+            fi
+            ;;
+          *)
+            echo "Unknown game type: $2"
+            usage
+            exit 1
+            ;;
+        esac
+              else
         printf "\nYou need to specify the game type (Basic, Advanced, Net)\n\n"
         usage
         exit 0
@@ -199,16 +231,25 @@ EOF
 
     ;;
   1)
-    export HOME=$(pwd)/.adv_jail/gate
+    export HOME=/gate
     if test -d $JAIL/gate; then
       # gate already exists so do nothing
       echo "Resuming your previous game, good luck!"
     else
       echo "Starting a new game"
       cp -r .gate $JAIL/gate
+      cp advanced_welcome_message $JAIL
     fi
     ;;
   2)
+    export HOME=/netroom
+    if test -d $JAIL/netroom; then
+      echo "Resuming your previous game, good luck!"
+    else
+      echo "Starting a new game"
+      cp -r .gate $JAIL/netroom
+      cp advanced_welcome_message $JAIL
+    fi
     ;;
 esac
 
