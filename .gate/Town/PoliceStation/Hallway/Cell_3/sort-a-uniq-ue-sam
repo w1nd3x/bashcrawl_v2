@@ -1,0 +1,60 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+# 
+if ! test -f .sam_intro; then
+	cat << sam_intro
+As you walk down the hall to the last cell, you begin to hear faint muttering. 
+It continues to ramp up in volume the closer you get to the bars, and you see
+a large, middle-aged man with his eyes closed chanting the same things over
+and over...
+sam_intro
+
+touch .sam_intro
+
+else
+	statements=("Audacious Sam devises plan to steal an anvil, hehe!" "Armed with cunning and agility, Sam approaches anvil, with stealth!" "Before break of dawn, Sam creeeeeeeeeeeeeps towards anvil." "Carefully calculating each move, Sam executes the heist flawlessly, oh yes!" "Disguised in darkness, Sam makes off with anvil, give it to carpenter!" "Elated with success, Sam and wood-man celebrate!")
+
+	for i in $(seq 1 1000); do
+		
+		echo ${statements[$(expr $RANDOM % 6)]}
+	done
+
+
+fi
+
+#
+#
+#
+#
+#
+#
+#
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.

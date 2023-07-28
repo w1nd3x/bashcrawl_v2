@@ -1,0 +1,281 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+# 
+if ! test -f .teresa_intro; then
+	cat << teresa_intro
+The second cell down the hall is oddly lit. It appears to have no sources of light, but stil
+maintains an eerie glow that sets you on edge before you approach the bars. 
+
+Before you can see the whole cell, 2 sickly, liver-spotted hands wrap around the bars. 
+They are covered in rings, each one a complex spiral of silver and gems. 
+tail-bone Teresa wastes no time after you ask her what happened with the anvil, 
+jumping straight into her version of events after a deep inhale...
+teresa_intro
+
+touch .teresa_intro
+
+else
+		cat << teresa_statement
+I'm a rogue pickpocket in the heart of the big city. For as long as I can remember, 
+
+I've been nimble-fingered and quick-witted, traits that led me down this thrilling path.
+
+Stealing from unsuspecting tourists has become my daily hustle, and I must admit, I absolutely love it.
+
+The city is my playground, and its bustling streets are my canvas. 
+
+I blend seamlessly into the crowd, adopting different personas with ease. Tourists are my favorite targets. 
+
+They wander around, distracted by the sights and sounds, completely oblivious to the danger lurking nearby. 
+
+I become one with the rhythm of the city, anticipating their movements, and striking at just the right moment.
+
+My attire changes constantly, from a charming street musician to a lost tourist myself. 
+
+It's amazing how a simple change of clothes and a well-practiced act can make people overlook your true intentions. 
+
+But that's precisely what makes me so successful. I pick my mark carefully, avoiding locals who might be more attentive to their belongings.
+
+Once I've spotted a group of tourists, I begin my approach. I'll start by striking up a casual conversation, 
+
+offering advice on places to visit or restaurants to try. They often trust me instantly, seeing me as just a friendly local eager to help. 
+
+Little do they know that I'm already mapping out my path to their wallets or bags.
+
+I've mastered the art of misdirection. I'll compliment someone's outfit, pointing out a bird in the distance, 
+
+or creating a distraction with a well-timed stumble. While their attention is elsewhere, my deft fingers work their magic. 
+
+I've become an expert at slipping wallets out of back pockets, purses from handbags, and cameras from straps.
+
+The adrenaline rush that comes with each successful theft is intoxicating. My heart races, my senses heighten, 
+
+and a rush of euphoria washes over me. It's a dangerous addiction, but one I can't resist. There's an element of danger in my lifestyle, 
+
+knowing that at any moment, I could be caught.
+
+But I've honed my skills to perfection. I can disappear into the crowd like a ghost, leaving no trace of my misdeeds behind. 
+
+Sometimes, I even manage to pickpocket without my victims realizing until they try to find their belongings later. It's a high-stakes game, 
+
+but the rewards are more than worth it.
+
+At night, when the city sleeps, I revel in the spoils of my labor. 
+
+Counting the bills and examining the shiny new items I've acquired brings me immense satisfaction. It's not just about the money; 
+
+it's the thrill of outsmarting others, the feeling of being in control.
+
+But amidst the exhilaration, a small part of me wonders if I could use my talents for something better. Maybe I could be a sleight-of-hand magician, 
+
+entertaining audiences instead of robbing them. Or perhaps, I could help people protect themselves from pickpockets like me.
+
+Yet, the allure of my current lifestyle always pulls me back. I love the thrill of the chase, the dance with danger, 
+
+and the liberation that comes from living outside society's rules. So, for now, I'll continue to roam the city streets, 
+
+a master of disguise and deception, a rogue pickpocket who loves every minute of it.
+
+I'm a rogue pickpocket. I've been on my own since I was a kid. I've never had a home or a family.
+
+I make my living as a nimble thief. I roam the crowded streets of the city, unseen and unnoticed, 
+
+relying on my dexterity and agility to steal from those who can afford to lose a trinket or two. 
+
+My favorite target is a mean old man who owns a curiosity shop filled with fascinating but overpriced oddities.
+
+The old man, Mr. Grimsby, is notorious for his sour demeanor and mistreatment of customers. He takes pleasure in inflating prices beyond reason, 
+
+preying on the curiosity of tourists and collectors who pass through his little shop. My disdain for him goes beyond his greed; 
+
+it's his complete lack of empathy that fuels my desire to relieve him of some of his precious trinkets.
+
+I've studied his daily routines and meticulously planned my approach. When the streets are busiest, and the shop is teeming with customers, 
+
+I strike. Wearing a plain, nondescript coat and a hat that shields my face from view, I blend into the crowd effortlessly. 
+
+I observe from a distance, biding my time until the opportune moment arises.
+
+When the perfect chance presents itself, I slip into the shop, moving like a shadow, undetected by the few dim lights that illuminate the cluttered space. 
+
+I've spent countless hours familiarizing myself with the layout, so I know exactly where to find the most valuable trinkets.
+
+With nimble fingers, I pluck delicate jewelry, rare coins, and small antiques from their display cases. Each time I steal something, 
+
+a small thrill courses through my veins, but there's something more than greed driving me. 
+
+It's the satisfaction of giving those treasures a chance to escape the clutches of their heartless owner.
+
+My heart races with both excitement and anxiety as I work quickly but quietly. There's always the risk of being caught, 
+
+and I know Mr. Grimsby would show no mercy if he caught me red-handed. However, that fear only fuels my determination. 
+
+I've become adept at detecting even the faintest sounds that could signal danger.
+
+Once I've gathered my haul, I make my escape, leaving the shop without a trace of my presence. 
+
+Back in the shadows of the city's labyrinthine alleyways, I examine my stolen treasures, marveling at their beauty. 
+
+As tempted as I am to keep them for myself, I remember my purpose: to liberate these precious trinkets from Mr. Grimsby's clutches.
+
+I distribute the stolen goods among the less fortunate, the struggling artists, 
+
+and the kind-hearted individuals who deserve a bit of magic in their lives. I find joy in the knowledge that these trinkets 
+
+now bring smiles and happiness to those who cherish them, rather than gathering dust in the hands of a greedy old man.
+
+As the days go by, my reputation as a nimble thief grows, and Mr. Grimsby becomes increasingly frustrated by the mysterious 
+
+disappearance of his precious trinkets. He tightens his security, but it only serves to sharpen my skills further. 
+
+The thrill of outsmarting him time and time again is immensely satisfying.
+
+In the end, my nimble fingers and clever tactics prevail against Mr. Grimsby's bitterness. The trinkets find new homes, 
+
+and the old man's curse seems to wane. As for me, I continue to roam the streets, a thief with a conscience, 
+
+seeking to balance the scales of justice, one trinket at a time.
+
+I've learned to survive on my own. I'm good at what I do. I can take anything from anyone, without them even knowing.
+
+But lately, I've been feeling restless. I'm tired of living this life. I want something more.
+
+One day, I'm walking through the forest when I come across a band of merry men. They're on their way to fight a dragon.
+
+I've never seen anything like them before. They're all so brave and noble. I'm drawn to them.
+
+I decide to join them on their quest. I know I can help them. I can use my skills to steal the dragon's treasure.
+
+The merry men are hesitant at first. They don't trust me. But I eventually win them over.
+
+We set off on our journey. It's not easy. We face many dangers along the way. But we never give up.
+
+Finally, we reach the dragon's lair. It's a dark and foreboding place. But we're not afraid.
+
+We battle the dragon. It's a long and hard fight. But in the end, we're victorious.
+
+We slay the dragon and steal its treasure. We're heroes.
+
+I'm no longer a rogue pickpocket. I'm a member of the merry men. I've found a new home. I've found a new family.
+
+I'm finally happy.
+
+I'm sitting around the campfire with the merry men. We're telling stories and laughing.
+
+I feel like I belong here. I'm finally home.
+
+I look up at the stars. I think about the dragon. I'm glad we defeated it. But I'm also glad that it's gone.
+
+The dragon was a symbol of fear and darkness. Now that it's gone, there's hope for the future.
+
+I'm excited to see what the future holds. I know that I'll be with the merry men. And I know that we'll make a difference in the world.
+
+I'm not a rogue pickpocket anymore. I'm a hero. I'm a member of the merry men. And I'm finally happy.
+
+I'm the best pickpocket in the world. I can take anything from anyone, without them even knowing.
+
+But lately, I've been having a streak of bad luck. I've been caught twice in the past month, and I'm starting to think that I'm cursed.
+
+I don't know what I'm doing wrong. I'm still using the same techniques that I've always used. But for some reason, people are just more aware of me now.
+
+I'm starting to get desperate. I need to make some money, and I'm running out of options.
+
+I'm thinking about quitting. Maybe I'm just not cut out for this anymore.
+
+But then I think about all the money I've made. All the things I've been able to do.
+
+I can't give it up. I'm too good at it.
+
+So I'm going to keep trying. I'm going to find a way to turn my luck around.
+
+I know I can do it. I'm the best pickpocket in the world.
+
+I'm standing in the middle of a crowded subway car. I'm looking for my next victim.
+
+I see a woman with a big purse. She's not paying attention to anything. She's the perfect target.
+
+I move in close. I reach into her purse and take her wallet. I'm in and out in a matter of seconds.
+
+I walk away, feeling confident. I know I got away with it.
+
+But then I feel a tap on my shoulder. I turn around, and I see a police officer.
+
+"You're under arrest," he says.
+
+I'm stunned. I can't believe I got caught again.
+
+I'm taken to the police station. I'm fingerprinted and booked.
+
+I'm facing a long jail sentence. I know I'm going to regret this for the rest of my life.
+
+I'm sitting in my cell, thinking about my life. I've made a lot of mistakes. But I'm not a bad person.
+
+I just wanted to make some money. I didn't mean to hurt anyone.
+
+I'm going to get out of here someday. And when I do, I'm going to change my life.
+
+I'm going to find a legitimate way to make money. I'm going to be a productive member of society.
+
+I'm not going to let this experience define me. I'm going to come out of this stronger than ever before.
+
+I'm finally released from jail. I'm a free woman.
+
+I'm determined to make a new start. I'm going to find a job and get my life back on track.
+
+I know it won't be easy. But I'm confident that I can do it.
+
+I'm not going to let my past define me. I'm going to be a better person.
+
+I'm going to make my family proud.
+
+I'm going to make myself proud.
+
+[start of statement] OKOK I did it! Or did I? HA! No, I didn't do it. We have fun, don't we? 
+
+Darling, as much as I would have loved to steal that bumbling fools 
+
+anvil, I've been living it up in the city! I haven't had the time or the locale
+
+to commit such a darling crime. If I had, also, you would know. You do know why
+
+they call me tail-bone Teresa, right? [end of statement]
+teresa_statement
+
+
+fi
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.

@@ -1,0 +1,382 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+# 
+if ! test -f .henry_intro; then
+	cat << henry_intro
+The first cell consists of nothing more than a shoddily-made rack, a toilet, and concrete walls.
+The wall opposite the rack has a poster of a sliding glass door and a bottle of window cleaner.
+Nothing about it seems ordinary, least of all the occupant. 
+
+A gaunt, raggeed looking man with a patchwork, smock-esque piece of clothing faces away from you 
+in the cell, picking at his own fingers in a deep squat. He seems almost child-like, but when he
+hears you step towards the cell, he ages 20 years. He sluggishly brings himself to his feet, 
+turns toward you begrudgingly, and, with a little delay, begins talking...
+henry_intro
+
+touch .henry_intro
+
+else
+		cat << henry_statement
+You won't find much of use from me, I was out exploring in the woods when the smith lost his anvil. 
+
+I was trying to find myself some nice mushrooms to get through the next couple days in style, 
+
+when I was immediately snatched up by the sheriff on my way back in! Now, I know I have a bit of a reputation, 
+
+but this hardly seems fair, no? Next time I do something like this, you'll know princess. [end of statement]
+
+They say I'm crazy. They say I'm delusional. They say I'm not in touch with reality. But they're wrong. I'm not crazy. I'm just different.
+
+I see things that they don't see. I hear things that they don't hear. I know things that they don't know. I'm not crazy. I'm just awake.
+
+They think I'm crazy because I believe in magic. They think I'm crazy because I believe in fairies. 
+
+They think I'm crazy because I believe in the power of the mind. But they're wrong. 
+
+Magic is real. Fairies are real. The power of the mind is real. I'm not crazy. I'm just open-minded.
+
+They think I'm crazy because I talk to myself. They think I'm crazy because I laugh at nothing. They think I'm crazy because I dance in the street. But they're wrong. I'm not crazy. I'm just happy.
+
+I'm happy because I know the truth. I know that the world is a magical place. 
+
+I know that there are fairies and unicorns and dragons. 
+
+I know that the power of the mind is limitless. 
+
+I'm not crazy. 
+
+I'm just enlightened.
+
+So if you see me walking down the street, talking to myself and laughing at nothing, don't be afraid. 
+
+Don't think I'm crazy. Just know that I'm awake. I'm open-minded. I'm happy. I'm enlightened.
+
+I hope you enjoyed my story. I know it's a bit crazy, but that's just how I am. I'm not afraid to be different. I'm not afraid to be awake. I'm not afraid to be happy.
+
+If you're ever feeling crazy, just remember that you're not alone. There are other people out there who are awake. There are other people who are open-minded. There are other people who are happy.
+
+So don't be afraid to be yourself. Don't be afraid to be crazy. Be proud of who you are. Be proud of your differences. Be proud of your enlightenment.
+
+I'm sitting in my room, all alone. The walls are closing in on me. I can feel the darkness creeping in.
+
+I'm starting to lose it. I can't tell what's real and what's not.
+
+I hear voices in my head. They're telling me to do things. Bad things.
+
+I'm scared. I don't know what to do.
+
+I want to scream, but I can't. My throat is too dry.
+
+I want to run, but I can't. My l've been lost in this forest for years. I don't know how long, exactly. Time has lost all meaning here.
+
+The trees are so tall that they block out the sun. The only light comes from the moon and stars at night.
+
+The forest is silent. No birds sing. No animals roam. It's as if I'm the only one left in the world.
+
+I've tried to find my way out, but I always get lost again. The trees all look the same. The paths all lead nowhere.
+
+I'm starting to lose my mind. I see things that aren't there. I hear voices that aren't real.
+
+I'm not sure if I'm going crazy or if I'm just finally starting to see the truth.
+
+The forest is a dark and dangerous place. It's a place where people go to disappear.
+
+I'm starting to think that maybe I'm one of those people.
+
+I'm sitting by a campfire, trying to stay warm. The flames are dancing in the darkness, casting strange shadows on the trees.
+
+I'm listening to the wind in the leaves. It sounds like whispers.
+
+I'm starting to think that the forest is talking to me. It's telling me to stay here.
+
+It's telling me that this is my home now.
+
+I'm not sure if I should listen to the forest. I'm not sure if I want to stay here forever.
+
+But I don't have anywhere else to go.
+
+I'm starting to accept that I'm never going to find my way out of the forest. This is my home now.
+
+I've learned to live off the land. I know where to find food and water. I know how to build shelter.
+
+I'm not afraid of the forest anymore. I know its secrets. I know its dangers.
+
+I'm one of the forest now. I'm part of it.
+
+I'm sitting by the campfire, watching the flames. I'm content. I'm at peace.
+
+This is where I belong. This is where I'm meant to be.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I'm not sure what the future holds, but I'm not afraid. I know that I'm not alone. The forest is with me.
+
+We're the crazy ones. We're the ones who are different. We're the ones who are going to change the world.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I'm sitting in my living room, watching the news. The headline says that a new airplane has been built. It's as big as a country, and it blots out the sun.
+
+I can't believe it. I've never seen anything like it.
+
+The airplane is called the 'SunBlotter'. It's the brainchild of a mad scientist named Dr. Evil.
+
+Dr. Evil is determined to take over the world, and he's using the SunBlotter to do it.
+
+The SunBlotter is blocking out the sun, causing global temperatures to drop. Crops are failing, and people are starting to starve.
+
+The world is in chaos. I'm scared. I don't know what to do.
+
+I'm walking down the street, and I see the SunBlotter flying overhead. It's so big that it blocks out the sun.
+
+I feel like I'm being swallowed up by darkness. I'm scared. I don't know what's going to happen.
+
+I run home, and I lock the door. I'm safe, for now.
+
+But I know that the SunBlotter is still out there. It's only a matter of time before it finds me.
+
+I'm sitting in my living room, listening to the news. The announcer says that the SunBlotter has been destroyed.
+
+I'm relieved. I'm safe. The world is safe.
+
+But I know that the SunBlotter was just a symbol. Dr. Evil is still out there. He's still planning to take over the world.
+
+I don't know what the future holds, but I'm not going to give up. I'm going to fight back. I'm going to save the world.
+
+I'm standing on a mountaintop, looking out at the world. The sun is shining, and the birds are singing.
+
+It's a beautiful day. And I know that it's going to stay that way. Because I'm going to make sure of it.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I'm not sure what the future holds, but I'm not afraid. I know that I'm not alone. There are other people out there who believe in me.
+
+We're the crazy ones. We're the ones who are different. We're the ones who are going to save the world.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I'm not crazy. I'm just different. I see the world in a different way. I see the beauty in the heights. I see the freedom in the air.
+
+I've always been fascinated by tall buildings. I love the way they tower over the city, reaching up to the sky. I love the way they make me feel small and insignificant, but also powerful and free.
+
+I've been climbing buildings since I was a kid. I started with small buildings, like houses and apartment buildings. But as I got older, I started climbing taller and taller buildings.
+
+I've climbed skyscrapers, hotels, and even the Eiffel Tower. I've climbed buildings in every city I've ever been to.
+
+I'm not sure why I'm so obsessed with climbing buildings. Maybe it's the challenge. Maybe it's the adrenaline rush. Maybe it's the feeling of being on top of the world.
+
+Whatever the reason, I can't stop climbing. I know it's dangerous, but I don't care. I have to climb. It's the only thing that makes me feel alive.
+
+I'm sitting on the roof of the Empire State Building, looking out at the city. The sun is setting, and the sky is ablaze with color.
+
+I feel like I'm on top of the world. I'm the king of the city. I can see everything.
+
+I know that I'm crazy. I know that I could get hurt. But I don't care. I'm not going to stop climbing.
+
+I have to climb. It's the only thing that makes me feel alive.
+
+I'm standing on the edge of the roof, looking down at the street below. It's a long way down.
+
+I could jump. I could end it all right here.
+
+But I don't want to die. I want to live. I want to climb.
+
+I take a deep breath and step back from the edge. I'm not going to jump. I'm going to climb.
+
+I turn and walk back to the ladder. I'm going to climb another building. I'm going to climb the world.
+
+I'm not crazy. I'm just different. I see the world in a different way. I see the beauty in the heights. I see the freedom in the air.
+
+And I'm going to climb it all.
+
+I've always been different. I've always walked on all fours. It's just how I feel most comfortable.
+
+People think I'm crazy. They say that I'm a freak. But I don't care. I'm not going to change who I am.
+
+I'm happy being different. I'm happy walking on all fours. It's my way of being closer to the earth. It's my way of feeling more connected to nature.
+
+I know that people don't understand me. But that's okay. I don't need them to understand me. I just need them to accept me for who I am.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I'm walking through the forest. I'm walking on all fours, like I always do. The trees are tall and the air is fresh. I feel at peace.
+
+I come across a group of people. They're sitting around a campfire, talking and laughing. They see me and they start to stare.
+
+"What's wrong with him?" one of them asks.
+
+"He's crazy," another one says. "He walks on all fours."
+
+I ignore them. I keep walking. I don't need their approval. I don't need them to understand me.
+
+I walk for hours. I walk until I reach the top of a mountain. I look out at the view. It's breathtaking.
+
+I feel like I can see the whole world from here. I feel like I'm part of something bigger than myself.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I know that I'm not like other people. I know that I walk on all fours. But that doesn't make me crazy. It just makes me different.
+
+I'm proud of who I am. I'm proud of being different. I'm proud of walking on all fours.
+
+I'm not going to change who I am for anyone. I'm not going to let people make me feel ashamed of who I am.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I hear them all the time. The noises. They're always there, in the background, just out of reach. They're whispering to me, telling me things I don't want to hear.
+
+And then there are the butterflies. The little, creepy butterflies. They're always flitting around me, just out of my reach. They're watching me, waiting for me to make a mistake.
+
+I know that people think I'm crazy. They say that I'm hearing things and seeing things that aren't there. But I know that they're real. I know that they're trying to tell me something.
+
+I don't know what it is they're trying to tell me. But I'm going to find out. I'm going to listen to them. I'm going to see what they want me to see.
+
+I know that it's not going to be easy. The noises are getting louder. The butterflies are getting closer. But I'm not going to give up. I'm going to find out what they want me to know.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I'm sitting in my room, all alone. The noises are louder than ever. They're deafening. I can't think straight.
+
+I look up, and I see the butterflies. They're everywhere. They're crawling on the walls. They're covering the floor. They're even on me.
+
+I scream, but no sound comes out. I'm paralyzed with fear.
+
+The butterflies start to laugh. They're mocking me. They're telling me that I'm crazy.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I close my eyes and take a deep breath. I can still hear the noises. I can still see the butterflies. But I'm not going to let them control me.
+
+I open my eyes and stand up. I face the butterflies. I'm not afraid of them.
+
+"What do you want from me?" I ask.
+
+The butterflies stop laughing. They look at me in silence.
+
+"I know you're trying to tell me something," I say. "I'm not going to give up until I find out what it is."
+
+The butterflies start to fly away. They're still laughing, but it's a different kind of laugh. It's a laugh of respect.
+
+I watch them go, and I know that I'm one step closer to finding out the truth.
+
+I'm not crazy. I'm just different. And that's okay.
+
+Knew kids kept calling me crazy.
+
+Kept saying I’m a kook,
+
+Keeps saying I’m a klutz,
+
+Keeps saying I’m a kooky kid.
+
+Knew they’re wrong.
+
+Keeps sleeping upside down.
+
+Keeps seeing kaleidoscopic colors.
+
+Keeps hearing kaleidoscope music.
+
+Know I’m not crazy.
+
+Just different.
+
+Keeps dreaming of kaleidoscopic worlds.
+
+Keeps knowing the key to the universe.
+
+Keeps knowing the key to my heart.
+
+Keeps knowing I’m not crazy.
+
+Just different.
+
+Keeps knowing I’m amazing.
+
+Just keep being me.
+
+Keenly
+
+Knew I’m not crazy.
+
+Keeps knowing I’m amazing.
+
+Keeps knowing I’m unique.
+
+Keeps knowing I’m a kooky kid.
+
+Keeps knowing I’m a kid with a key.
+
+Keeps knowing I’m a kid with a kaleidoscopic heart.
+
+Keeps knowing I’m a kid with a keen mind.
+
+Keep on keeping on.
+
+I sleep upside down. I prefer the company of squirrels. I see the world in a different way than most people.
+
+I know that people think I'm crazy. They say that I'm a freak. But I don't care. I'm not going to change who I am.
+
+I'm happy being different. I'm happy sleeping upside down. I'm happy with the company of squirrels.
+
+Squirrels are my friends. They understand me. They don't judge me. They just accept me for who I am.
+
+I love to watch them climb trees. I love to listen to them chatter. I love to feel their soft fur against my skin.
+
+I know that some people think that I'm crazy. But I don't care. I'm happy with my life. I'm happy with my friends. I'm happy with who I am.
+
+I'm hanging upside down from a tree branch. I'm watching a group of squirrels play. They're chasing each other, climbing trees, and burying nuts.
+
+I smile. I love watching squirrels. They're so carefree and happy.
+
+I close my eyes and listen to the sounds of the forest. I can hear the wind rustling through the leaves, the birds singing, and the squirrels chattering.
+
+I feel at peace. I feel like I'm part of something bigger than myself.
+
+I'm not crazy. I'm just different. And that's okay.
+
+I know that some people will never understand me. But that's okay. I don't need them to understand me. I just need them to accept me for who I am.
+
+I'm happy being different. I'm happy with my life. I'm happy with my friends. I'm happy with who I am.
+
+And that's all that matters.
+henry_statement
+
+
+fi
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.

@@ -26,18 +26,25 @@ Village
 		read in from file output to file
 Town
 	blacksmith
-		last apprentice moved to the city
-		determine if there's enough coal to forge a thing
+		Was robbed! He can't find his prized anvil
+		Once you find his anvil, he has you look to see if
+		he has enough coal to light a fire. If you do, you have to 
+		use head to redirect enough lines of 'high quality' coal into the 'forge' file
 		head / tail
 		uniq
 	carpenter
-		customer is in the city left confusing requirements
+		At first, he seems like a harmless person, but upon getting the confession from the 
+		police station, you find that the carpenter was in cahoots with the criminal the 
+		whole time! after that, he gives you the ledger of all the active jobs he has, 
+		but they're super disorganized and he has duplicate jobs. He says that he'll turn in
+		the anvil when you can sort his jobs. He even thinks he has some duplicate ones!
 		sort
 		head / tail
 		uniq
-		
-	farmer's son
-		i don't remember where it went why are they blaming me
+	sheriff
+		Talk to him first in the PoliceStation. Once you do, the three suspects are generated,
+		and talking to them to get their precise statements will require use of head (head-case henry),
+		tail (tail-bone terry), and sort/uniq (sort-a uniq-ue sam)
 City
 	carpenter's customer
 	banker

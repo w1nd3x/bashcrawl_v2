@@ -1,0 +1,76 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+# 
+if ! test -f anvil.txt; then
+	if ! test -f .blacksmith_quest_begun; then
+
+	cat << no_anvil
+The blacksmith, a formidable figure with thick, well-worn glasses pressed onto his wrinkled, fire-braised face, 
+ambles around the shop as you enter. He seems the type of man to work his way around the shop with ease, 
+but right now he's moving erratically. Upon stepping into the shop, you realize that the floor is covered in a thick layer of soot, 
+concentrated most around the hulking forge on the back wall. 
+
+Heat eminates from the forge, but the blacksmith seems
+unaffected by the temperature as he flips sheets of metal strewn across the workbenches.
+It takes him a minute to realize you have walked in, and when you do, 
+the lines of worry creased onto his forehead seem to lessen.
+
+He explains the haphazard state of his shop; he has just been robbed, and cannot locate his anvil. 
+They haven't found the person who took it yet, but the sheriff has managed to apprehend some suspects
+at the station. He implores you to go down to the station, as the sheriff is hopelessly overworked.
+no_anvil
+
+	touch .blacksmith_quest_begun
+
+	else
+		cat << still_waiting
+The shop is turned upside-down as the blacksmith continues to search for his anvil. When he sees you,
+he just shakes his head and expresses his woes, insisting that you continue the search for his anvil
+and to leave him to his disheveled shop.
+still_waiting
+	fi
+
+else
+		cat << yay_anvil!
+The blacksmith is overjoyed to get his anvil back, and within minutes, is already putting it to good use.
+As you leave the building, you can hear the loud sounds of metal on metal. You hope you can find something
+that speaks to you like smithing speaks to that man.
+yay_anvil!
+
+fi
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.
