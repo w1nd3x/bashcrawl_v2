@@ -1,0 +1,21 @@
+# =====================
+# Welcome to bashcrawl!
+# =====================
+
+# This is a game to teach you the basics of using a POSIX (Linux, BSD,
+# UNIX) terminal, like the one where you are reading this message now.
+# 
+# You are the princess of the castle and have suffered a fairly severe 
+# blow to the head.  
+#
+# You no longer have any memory of the castle you live in, but you do 
+# remember that there is chocolate in the kitchens... 
+# and you are very hungry.  
+# 
+# Luckily each room of the castle has a scroll with helpful 
+# instructions about getting around.  
+#
+# You can read the scroll with the command:
+# 
+#   cat scroll
+
