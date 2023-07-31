@@ -1,0 +1,454 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+
+greeting() {
+    cat << EOF
+
+You can connect to the router using the 'connect' command.  It will
+let you connect to any machine as long as you're in the same room as it.
+
+Once you've connected you should be able to see all the information about
+the computer that you are connected to.
+
+Try connecting to the router in this room and talking to me again.
+
+EOF
+    return
+}
+
+router_connected() {
+    cat << EOF
+
+Great!  You're connected to the router.  One of the most important things to 
+do to figure out networking problems is collect information about the machine
+that's having problems.  
+
+You can get a bunch of information by running the 'ip address' command. It shows
+information about specific interfaces on a computer.  An interface connects the 
+computer to other computers and each interface usually has an ip address and a 
+MAC address that you'll be able to see with the 'ip address' command.  
+
+Try running that command while connected to the router and figure out how many 
+interfaces the router has.
+
+EOF
+    return
+}
+
+count_interfaces() {
+    cat << EOF
+
+Great!  Now, how many interfaces is the router connected to?  
+
+EOF
+    return
+}
+
+interface_correct() {
+    cat << EOF
+Yep, that's exactly right!!  The first interface is lo which is the loopback interface.
+Computers use that interface to connect back to themselves. The next five interfaces all
+connect to the other networks here in the kingdom.  The router's job is to forward all the 
+traffic between the networks.  That means each interface is connected to a different network 
+and the router sends traffic between them so everyone can communicate!
+
+We're having problems because the networks don't seem to be able to reach the router or each 
+other right now.  We need to troubleshoot all these problems to get everyone connected again.
+
+Talk to me again to get started.
+
+EOF
+    return
+}
+
+wrong_connection() {
+    cat << EOF
+
+It looks like you're connected to one of the other computers in the kingdom.
+
+EOF
+}
+
+set_router0() {
+        cat << EOF
+
+The first thing we'll do is prepare interface router0.  It's the interface that
+allows everyone in the city to communicate.
+
+There are two things that an interace needs to communicate, an IP Address and 
+a route.
+
+The normal address for router0 is 10.0.100.1.  To get it connected up we can 
+use the 'ip address' command.
+
+We'll use the add argument to add a new ip address.  We also want to specify 
+that it's for the router0 interface or device.  
+
+So in all we need to run:
+ip address add 10.0.100.1/24 dev router0
+
+The dev at the end is the argument that indicates what interface we are setting 
+the address to and the add lists the address we are adding.  We need to have 
+the /24 at the end for reasons we'll cover in company training later this 
+month.
+
+EOF
+    return
+}
+
+ip_address_set() {
+    cat << EOF
+
+Great!  You've got the address all set.  The next step is to make sure the 
+route is set up.  To see what routes are currently set up on the computer we 
+can run:
+    'ip route'  
+    
+This will show all the routes.  
+
+EOF
+    return
+}
+
+ran_ip_route() {
+    cat << EOF
+
+Excellent work!  You were definitely the right person to take over.  
+You should see that the command output a few routes and one should look like 
+this:
+    10.0.100.0/24 dev router0
+This is perfect and says that any address the router sees that starts with 
+10.0.100 will go through the router0 interface.
+
+The next step is to go around the city and make sure that our customers 
+computers are set up properly.
+
+You can check whether they're properly set up by checking the 'status' in the 
+previous room.
+
+Last 2 things:
+    - Don't forget to 'disconnect' before you leave.
+    - You can always come see me if you need any help
+
+EOF
+    return
+}
+
+help_message() {
+    cat << EOF
+
+Which network do you need help with?
+
+EOF
+    return
+}
+
+bank_go_back_to_teller() {
+    cat << EOF
+
+You should go back and try talking to the bank teller.  They can help you get 
+the ip address situation worked out.
+
+EOF 
+    return
+}
+
+bank_needs_route() {
+
+    cat << EOF
+
+If you remember before, we said the second thing a computer needs is a route.
+
+It looks like that one only has a route for networks that start with 10.0.100!  
+
+One way we can fix that is to tell the computer that if we don't have a route 
+we should send the traffic to a gateway.  Gateway's are special computers like 
+routers that can figure out where your traffic is supposed to go.  In the city 
+network the gateway is at 10.0.100.1.  We can make that the default route by 
+running the command: 
+    'ip route add default via 10.0.100.1 dev city1'.
+
+Again the dev tells the computer which interface to send the traffic out of and
+the add specifies the route we're adding.  Here we specify default because this
+is the route we send to when nothing else matches, or the default.
+
+EOF
+    return
+}
+
+bank_done() {
+    cat << EOF
+
+It looks like the bank computer is all set up!!  You should go let the teller 
+know that the network is good to go.
+
+EOF
+    return
+}
+
+place_done() {
+    cat << EOF
+
+It looks like the place computer is all set up!!  You should go let the person 
+know that the network is good to go.
+
+EOF
+    return
+}
+
+generic_help() {
+    cat << EOF
+
+You need some help?  Not a problem.  Just connect to whatever network you are 
+having trouble with then come back and talk to me.
+
+EOF
+    return
+}
+
+done_with_city() {
+
+    cat << EOF
+
+It looks like the city network is all up and running.  You should go check out 
+one of the other networks, maybe the castle?
+
+EOF
+
+}
+
+done_with_castle() {
+
+    cat << EOF
+
+It looks like the castle network is all up and running.  You should go check out 
+one of the other networks, maybe the village?
+
+EOF
+    return
+
+}
+
+done_with_village() {
+   
+    cat << EOF
+
+It looks like the village network is all up and running.  You should go check out 
+one of the other networks, maybe the town?
+
+EOF
+    return
+
+}
+
+done_with_town() {
+
+    cat << EOF
+
+It looks like the town network is all up and running.  You should go check out 
+one of the other networks.
+
+EOF
+
+}
+
+complete() {
+    cat << EOF
+
+Great Work!!!!
+
+It looks like the whole network is back up.  You can verify the status by going 
+back to the previous room and checking the 'status'.
+
+You may also want to see if anyone has any 'extra' tasks for you.
+
+
+EOF
+    return
+}
+
+not_help() {
+    cat << EOF
+
+I don't think I can help you with that....
+
+EOF
+}
+
+NS=$(command ip netns identify)
+# first thing to check is if we are completely done.  If so print complete message
+if [ -f ~/.router3 ] && [ -f ~/.router2 ] && [ -f ~/.router1 ] && [ -f ~/.router0 ]; then 
+    complete
+
+# Next thing is if we've finished intro
+elif [ -f ~/.intro ] && [ -z "${NS}" ]; then
+    help_message
+    read RESP
+    case $RESP in
+        city)
+            # if router0 is done they don't need help
+            if [ -f ~/.router0 ]; then
+                done_with_city
+            # are they connected to the bank?
+            elif [ $NS = "city1" ]; then
+                ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city10")
+                ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global city10")
+                if ! [ -z "$ROUTE_SET" ]; then
+                    bank_done
+                elif ! [ -z "$ADDR_SET" ]; then
+                    bank_needs_route
+                else
+                    bank_go_back_to_teller
+                fi
+            # are they connect to the other place?
+            elif [ $NS = "city2" ]; then
+                ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city20")
+                ADDR_SET=$(ip a | grep -o "10.0.100.36/24 scope global city20")
+                if ! [ -z "$ROUTE_SET" ]; then
+                    place_done
+                fi
+            else
+                generic_help    
+            fi
+        ;;
+        castle)
+            # if router1 is done they don't need help
+            if [ -f ~/.router1 ]; then
+                done_with_castle
+            # are they connected to the bank?
+            elif [ $NS = "castle1" ]; then
+                ROUTE_SET=$(ip route | grep -o "default via 10.0.110.1 dev castle10")
+                ADDR_SET=$(ip a | grep -o "10.0.110.196/24 scope global castle10")
+                if ! [ -z "$ROUTE_SET" ]; then
+                    workshop_done
+                elif ! [ -z "$ADDR_SET" ]; then
+                    workshop_needs_route
+                else
+                    workshop_go_back
+                fi
+            # are they connect to the other place?
+            elif [ $NS = "castle2" ]; then
+                ROUTE_SET=$(ip route | grep -o "default via 10.0.110.1 dev castle20")
+                ADDR_SET=$(ip a | grep -o "10.0.110.169/24 scope global castle20")
+                if ! [ -z "$ROUTE_SET" ]; then
+                    tower_done
+                elif ! [ -z "$ADDR_SET" ]; then
+                    tower_needs_route
+                else
+                    tower_go_back
+                fi
+            else
+                generic_help    
+            fi
+        ;;
+        village)
+            # if router2 is done they don't need help
+            if [ -f ~/.router2 ]; then
+                done_with_village
+            # are they connected to the bank?
+            elif [ $NS = "village1" ]; then
+                ROUTE_SET=$(ip route | grep -o "default via 10.0.120.128 dev village10")
+                ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global village10")
+                if ! [ -z "$ROUTE_SET" ]; then
+                    farm_done
+                elif ! [ -z "$ADDR_SET" ]; then
+                    farm_needs_route
+                else
+                    farm_go_back
+                fi
+            # are they connect to the other place?
+            elif [ $NS = "village2" ]; then
+                ROUTE_SET=$(ip route | grep -o "default via 10.0.120.111 dev village20")
+                ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global village20")
+                if ! [ -z "$ROUTE_SET" ]; then
+                    cottage_done
+                elif ! [ -z "$ADDR_SET" ]; then
+                    cottage_needs_route
+                else
+                    cottage_go_back
+                fi
+            else
+                generic_help    
+            fi
+        ;;
+        town)
+            # if router1 is done they don't need help
+            if [ -f ~/.router3 ]; then
+                done_with_town
+            # are they connected to the bank?
+            elif [ $NS = "town1" ]; then
+                ROUTE_SET=$(ip route | grep -o "default via 10.0.130.1 dev town10")
+                ADDR_SET=$(ip a | grep -o "10.0.130.173/24 scope global town10")
+                if ! [ -z "$ROUTE_SET" ]; then
+                    station_done
+                elif ! [ -z "$ADDR_SET" ]; then
+                    station_needs_route
+                else
+                    station_go_back
+                fi
+            # are they connect to the other place?
+            elif [ $NS = "city2" ]; then
+                ROUTE_SET=$(ip route | grep -o "default via 10.0.130.1 dev town20")
+                ADDR_SET=$(ip a | grep -o "10.0.130.121/24 scope global town20")
+                if ! [ -z "$ROUTE_SET" ]; then
+                    capitol_done
+                elif ! [ -z "$ADDR_SET" ]; then
+                    capitol_needs_route
+                else
+                    capitol_go_back    
+                fi
+            else
+                generic_help    
+            fi
+        ;;
+        *)
+            not_help
+        ;;
+    esac
+# Check if they've connected to the router (this will generally be message 1)
+elif [ -z "${NS}" ]; then
+    greeting
+# If they've connected to the router get them to run ip address
+elif [ $NS = "router" ]; then
+    ADDR_SET=$(ip a | grep -o "10.0.100.1/24 scope global router0")
+    IP_ROUTE=$(cat ~/.bash_history | grep -o "ip r.*")
+    IP_ADDR=$(cat ~/.bash_history | grep -o "ip a.*")
+
+    # if they ran ip route
+    if ! [ -z "$IP_ROUTE" ] && ! [ -z "$ADDR_SET"]; then
+        ran_ip_route
+        touch ~/.intro
+    # if router0 is properly set
+    elif ! [ -z "$ADDR_SET" ]; then
+        ip_address_set
+    # if the correctly answered the interface question
+    elif [ -f .correct ]; then
+        set_router0
+    # if they've used the ip address command
+    elif ! [ -z "$IP_ADDR" ]; then
+        count_interfaces
+        read RESP
+        if [ "$RESP" = 6 ]; then
+            interface_correct
+            touch .correct
+        else
+            printf "That's not quite right, you may want to try running 'ip address' again.\n"
+        fi
+    else 
+        router_connected
+    fi
+else
+    wrong_connection
+fi
