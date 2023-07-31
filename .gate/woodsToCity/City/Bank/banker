@@ -1,0 +1,125 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+# 
+
+if ! test -f .banker_intro ; then
+	cat << account?
+When you walk into the bank, you are blown away by how homey the interior feels.
+Maybe that's how they intended it, so you'd feel at home when you gave away your money.
+Either way, you are set at ease when the banker walks up to you. He's got an easy smile, 
+a nicely pressed suit, and an outstretched hand.
+
+You get to talking about your voyage so far, from your trials in the castle to the strange
+townspeople outside the city. He effortlessly guides the conversation toward finances, 
+and before you know it you are admitting that things have been a little harder money-wise. 
+He, being the gentlemen banker, offers to help you out in any way he can, provided you open 
+an account with him.
+account?
+touch .banker_intro
+
+fi
+
+if ! test -f ../NetworkCompany/.purchase_in_prog; then
+	cat << waiting
+
+Something about accounts snaps you out of his trap, and you realize what's going on. Flustered but
+newly confident, you decline his offer, and throw out some excuses why you have to leave
+before he can talk you into something else. That banker seems like a good guy to have on your team, 
+but you're unsure if he is on anyone's but his own...
+waiting
+
+
+elif ! test -f .task_begun ; then
+	cat << task
+
+The banker nods slowly as you unfold your plan to purchase the Network Company, a smile slowly creeping across
+his face. Once you are done talking, he spreads his arms wide, and says "Let's go into business together!"
+He does have one teensy thing for you to do though. You noticed earlier a large stack of papers with the heading
+'accounts' on it, and he picks them up and hands them to you.
+
+He says that if you can tell him the total outstanding balance from all the loans that he has given to people, 
+then he will have no problem lending whatever amount you need.
+
+***********************************************************************************************************
+Your task: 
+1) use whatever tool you can at your disposal to isolate the dollar amounts from 'accounts.txt'
+2) you can use the following command to total up line-delimited numbers in a file: 
+    awk '{ sum += $1 } END { print sum }' <file>
+3) come back and talk to the banker and see if you've got the right number!
+***********************************************************************************************************
+
+task
+
+touch .task_begun
+
+elif ! test -f .accounts_totalled ; then
+	cat << number
+The banker is ready for a number.
+
+Total amount of money lent:
+number
+money=
+while [[ -z $money ]]; do
+   read money
+done
+if [ $money -ne 913200 ] ; then
+	cat << nah
+That isn't right... you need to ***cut*** out the specific field, 
+The -d and -f flags are your friends! Don't be afraid to try and
+mess up.
+nah
+
+fi
+
+while [ $money -ne 913200 ] ; do
+	echo "Are you sure about that? Give it another shot:"
+	money=
+	while [[ -z $money ]]; do
+	   read money
+	done
+done
+	cat << done_deal
+ALRIGHT! The banker is overjoyed that he can finally put that to rest, and within the hour, 
+you have the money you need to purchase the Network Company.
+done_deal
+touch .accounts_totalled
+
+else
+	echo "woohoo, business partner!"
+fi
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# Hmm, that didn't work.

@@ -48,7 +48,10 @@ Town
 City
 	carpenter's customer
 	banker
-		money?
+		when you talk to him at first, he just wants you to open an account
+		when you go back to get the money to buy the network company, however, he says he'll let
+		you take out an exclusive interest free loan if you can give him the total number of money contained within his loans
+		awk '{ sum += $1 } END { print sum }' file
 		cut 
 	network company
 		going out of business
