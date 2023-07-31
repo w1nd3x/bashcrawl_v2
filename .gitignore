@@ -1,4 +1,6 @@
 .git
 .vscode
 .jail
+.net_jail
+.adv_jail
 .stats

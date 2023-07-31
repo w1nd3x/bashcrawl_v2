@@ -37,6 +37,36 @@ ip() {
   
 }
 
+ss() {
+  NS=$(command ip netns identify)
+	if [ -z "${NS}" ]; then
+		printf "You have to connect to a computer before you can use ss\n"
+		return
+	else
+		command ss "$@"
+	fi
+}
+
+nc() {
+  NS=$(command ip netns identify)
+	if [ -z "${NS}" ]; then
+		printf "You have to connect to a computer before you can use nc\n"
+		return
+	else
+		command nc "$@"
+	fi 
+}
+
+ping() {
+  NS=$(command ip netns identify)
+	if [ -z "${NS}" ]; then
+		printf "You have to connect to a computer before you can use ping\n"
+		return
+	else
+		command ping "$@"
+	fi 
+}
+
 connect() {
   NS=$(command ip netns identify)
   if [ -z "${NS}" ]; then
@@ -61,13 +91,13 @@ connect() {
       farm)
         export MACHINE=village1
       ;;
-      pasture)
+      cottage)
         export MACHINE=village2
       ;;
       station)
         export MACHINE=town1
       ;;
-      smith)
+      capitol)
         export MACHINE=town2
       ;;
       *)
@@ -101,6 +131,7 @@ disconnect() {
   else
     # the user is not in the default namespace so they can disconnect 
     mv ~/.bashrc.bak ~/.bashrc
+    mv ~/.bash_history.bak ~/.bash_history
     unset MACHINE
     printf "Getting ready to "
     command exit > /dev/null

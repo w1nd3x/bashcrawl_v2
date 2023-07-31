@@ -141,8 +141,8 @@ else
 fi
 
 farm=$(command ip netns exec test ping -c1 -W1 10.0.120.128 | grep -o from 2> /dev/null)
-pasture=$(command ip netns exec test ping -c1 -W1 10.0.120.111 | grep -o from 2> /dev/null)
-if [ ! -z $farm ] && [ ! -z $pasture ]; then
+cottage=$(command ip netns exec test ping -c1 -W1 10.0.120.111 | grep -o from 2> /dev/null)
+if [ ! -z $farm ] && [ ! -z $cottage ]; then
     ONE=$ID
     TWO=$ID
     printf "Village: $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
@@ -153,16 +153,16 @@ else
     else
         printf "\tFarm:        $On_IRed  $Color_Off\n\n"
     fi
-    if [ ! -z $pasture ]; then 
-        printf "\tPasture:     $On_IGreen  $Color_Off\n\n"
+    if [ ! -z $cottage ]; then 
+        printf "\tCottage:     $On_IGreen  $Color_Off\n\n"
     else
-        printf "\tPasture:     $On_IRed  $Color_Off\n\n"
+        printf "\tCottage:     $On_IRed  $Color_Off\n\n"
     fi
 fi
 
 station=$(command ip netns exec test ping -c1 -W1 10.0.130.173 | grep -o from 2> /dev/null) 
-smith=$(command ip netns exec test ping -c1 -W1 10.0.130.121 | grep -o from 2> /dev/null)
-if [ ! -z $station ] && [ ! -z $smith ]; then
+capitol=$(command ip netns exec test ping -c1 -W1 10.0.130.121 | grep -o from 2> /dev/null)
+if [ ! -z $station ] && [ ! -z $capitol ]; then
     ONE=$ID
     TWO=$ID
     printf "Town:    $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
@@ -173,9 +173,9 @@ else
     else
         printf "\tStation:     $On_IRed  $Color_Off\n\n"
     fi
-    if [ ! -z $smith ]; then 
-        printf "\tBlacksmith:  $On_IGreen  $Color_Off\n\n"
+    if [ ! -z $capitol ]; then 
+        printf "\tCapitol:  $On_IGreen  $Color_Off\n\n"
     else
-        printf "\tBlacksmith:  $On_IRed  $Color_Off\n\n"
+        printf "\tCapitol:  $On_IRed  $Color_Off\n\n"
     fi
 fi

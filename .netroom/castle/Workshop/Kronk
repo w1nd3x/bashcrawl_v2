@@ -31,22 +31,28 @@ EOF
 connected() {
 cat << EOF
 
-Great, you're in!  
+Great, you're in!
 
-My computer is supposed to be at 10.0.110.120.
+My computer is supposed to be at 10.0.110.196.
 
 EOF
     return
 }
 
-connected_hint() {
+prompt_for_hint() {
     cat << EOF
 
-Hint:
-You should run the command 'ip address add 10.0.110.120/24 dev castle10'.
+Did you need some help?
 
-If you set an incorrect ip address you can run: 
-    'ip address del <incorrect ip address> dev castle10'
+You can check out this manual if you'd like.  (y/n)
+
+EOF
+}
+
+no_hint() {
+    cat << EOF
+
+If you're sure, but I'm supposed to have a meeting soon... I mean no pressure.
 
 EOF
     return
@@ -54,26 +60,54 @@ EOF
 
 ip_set() {
 
-cat << EOF
+    cat << EOF
 
-Hurray.  Now you should be able to make sure my connection is good.  Try to 
-ping the city's router.  You can use the ping command:  
-    'ping -c3 10.0.100.1'  
+Silly me.  Who knows how I could have messed that up.  Thanks for fixing up my 
+ip address.
 
-The -c argument sets the count for how many ping's you will send.  If you don't
-specify a count, ping will run forever and to shut it down you'll need to press
-ctrl+c.
-
-EOF 
+EOF
     return
 }
 
 ping_success() {
     cat << EOF
 
-Great we can get to the router.  Now see if you can reach the test network.  
-Someone at the IT company set it up so we could make sure our connections were 
-good.  It's IP address is 10.0.140.2.
+Well thank goodness.  I was worried you wouldn't be able to get me connected.
+
+Now can you make sure I can get to the test computer?  It's at 10.0.140.42.
+
+EOF
+    return
+}
+
+ping_hint() {
+    cat << EOF
+
+Hint:
+You should run the command 'ping -c3 10.0.140.42'
+
+EOF
+    return
+}
+
+workshop_routed() {
+    cat << EOF
+
+Amazing!!! It connects.  Technology is something else.
+
+So about that online business...
+
+I tried to set up a storefront, but I can't figure out what port it's on.  Do 
+you think you could help me out with that?
+
+EOF
+    return
+}
+
+wrong_connection() {
+    cat << EOF
+
+It looks like you're connected to one of the other computers in the kingdom.
 
 EOF
     return
@@ -82,21 +116,56 @@ EOF
 complete() {
     cat << EOF
 
-Amazing!!!  I'm back on the network!!  Thank you for your help!
-
-If you've got some time I could use some help with another problem.
+Well it looks like you've fixed everything here.
 
 EOF
     return
 }
 
-extra_credit() {
-    cat << EOF
 
-I tried to set up an online store that you can reach on port XXXX.
-
-Could you make sure that it's up and order my 'secret item'?
-
-EOF
-    return
-}
+NS=$(command ip netns identify)
+if [ -f .done ]; then
+    complete
+elif [ -z "${NS}" ]; then
+    greeting
+else
+    if [ "$NS" = "castle2" ]; then
+        ADDR_SET=$(ip a | grep -o "10.0.110.196/24 scope global castle10")
+        PING=$(cat ~/.bash_history | grep -o "ping .* 10.0.110.1")
+        PING2=$(cat ~/.bash_history | grep -o "ping .* 10.0.140.42")
+        ROUTE_SET=$(ip route | grep -o "default via 10.0.110.1 dev castle10")
+        if ! [ -z "$ROUTE_SET" ]; then
+            complete
+            touch .done
+            # edit .start.sh to save progress
+        elif ! [ -z "$PING2" ] && [ -f .ping ]; then
+            ping_aftermath
+        elif [ -f .ping ]; then
+            prompt_for_hint
+            read RESP
+            if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
+                ping_hint
+            else
+                no_hint
+            fi
+        elif ! [ -z "$PING" ] && ! [ -z "$ADDR_SET" ]; then
+            ping_success
+            touch .ping
+        elif ! [ -z "$ADDR_SET" ]; then
+            ip_set
+        elif [ -f .connected ]; then
+            prompt_for_hint
+            read RESP
+            if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
+                connected_hint
+            else
+                no_hint
+            fi
+        elif ! [ -z "${NS}" ]; then
+            connected
+            touch .connected
+        fi
+    else
+        wrong_connection
+    fi
+fi
