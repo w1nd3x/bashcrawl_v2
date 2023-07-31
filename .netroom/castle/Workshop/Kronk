@@ -1,0 +1,102 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+
+greeting() {
+    cat << EOF
+
+Guess what!?!
+
+I've started an online business.  I'm selling my frying pan upgrades to the 
+whole kingdom!
+
+At least I would be if the network were up.  Think you can 'connect' and 
+figure out what's going on?
+
+EOF
+    return
+}
+
+connected() {
+cat << EOF
+
+Great, you're in!  
+
+My computer is supposed to be at 10.0.110.120.
+
+EOF
+    return
+}
+
+connected_hint() {
+    cat << EOF
+
+Hint:
+You should run the command 'ip address add 10.0.110.120/24 dev castle10'.
+
+If you set an incorrect ip address you can run: 
+    'ip address del <incorrect ip address> dev castle10'
+
+EOF
+    return
+}
+
+ip_set() {
+
+cat << EOF
+
+Hurray.  Now you should be able to make sure my connection is good.  Try to 
+ping the city's router.  You can use the ping command:  
+    'ping -c3 10.0.100.1'  
+
+The -c argument sets the count for how many ping's you will send.  If you don't
+specify a count, ping will run forever and to shut it down you'll need to press
+ctrl+c.
+
+EOF 
+    return
+}
+
+ping_success() {
+    cat << EOF
+
+Great we can get to the router.  Now see if you can reach the test network.  
+Someone at the IT company set it up so we could make sure our connections were 
+good.  It's IP address is 10.0.140.2.
+
+EOF
+    return
+}
+
+complete() {
+    cat << EOF
+
+Amazing!!!  I'm back on the network!!  Thank you for your help!
+
+If you've got some time I could use some help with another problem.
+
+EOF
+    return
+}
+
+extra_credit() {
+    cat << EOF
+
+I tried to set up an online store that you can reach on port XXXX.
+
+Could you make sure that it's up and order my 'secret item'?
+
+EOF
+    return
+}

@@ -149,18 +149,27 @@ cleanup() {
     if test $TYPE = 0; then
       cp .jail/room/tower/mainhall/.stats .stats 2>/dev/null
       # destroy all the folders for the game
-      # umount .jail/{dev,proc,sys}/
       sudo rm -rf ./.jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
     elif test $TYPE = 1; then
       #cp .adv_jail/ 2>/dev/null
       # destroy all the folders for the game
       # umount .jail/{dev,proc,sys}/
+      umount $JAIL/dev/random
+      umount $JAIL/dev/urandom
       sudo rm -rf ./.adv_jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
     elif test $TYPE = 2; then
       #cp .net
       # destroy all the folders for the game
       # umount .jail/{dev,proc,sys}/
-      sudo rm -rf ./.net_jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
+      for i in $(ls /run/netns); do
+        umount $JAIL/run/netns/$i
+      done
+      umount $JAIL/run
+      umount $JAIL/proc
+      umount $JAIL
+      umount $JAIL/dev/null
+      sudo rm -rf ./.net_jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var,run}
+      sudo ./.stop.sh
     fi
     echo Thanks for playing, come back soon
 }
@@ -171,7 +180,7 @@ export OLD_HOME=$HOME
 
 # create the directories necessary for a chroot jail
 # apropos(1), groff(1), less(1), manpath(1), nroff(1), troff(1), whatis(1)
-mkdir -p $JAIL/{bin,lib64,lib,dev,etc,usr,proc,sys,dev}
+mkdir -p $JAIL/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,run,var,mnt}
 
 # cp $(which bash) .jail/bin
 cp busybox $JAIL/bin/busybox
@@ -183,7 +192,13 @@ done
 # for i in $(ldd /bin/{awk,wc,realpath,basename,cut,col,manpath,whatis,less,grotty,nroff,tbl,sh,perl,groff,troff,grops,man,mandb,apropos,bash,pwd,ls,cat,mv,cp,chmod,file,mkdir,sed,grep,rm,echo,touch,clear,env} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
 cp $(which file) $JAIL/bin/
 cp $(which bash) $JAIL/bin/
-for i in $(ldd $JAIL/bin/{file,bash} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
+cp $(which ip) $JAIL/bin/    # need ip since busybox version doesn't have netns
+cp $(which ping) $JAIL/bin/
+cp $(which nc) $JAIL/bin/
+cp $(which ss) $JAIL/bin/
+# added strace for debug purposes, removed in production
+# cp $(which strace) $JAIL/bin/
+for i in $(ldd $JAIL/bin/{file,bash,ip,ping,nc,ss} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
 do
     j=$(echo $i | sed "s/=>.*//")
     i=$(echo $i | sed "s/.*=>//")
@@ -232,6 +247,10 @@ EOF
     ;;
   1)
     export HOME=/gate
+    touch $JAIL/dev/random
+    touch $JAIL/dev/urandom
+    mount --rbind /dev/random $JAIL/dev/random
+    mount --rbind /dev/urandom $JAIL/dev/urandom
     if test -d $JAIL/gate; then
       # gate already exists so do nothing
       echo "Resuming your previous game, good luck!"
@@ -242,13 +261,22 @@ EOF
     fi
     ;;
   2)
-    export HOME=/netroom
-    if test -d $JAIL/netroom; then
+    export HOME=/crossroad/city/net/
+    sudo ./.start.sh
+    touch $JAIL/dev/null
+    mount --rbind /dev/null $JAIL/dev/null
+    mount --bind --make-private $JAIL $JAIL
+    mount --bind /proc $JAIL/proc/
+    mount --bind /run $JAIL/run/
+    for i in $(ls /run/netns); do
+      mount --rbind /run/netns/$i $JAIL/run/netns/$i
+    done
+    if test -d $JAIL/crossroad; then
       echo "Resuming your previous game, good luck!"
     else
       echo "Starting a new game"
-      cp -r .gate $JAIL/netroom
-      cp advanced_welcome_message $JAIL
+      cp -r .netroom $JAIL/crossroad
+      cp net_welcome_message $JAIL
     fi
     ;;
 esac
@@ -259,14 +287,22 @@ esac
 mkdir -p $JAIL/usr/share/man
 tar -C $JAIL/usr/share/man -xvzf catpages.tar.gz &>/dev/null
 
+# copy over stuff so file works
 cp -r --parents /etc/magic $JAIL
 cp -r --parents /usr/share/misc/magic $JAIL
 cp -r --parents /lib/terminfo $JAIL
 cp  --parents /usr/share/misc/magic.mgc $JAIL
 
-# mount --bind /dev .jail/dev/
-# mount --bind /proc .jail/proc/
-# mount --bind /sys .jail/sys
+# copy over stuff so ip works
+cp -r --parents /etc/iproute2 $JAIL
+
+#mount --bind /var $JAIL/var/
+#mount --bind /mnt $JAIL/mnt/
+#mount --bind /dev $JAIL/dev/
+#mount --bind /proc $JAIL/proc/
+#mount --bind /run $JAIL/run/
+#mount --make-shared $JAIL/run/
+#mount --bind /sys $JAIL/sys
 #cp -r /usr/libexec/man-db .jail/usr/libexec
 
 sudo chroot $JAIL /bin/env -i ID="$ID" HOME=$HOME TERM="$TERM" PS1='\$ ' ENV=$HOME/.bashrc PATH=/bin /bin/bash

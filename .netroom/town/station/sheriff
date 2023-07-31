@@ -1,0 +1,122 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+
+greeting() {
+    cat << EOF
+
+Look I know we've had our differences of opinion, but I really need access to 
+the network again so I can meet with my conspirat... support group.  Can you 
+really deny an old lady that?
+
+Why don't you 'connect' and see if you can get it fixed?
+EOF
+    return
+}
+
+connected() {
+cat << EOF
+
+Great, you're connected.  
+
+Does my computer have an ip address?  
+
+It's supposed to be 10.0.100.25.  
+
+Do you think you can set that up?
+
+EOF
+    return
+}
+
+connected_hint() {
+    cat << EOF
+
+Hint:
+You should run the command 'ip address add 10.0.100.25/24 dev city10'.
+
+If you set an incorrect ip address you can run: 
+    'ip address del <incorrect ip address> dev city10'
+
+EOF
+    return
+}
+
+ip_set() {
+
+cat << EOF
+
+Hurray.  Now you should be able to make sure my connection is good.  Try to 
+ping the city's router.  You can use the ping command:  
+    'ping -c3 10.0.100.1'  
+
+The -c argument sets the count for how many ping's you will send.  If you don't
+specify a count, ping will run forever and to shut it down you'll need to press
+ctrl+c.
+
+EOF 
+    return
+}
+
+ping_success() {
+    cat << EOF
+
+Great we can get to the router.  Now see if you can reach the test network.  
+Someone at the IT company set it up so we could make sure our connections were 
+good.  It's IP address is 10.0.140.2.
+
+EOF
+    return
+}
+
+ping_hint() {
+    cat << EOF
+
+Hint:
+You should run the command 'ping -c3 10.0.140.2'
+
+EOF
+    return
+}
+
+ping_aftermath() {
+    cat << EOF
+
+Oh no!! It's not working.  You should go talk to the technician to figure this 
+out.
+
+EOF
+    return
+}
+
+complete() {
+    cat << EOF
+
+Amazing!!!  I'm back on the network!!  Thank you for your help!
+
+EOF
+    return
+}
+
+
+extra_credit() {
+    cat << EOF
+
+Your predecessor was a real shady character.  When they set up that test 
+computer the crime rate almost tripled.  Do you think you could scan the ports 
+on that computer and see if anything suspicious pops up?
+
+EOF
+    return
+}
