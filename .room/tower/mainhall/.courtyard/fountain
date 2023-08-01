@@ -37,12 +37,13 @@ You feel oddly at peace and ready to continue
 your journey
 
 EOF
-        sed "s/Modifier: /Modifier: blessing,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+        sed "s/Modifier:/Modifier: blessing,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
     else
         cat << EOF
 
 You don't have anything that would fit in that
 space.
+
 EOF
     fi
 else

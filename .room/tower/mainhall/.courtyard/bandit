@@ -18,6 +18,7 @@ source ~/.combat
 # and this file has been renamed to 'rags'
 if [ "$0" = "./rags" ]; then
     cat << eof
+
 You sift through the rags left behind by the bandit.
 
 You find nothing of interest.
@@ -28,6 +29,7 @@ fi
 
 # start the thief encounter
 cat << eof
+
 A bandit appears.
 
 eof
@@ -43,13 +45,14 @@ The bandit rushes forward!
 eof
     roll 0 0 6 3
     if test $? = 1; then 
-        printf "The bandit falls away... I don't think they're getting back up!"
+        printf "The bandit falls away... I don't think they're getting back up!\n"
         mv bandit rags
-        printf "The bandit dropped five coins!"
+        printf "The bandit dropped five coins!\n"
         addCoins 5
     fi
 else
     cat << eof
+    
 You cautiously avoid the bandit.
 
 eof

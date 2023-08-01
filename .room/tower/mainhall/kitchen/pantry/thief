@@ -18,6 +18,7 @@ source ~/.combat
 # and this file has been renamed to 'rags'
 if [ "$0" = "./rags" ]; then
     cat << eof
+    
 You sift through the rags left behind by the thief.
 
 You find nothing of interest.
@@ -28,6 +29,7 @@ fi
 
 # start the thief encounter
 cat << eof
+
 A mangy thief crouches in the pantry.
 
 eof
@@ -37,6 +39,7 @@ read RESP
 
 if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
     cat << eof
+
 The thief rushes forward, yelling:
 
 YOU DON'T DESERVE CHOCOLATE!!!!
@@ -54,8 +57,8 @@ eof
     fi
 else
     cat << eof
-You cautiously avoid the thief, you are after all,
-a princess.
+
+You cautiously avoid the thief.
 
 eof
 

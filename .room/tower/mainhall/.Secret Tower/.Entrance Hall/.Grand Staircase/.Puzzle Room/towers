@@ -15,6 +15,8 @@
 source ~/.combat
 
 if test $(ls "Right" | wc -w) = "5"; then
+    printf "\nGreat work, you soled the towers of Hanoi!!!!\n\n"
+
     /bin/touch .solved 
     addTreasure "HanoiTower" "This is in like every game..."
 fi

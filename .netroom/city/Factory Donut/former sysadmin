@@ -16,9 +16,12 @@
 greeting() {
     cat << EOF
 
-Now I'm no technician, but this computer is supposed to be connecting to 
-everyone else so they can access their accounts and make purchases, but 
-something isn't working.  You should "connect" and see what's going on.
+It looks like things are going pretty well for your new company.  I hope you
+manage to start turning a profit, even in our heyday we didn't.  Anywho, I'm 
+hoping you can work some of your network magic and get this Factory Donut all
+connected.
+
+You can go ahead and 'connect' right up.
 
 EOF
     return
@@ -27,13 +30,11 @@ EOF
 connected() {
 cat << EOF
 
-Great, you're connected.  
+You connected?!?!  You're already doing this network thing better than we did.  
 
-Does my computer have an ip address?  
+The ip address here is supposed to be at 10.0.100.36.  
 
-It's supposed to be 10.0.100.25.  
-
-Do you think you can set that up?
+Could you set that up?
 
 EOF
     return
@@ -44,7 +45,7 @@ prompt_for_hint() {
 
 Did you need some help?
 
-You can check out this manual if you'd like.  (y/n)
+I think I kind of remember some network commands.  (y/n)
 
 EOF
 }
@@ -53,10 +54,10 @@ connected_hint() {
     cat << EOF
 
 Hint:
-You should run the command 'ip address add 10.0.100.25/24 dev city10'.
+You should run the command 'ip address add 10.0.100.36/24 dev city20'.
 
 If you set an incorrect ip address you can run: 
-    'ip address del <incorrect ip address> dev city10'
+    'ip address del <incorrect ip address> dev city20'
 
 EOF
     return
@@ -135,22 +136,33 @@ EOF
     return
 }
 
+do_the_intro() {
+    cat << EOF
+
+You should probably go back to The Royal Byte and talk to the technician.
+
+EOF
+}
+
 
 NS=$(command ip netns identify)
 if [ -f .done ]; then
     complete
+elif ! [ -f ~/.router0 ]; then
+    do_the_intro
 elif [ -z "${NS}" ]; then
     greeting
 else
-    if [ "$NS" = "city1" ]; then
-        ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global city10")
+    if [ "$NS" = "city2" ]; then
+        ADDR_SET=$(ip a | grep -o "10.0.100.36/24 scope global city20")
         PING=$(cat ~/.bash_history | grep -o "ping .* 10.0.100.1")
         PING2=$(cat ~/.bash_history | grep -o "ping .* 10.0.140.42")
-        ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city10")
+        ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city20")
         if ! [ -z "$ROUTE_SET" ]; then
             complete
             touch .done
             # edit .start.sh to save progress
+            sed "s/#city2 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
         elif ! [ -z "$PING2" ] && [ -f .ping ]; then
             ping_aftermath
         elif [ -f .ping ]; then

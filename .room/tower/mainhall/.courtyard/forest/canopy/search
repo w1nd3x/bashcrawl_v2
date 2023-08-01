@@ -19,7 +19,8 @@ Finally feeling a little dry you are able to
 thoroughly search the area.  
 
 You manage to find an altar with three differently
-shaped holes, a circle, a square, and a diamond.
+shaped holes, a "circle", a "square", and a 
+"diamond".
 
 The circle is already in place.
 
@@ -28,9 +29,11 @@ allowed you to "copy" objects into new ones...
 
 
 EOF
-
-echo "REAL OBJECT" > circle
-cat << EOF > altar
+        if ! test -f circle; then
+            echo "REAL OBJECT" > circle
+        fi
+        if ! test -f altar; then
+            cat << EOF > altar
 #!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
@@ -62,13 +65,15 @@ fi
 
 
 EOF
-    chmod +x altar
+            chmod +x altar
+        fi
     else
         cat << EOF
 Something feels off about this umbrella
 
 You should have man pop back up to your room and make
-that this is the right one (there should only be one umbrella)
+sure that this is the right one (there should only be 
+one umbrella)
 
 
 EOF

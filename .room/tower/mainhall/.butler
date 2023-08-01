@@ -27,7 +27,11 @@ else
         # Add seasoning
         sed "s/Inventory:/Inventory: seasoning,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
         cat << EOF
-# The butler gives you some seasoning.  
+
+#
+# Great work!! man is super useful!! 
+#
+# **The butler gives you some seasoning.**
 # 
 # 
 # 
@@ -35,6 +39,8 @@ else
 EOF
     else
         cat <<EOF
+
+#        
 # A well-dressed butler comes running in from the 
 # tower.
 #

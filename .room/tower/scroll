@@ -1,3 +1,4 @@
+
 #
 # That blow to the head may have caused more damage than you thought.
 # It's hard to tell what's a doorway and what's an object.
@@ -8,7 +9,7 @@
 # 
 # Directories (the rooms) end with a / symbol.
 # 
-# Encounters (programs) end with a * symbol.
+# Programs (encounters) end with a * symbol.
 #
 # You can avoid having to type ls -F every time by running the
 # following:

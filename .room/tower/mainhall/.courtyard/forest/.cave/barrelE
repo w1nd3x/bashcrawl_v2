@@ -12,6 +12,11 @@
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
 #  
+
+if test -f "./Secret Hideout/scroll"; then
+    printf "\nThe switch has already been flipped!\n\n"
+    exit
+fi
 cat << EOF
 
 You find a switch inside of the barrel.
@@ -19,7 +24,14 @@ You find a switch inside of the barrel.
 You flip it and a section of the cave falls away 
 to reveal the Secret Hideout.
 
+You may want to go back to the courtyard and try 
+relaxing some more.
+
 EOF
+
+if test -f ~/courtyard/.relax; then
+    mv ~/courtyard/.relax ~/courtyard/relax
+fi
 # Create the Secret Hideout
 mkdir "Secret Hideout"
 
@@ -69,8 +81,8 @@ if [ "\$RESP" = "y" -o "\$RESP" = "Y" ]; then
     roll 0 0 50 5
     if test \$? = 1; then 
         printf "\nYou've taken down the cave boss and as you look around you see that there is still no chocolate!!\n\n"
-        mv thief rags
-        mv "~/.Secret Tower" "~/Secret Tower"
+        mv ./Cave\ Boss rags
+        mv ~/.Secret\ Tower ~/Secret\ Tower
         addTreasure "corgi" "The queen won't be happy to find out about this."
         NUM1=\$((\$ID+5))
         NUM2=\$((\$ID+6))

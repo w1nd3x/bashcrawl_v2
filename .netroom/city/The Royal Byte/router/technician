@@ -146,10 +146,20 @@ EOF
     return
 }
 
-help_message() {
+help_connected() {
     cat << EOF
 
-Which network do you need help with?
+Let me take a look at what's going on in this network...
+
+EOF
+    return
+}
+
+help_not_connected() {
+    cat << EOF
+
+I'm more than happy to help, just connect to whatever network is giving you 
+problems and come talk to me again.
 
 EOF
     return
@@ -282,137 +292,145 @@ EOF
 not_help() {
     cat << EOF
 
-I don't think I can help you with that....
+You're not supposed to be there!!!!
 
 EOF
 }
 
 NS=$(command ip netns identify)
 # first thing to check is if we are completely done.  If so print complete message
-if [ -f ~/.router3 ] && [ -f ~/.router2 ] && [ -f ~/.router1 ] && [ -f ~/.router0 ]; then 
+if [ -f ~/.complete ]; then 
     complete
 
 # Next thing is if we've finished intro
-elif [ -f ~/.intro ] && [ -z "${NS}" ]; then
-    help_message
-    read RESP
-    case $RESP in
-        city)
+elif [ -f ~/.router0 ]; then
+    if [ -z "${NS}" ]; then
+        help_not_connected
+        return
+    else
+        help_connected
+    fi
+    case $NS in
+        city1)
+            ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city10")
+            ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global city10")
             # if router0 is done they don't need help
             if [ -f ~/.router0 ]; then
                 done_with_city
-            # are they connected to the bank?
-            elif [ $NS = "city1" ]; then
-                ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city10")
-                ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global city10")
-                if ! [ -z "$ROUTE_SET" ]; then
-                    bank_done
-                elif ! [ -z "$ADDR_SET" ]; then
-                    bank_needs_route
-                else
-                    bank_go_back_to_teller
-                fi
-            # are they connect to the other place?
-            elif [ $NS = "city2" ]; then
-                ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city20")
-                ADDR_SET=$(ip a | grep -o "10.0.100.36/24 scope global city20")
-                if ! [ -z "$ROUTE_SET" ]; then
-                    place_done
-                fi
+            elif ! [ -z "$ROUTE_SET" ]; then
+                bank_done
+            elif ! [ -z "$ADDR_SET" ]; then
+                bank_needs_route
             else
-                generic_help    
+                bank_go_back_to_teller
             fi
-        ;;
-        castle)
+            ;;
+        city2)
+            ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city20")
+            ADDR_SET=$(ip a | grep -o "10.0.100.36/24 scope global city20")
+            if [ -f ~/.router0 ]; then
+                done_with_city    
+            elif ! [ -z "$ROUTE_SET" ]; then
+                    place_done
+            elif ! [ -z "$ADDR_SET" ]; then
+                place_needs_route
+            else
+                place_go_back_to_person
+            fi
+            ;;
+        castle1)
+            ROUTE_SET=$(ip route | grep -o "default via 10.0.110.1 dev castle10")
+            ADDR_SET=$(ip a | grep -o "10.0.110.196/24 scope global castle10")
             # if router1 is done they don't need help
             if [ -f ~/.router1 ]; then
                 done_with_castle
-            # are they connected to the bank?
-            elif [ $NS = "castle1" ]; then
-                ROUTE_SET=$(ip route | grep -o "default via 10.0.110.1 dev castle10")
-                ADDR_SET=$(ip a | grep -o "10.0.110.196/24 scope global castle10")
-                if ! [ -z "$ROUTE_SET" ]; then
-                    workshop_done
-                elif ! [ -z "$ADDR_SET" ]; then
-                    workshop_needs_route
-                else
-                    workshop_go_back
-                fi
-            # are they connect to the other place?
-            elif [ $NS = "castle2" ]; then
-                ROUTE_SET=$(ip route | grep -o "default via 10.0.110.1 dev castle20")
-                ADDR_SET=$(ip a | grep -o "10.0.110.169/24 scope global castle20")
-                if ! [ -z "$ROUTE_SET" ]; then
-                    tower_done
-                elif ! [ -z "$ADDR_SET" ]; then
-                    tower_needs_route
-                else
-                    tower_go_back
-                fi
+            elif ! [ -z "$ROUTE_SET" ]; then
+                workshop_done
+            elif ! [ -z "$ADDR_SET" ]; then
+                workshop_needs_route
             else
-                generic_help    
+                workshop_go_back
             fi
-        ;;
-        village)
+            ;;
+        castle2)
+            ROUTE_SET=$(ip route | grep -o "default via 10.0.110.1 dev castle20")
+            ADDR_SET=$(ip a | grep -o "10.0.110.169/24 scope global castle20")
+            if [ -f ~/.router1 ]; then
+                done_with_castle
+            elif ! [ -z "$ROUTE_SET" ]; then
+                tower_done
+            elif ! [ -z "$ADDR_SET" ]; then
+                tower_needs_route
+            else
+                tower_go_back
+            fi
+            ;;
+        village1)
+            ROUTE_SET=$(ip route | grep -o "default via 10.0.120.128 dev village10")
+            ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global village10")
             # if router2 is done they don't need help
             if [ -f ~/.router2 ]; then
                 done_with_village
-            # are they connected to the bank?
-            elif [ $NS = "village1" ]; then
-                ROUTE_SET=$(ip route | grep -o "default via 10.0.120.128 dev village10")
-                ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global village10")
-                if ! [ -z "$ROUTE_SET" ]; then
-                    farm_done
-                elif ! [ -z "$ADDR_SET" ]; then
-                    farm_needs_route
-                else
-                    farm_go_back
-                fi
-            # are they connect to the other place?
-            elif [ $NS = "village2" ]; then
-                ROUTE_SET=$(ip route | grep -o "default via 10.0.120.111 dev village20")
-                ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global village20")
-                if ! [ -z "$ROUTE_SET" ]; then
-                    cottage_done
-                elif ! [ -z "$ADDR_SET" ]; then
-                    cottage_needs_route
-                else
-                    cottage_go_back
-                fi
+            elif ! [ -z "$ROUTE_SET" ]; then
+                farm_done
+            elif ! [ -z "$ADDR_SET" ]; then
+                farm_needs_route
             else
-                generic_help    
+                farm_go_back
             fi
-        ;;
-        town)
-            # if router1 is done they don't need help
+            ;;
+        village2)
+            ROUTE_SET=$(ip route | grep -o "default via 10.0.120.111 dev village20")
+            ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global village20")
+            if [ -f ~/.router2 ]; then
+                done_with_village
+            elif ! [ -z "$ROUTE_SET" ]; then
+                cottage_done
+            elif ! [ -z "$ADDR_SET" ]; then
+                cottage_needs_route
+            else
+                cottage_go_back
+            fi
+            ;;
+        town1)
+            ROUTE_SET=$(ip route | grep -o "default via 10.0.130.1 dev town10")
+            ADDR_SET=$(ip a | grep -o "10.0.130.173/24 scope global town10")
             if [ -f ~/.router3 ]; then
-                done_with_town
-            # are they connected to the bank?
-            elif [ $NS = "town1" ]; then
-                ROUTE_SET=$(ip route | grep -o "default via 10.0.130.1 dev town10")
-                ADDR_SET=$(ip a | grep -o "10.0.130.173/24 scope global town10")
-                if ! [ -z "$ROUTE_SET" ]; then
-                    station_done
-                elif ! [ -z "$ADDR_SET" ]; then
-                    station_needs_route
-                else
-                    station_go_back
-                fi
-            # are they connect to the other place?
-            elif [ $NS = "city2" ]; then
-                ROUTE_SET=$(ip route | grep -o "default via 10.0.130.1 dev town20")
-                ADDR_SET=$(ip a | grep -o "10.0.130.121/24 scope global town20")
-                if ! [ -z "$ROUTE_SET" ]; then
-                    capitol_done
-                elif ! [ -z "$ADDR_SET" ]; then
-                    capitol_needs_route
-                else
-                    capitol_go_back    
-                fi
+                done_with_town            
+            elif ! [ -z "$ROUTE_SET" ]; then
+                station_done
+            elif ! [ -z "$ADDR_SET" ]; then
+                station_needs_route
             else
-                generic_help    
+                station_go_back
             fi
-        ;;
+            ;;
+        town2)
+            ROUTE_SET=$(ip route | grep -o "default via 10.0.130.1 dev town20")
+            ADDR_SET=$(ip a | grep -o "10.0.130.121/24 scope global town20")
+            if [ -f ~/.router3 ]; then
+                done_with_town   
+            elif ! [ -z "$ROUTE_SET" ]; then
+                capitol_done
+            elif ! [ -z "$ADDR_SET" ]; then
+                capitol_needs_route
+            else
+                capitol_go_back    
+            fi
+            ;;
+        router)
+            if [ -f ~/.router0 ] && [ -f ~/.router1 ] && [ -f ~/.router2 ] && [ -f ~/.router3 ]; then
+                # all the router stuff is done
+            elif [ -f ~/.router0 ] && [ -f ~/.router1 ] && [ -f ~/.router2 ]; then
+                # need to set up router3
+            elif [ -f ~/.router0 ] && [ -f ~/.router1 ]; then
+                # need to set up router2
+            elif [ -f ~/.router0 ]; then
+                # need to set up router1
+            else
+                not_help
+            fi
+            ;;
         *)
             not_help
         ;;
@@ -429,7 +447,7 @@ elif [ $NS = "router" ]; then
     # if they ran ip route
     if ! [ -z "$IP_ROUTE" ] && ! [ -z "$ADDR_SET"]; then
         ran_ip_route
-        touch ~/.intro
+        touch ~/.router0
     # if router0 is properly set
     elif ! [ -z "$ADDR_SET" ]; then
         ip_address_set

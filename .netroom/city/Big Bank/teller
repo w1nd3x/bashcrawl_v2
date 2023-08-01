@@ -16,9 +16,9 @@
 greeting() {
     cat << EOF
 
-Look I know we've had our differences of opinion, but I really need access to 
-the network again so I can meet with my conspirat... support group.  Can you 
-really deny an old lady that?
+Now I'm no technician, but this computer is supposed to be connecting to 
+everyone else so they can access their accounts and make purchases, but 
+something isn't working.  You should "connect" and see what's going on.
 
 EOF
     return
@@ -27,11 +27,13 @@ EOF
 connected() {
 cat << EOF
 
-Thanks for doing this.  I really appreciate you looking beyond our past 
-differences.
+Great, you're connected.  
 
-My computer is supposed to be at 10.0.110.169.  I thought I had it set up, but 
-it just won't connect.
+Does my computer have an ip address?  
+
+It's supposed to be 10.0.100.25.  
+
+Do you think you can set that up?
 
 EOF
     return
@@ -47,10 +49,23 @@ You can check out this manual if you'd like.  (y/n)
 EOF
 }
 
+connected_hint() {
+    cat << EOF
+
+Hint:
+You should run the command 'ip address add 10.0.100.25/24 dev city10'.
+
+If you set an incorrect ip address you can run: 
+    'ip address del <incorrect ip address> dev city10'
+
+EOF
+    return
+}
+
 no_hint() {
     cat << EOF
 
-If you're sure, but I'm supposed to have a meeting soon... I mean no pressure.
+No problem, let me know if you need anything.
 
 EOF
     return
@@ -60,11 +75,13 @@ ip_set() {
 
     cat << EOF
 
-Oh, I guess I had the wrong address.  Well you know I got pretty close.  Do you
-know if I can get to the city router?  
+Hurray.  Now you should be able to make sure my connection is good.  Try to 
+ping the city's router.  You can use the ping command:  
+    'ping -c3 10.0.100.1'  
 
-Most of the people I need to communicate with are in other parts of the 
-kingdom.
+The -c argument sets the count for how many ping's you will send.  If you don't
+specify a count, ping will run forever and to shut it down you'll need to press
+ctrl+c.
 
 EOF
     return
@@ -73,9 +90,9 @@ EOF
 ping_success() {
     cat << EOF
 
-Well thank goodness.  I was worried you wouldn't be able to get me connected.
-
-Now can you make sure I can get to the test computer?  It's at 10.0.140.42.
+Great we can get to the router.  Now see if you can reach the test network.  
+Someone at the IT company set it up so we could make sure our connections were 
+good.  It's IP address is 10.0.140.42.
 
 EOF
     return
@@ -91,11 +108,11 @@ EOF
     return
 }
 
-cottage_routed() {
+ping_aftermath() {
     cat << EOF
 
-Now that you've fixed up my connection there's a thing I need to connect to on 
-port XX at XX.XX.XX.XX.  Think you can help me out.
+Oh no!! It's not working.  You should go talk to the technician to figure this 
+out.
 
 EOF
     return
@@ -107,36 +124,44 @@ wrong_connection() {
 It looks like you're connected to one of the other computers in the kingdom.
 
 EOF
-    return
 }
 
 complete() {
     cat << EOF
 
-Well it looks like you've fixed everything here.
+Amazing!!!  I'm back on the network!!  Thank you for your help!
 
 EOF
     return
+}
+
+do_the_intro() {
+    cat << EOF
+
+You should probably go back to The Royal Byte and talk to the technician.
+
+EOF
 }
 
 
 NS=$(command ip netns identify)
 if [ -f .done ]; then
     complete
-elif ! [ -f ~/.router2 ]; then
-    router2_setup
+elif ! [ -f ~/.router0 ]; then
+    do_the_intro
 elif [ -z "${NS}" ]; then
     greeting
 else
-    if [ "$NS" = "village2" ]; then
-        ADDR_SET=$(ip a | grep -o "10.0.120.111/24 scope global village20")
-        PING=$(cat ~/.bash_history | grep -o "ping .* 10.0.120.1")
+    if [ "$NS" = "city1" ]; then
+        ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global city10")
+        PING=$(cat ~/.bash_history | grep -o "ping .* 10.0.100.1")
         PING2=$(cat ~/.bash_history | grep -o "ping .* 10.0.140.42")
-        ROUTE_SET=$(ip route | grep -o "default via 10.0.120.1 dev village20")
+        ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city10")
         if ! [ -z "$ROUTE_SET" ]; then
             complete
             touch .done
             # edit .start.sh to save progress
+            sed "s/#city1 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
         elif ! [ -z "$PING2" ] && [ -f .ping ]; then
             ping_aftermath
         elif [ -f .ping ]; then

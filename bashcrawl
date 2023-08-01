@@ -78,6 +78,7 @@ if [ $# -ne 0 ]; then
             read RESP
             if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
               rm -rf .jail
+              rm .stats
               printf "Your previous progress has been removed\n"
               exit 0
             else
@@ -261,8 +262,16 @@ EOF
     fi
     ;;
   2)
+    if test -d $JAIL/crossroad; then
+      echo "Resuming your previous game, good luck!"
+    else
+      echo "Starting a new game"
+      cp -r .netroom $JAIL/crossroad
+      cp net_welcome_message $JAIL
+      cp ./.start.sh $JAIL
+    fi
     export HOME=/crossroad/city/net/
-    sudo ./.start.sh
+    sudo $JAIL/.start.sh
     touch $JAIL/dev/null
     mount --rbind /dev/null $JAIL/dev/null
     mount --bind --make-private $JAIL $JAIL
@@ -271,13 +280,6 @@ EOF
     for i in $(ls /run/netns); do
       mount --rbind /run/netns/$i $JAIL/run/netns/$i
     done
-    if test -d $JAIL/crossroad; then
-      echo "Resuming your previous game, good luck!"
-    else
-      echo "Starting a new game"
-      cp -r .netroom $JAIL/crossroad
-      cp net_welcome_message $JAIL
-    fi
     ;;
 esac
 

@@ -1,3 +1,5 @@
+
+#
 # You can interact with items in the room (they end with a *)
 # by running them as a command (a shell script).
 #
@@ -17,4 +19,4 @@
 # EXAMPLE:
 #
 # cd ..
-
+#

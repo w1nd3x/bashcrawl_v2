@@ -30,11 +30,11 @@ if [ "$RESP" = "y" -o "$RESP" = "Y" ] ;then
         WEAPON="seasoned pan"
         UPGRADE="enchanted pan"
         COST=15
-        ITEM="" 
+        ITEM="magic stone" 
     elif grep -o "enchanted pan" ~/.stats &>/dev/null; then
         WEAPON="enchanted pan"
         UPGRADE="flaming pan"
-        COST=15
+        COST=30
         ITEM="fire crystal"
     elif grep -o "flaming pan" ~/.stats &>/dev/null; then
         WEAPON="flaming pan"

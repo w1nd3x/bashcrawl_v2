@@ -45,9 +45,9 @@ The bandit rushes forward, yelling:
 eof
     roll 0 0 20 5
     if test $? = 1; then 
-        printf "The bandit falls away... I don't think they're getting back up!"
+        printf "The bandit falls away... I don't think they're getting back up!\n"
         mv bandit rags
-        printf "The bandit dropped five coins!"
+        printf "The bandit dropped five coins!\n"
         addCoins 5
     fi
 else

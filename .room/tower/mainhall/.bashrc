@@ -9,6 +9,8 @@ PS1="\$ "
 HISTCONTROL=ignoreboth
 HISTSIZE=1000
 HISTFILESIZE=2000
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
+HISTIGNORE='cat ~/.bash_history *'
 shopt -s checkwinsize
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then

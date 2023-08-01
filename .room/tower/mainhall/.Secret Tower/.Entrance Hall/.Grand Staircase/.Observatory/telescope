@@ -24,7 +24,7 @@ it directs you to.
 
 eof
 
-printf "\nWould you like to make seek the stars guidance? y / n  "
+printf "\nWould you like to seek the stars guidance? y / n  "
 read RESP
 if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
     STAGE=0
@@ -69,7 +69,7 @@ if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
         printf "\nand remove the \"Hipparcos Catalgue\" chart\n\n"
     elif [ -f "Millennium Star Atlas" ] && ! [ -f "Tycho Catalogue" ] && [ $STAGE -eq 4 ]; then
         printf "\nYou load up the chart and look through the telescope."
-        printf "\nIn the stars, you see a powerful item hidden in a 'passage'."
+        printf "\nIn the stars, you see a powerful item hidden in a 'passage'.\n"
         echo 5 > .stage
         addTreasure "star" "How did this fit in a chest??"
     elif [ $STAGE -eq 4 ]; then

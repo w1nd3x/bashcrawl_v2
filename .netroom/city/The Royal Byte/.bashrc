@@ -76,10 +76,10 @@ connect() {
       router)
         export MACHINE=router
 	    ;;
-      bank)
+      "Big Bank")
         export MACHINE=city1
       ;;
-      place)
+      "Factory Donut")
         export MACHINE=city2
       ;;
       Workshop)

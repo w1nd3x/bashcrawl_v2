@@ -1,3 +1,4 @@
+
 #
 # Doors are relatively simple to make.
 #
@@ -7,6 +8,7 @@
 #       mkdir <directory> (don't include the <,>)
 #
 # The library will reveal all sorts of knowledge if you 
-# can create the "Secret Room" and the activate the sconce.
+# can create the "Secret Room" and then activate the 
+# sconce.
 #
 

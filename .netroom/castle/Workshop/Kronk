@@ -126,6 +126,8 @@ EOF
 NS=$(command ip netns identify)
 if [ -f .done ]; then
     complete
+elif ! [ -f ~/.router1 ]; then
+    router1_setup
 elif [ -z "${NS}" ]; then
     greeting
 else

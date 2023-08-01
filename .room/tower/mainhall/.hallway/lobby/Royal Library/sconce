@@ -15,6 +15,7 @@
 if test -d "./Secret Room"; then
 
     cat << eof > "./Secret Room/scroll"
+
 #
 # You pulled the sconce and slipped into the secret
 # room.  The room contains many objects, some less
@@ -86,6 +87,7 @@ if [ "\\\$RESP" = 'y' -o "\\\$RESP" = 'Y' ]; then
             mkdir "The Final Secret"
             mv ~/.courtyard ~/courtyard
             cat << eof3 > "./The Final Secret/scroll"
+
 #
 # Your perseveracnce is impressive.  You've 
 # arrived at the end of the libraries secrets.
@@ -100,6 +102,7 @@ if [ "\\\$RESP" = 'y' -o "\\\$RESP" = 'Y' ]; then
 
 eof3
             cat << eof3 > "./The Final Secret/note"
+
 #
 # You are one persistent princess >:(
 # 
@@ -110,7 +113,7 @@ eof3
 
 eof3
             cat << eof3 > "./The Final Secret/treasure"
-#!//bin/bash
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -123,6 +126,8 @@ eof3
 # When you're ready to continue playing the game, though, stick to
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
+source ~/.combat
+
 if ! grep -o treasure ~/.stats &>/dev/null; then
     cat <<eof4
 You found a **hedgehog**.
@@ -135,6 +140,9 @@ cat ~/.stats
 
 eof4
 sed "s/Inventory:/Inventory: hedgehog,/; s/,\\\\\\\$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+NUM=\\\\\\\$(awk '/Treasure:/ { print \\\\\\\$2 }' ~/.progress)
+let NUM=NUM+1
+sed "s/Treasure: .*\//Treasure: \\\\\\\$(echo \\\\\\\$NUM) \//" ~/.progress > ~/.progress.tmp && mv ~/.progress.tmp ~/.progress
 NUM1=\\\\\\\$((\\\\\\\$ID+3))
 NUM2=\\\\\\\$((\\\\\\\$ID+4))
 CHECKPOINT="\\\\\\\$(get_secrets \\\\\\\$NUM1)_\\\\\\\$(get_secrets \\\\\\\$NUM2)"
@@ -157,7 +165,7 @@ fi
 eof2
     chmod +x "./Super Secret Room/stand"
 cat << eof2 > "./Super Secret Room/bandit"
-#!//bin/bash
+#!/bin/bash
 #
 # If you are reading this, you have wandered out of bounds
 # and are reading the code that drives the game.
@@ -291,6 +299,7 @@ the door you created.
 eof
 else
     cat << eof
+    
 You hear an eerie voice rise from the sconce.
 
 "I can only open the door, you have to make it"

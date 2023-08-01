@@ -13,6 +13,14 @@
 # We're happy to provide hints.
 #  
 source ~/.combat
+if test -f "Sad Witch"; then
+    printf "\nThe Evil Witch continues to sob as a small pool continues to form around her.\n\n"
+    exit
+elif test -f "Happy Witch"; then
+    printf "\nThe Evil Witch laughs maniacally while holding the hair you gave her.\n\n"
+    exit
+fi
+
 if ! grep -o tanuki ~/.stats &>/dev/null; then
     printf "\nYou attempt to approach the throne but you are thrown back \n\n"
     printf "\nYou see the image of a tanuki that for an unexplainable reason reminds you of the kitchens.\n\n"
@@ -102,7 +110,9 @@ The witch runs off, but luckily she leaves behind your
 chocolate... overall it's a win.
 
 EOF
+            mv ./shadowy\ figure ./Happy\ Witch
         else
+            mv ./shadowy\ figure ./Sad\ Witch
             cat << EOF
 
 You feel no pity for the evil witch.  You leave the 
@@ -153,7 +163,8 @@ further.
 
 eof
 
-EOF 
+EOF
+        chmod +x chocolate
         NUM1=$(($ID+7))
         NUM2=$(($ID+8))
         CHECKPOINT="$(get_secrets $NUM1)_$(get_secrets $NUM2)"

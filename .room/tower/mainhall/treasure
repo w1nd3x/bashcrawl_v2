@@ -22,7 +22,10 @@ You can always check your wealth with this command:
 cat ~/.stats (You may want to add an alias for this)
 
 eof
-sed "s/Inventory:/Inventory: cape,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+    sed "s/Inventory:/Inventory: cape,/; s/,$//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+    NUM=$(awk '/Treasure:/ { print $2 }' ~/.progress)
+    let NUM=NUM+1
+    sed "s/Treasure: .*\//Treasure: $(echo $NUM) \//" ~/.progress > ~/.progress.tmp && mv ~/.progress.tmp ~/.progress
 else
     echo "This treasure has already been taken."
 fi
