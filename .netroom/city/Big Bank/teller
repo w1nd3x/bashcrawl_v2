@@ -162,6 +162,9 @@ else
             touch .done
             # edit .start.sh to save progress
             sed "s/#city1 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
+            if [ -f ../Factory\ Donut/.done ]; then
+                touch ~/.city
+            fi
         elif ! [ -z "$PING2" ] && [ -f .ping ]; then
             ping_aftermath
         elif [ -f .ping ]; then

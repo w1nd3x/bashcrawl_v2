@@ -97,7 +97,7 @@ We'll use the add argument to add a new ip address.  We also want to specify
 that it's for the router0 interface or device.  
 
 So in all we need to run:
-ip address add 10.0.100.1/24 dev router0
+    ip address add 10.0.100.1/24 dev router0
 
 The dev at the end is the argument that indicates what interface we are setting 
 the address to and the add lists the address we are adding.  We need to have 
@@ -171,8 +171,77 @@ bank_go_back_to_teller() {
 You should go back and try talking to the bank teller.  They can help you get 
 the ip address situation worked out.
 
-EOF 
+EOF
     return
+}
+
+bank_done() {
+    cat << EOF
+
+It looks like the bank computer is all set up!!  You should go let the teller 
+know that the network is good to go.
+
+EOF
+    return
+}
+
+place_done() {
+    cat << EOF
+
+It looks like the Factory Donut computer is all set up!!  You should go let 
+the former sysadmin know that the network is good to go.
+
+EOF
+    return
+}
+
+workshop_done() {
+    cat << EOF
+
+It looks like the Workshop computer is all connected.  You should go talk to 
+Kronk, I think he had some other stuff he wanted done.
+
+EOF
+    return
+}
+
+tower_done() {
+    cat << EOF
+
+It looks like the Secret Tower computer is back online.  I know it's a pain, 
+but could you go talk to the Evil Witch?  She's been bothering me about IT 
+problems like every minute.
+
+EOF
+    return
+}
+
+farm_done() {
+    cat << EOF
+
+It looks like the Farm's computer is running at full capacity again.  Could 
+you swing by and talk to the farm-hand though?  He's got a bit of a sensitive 
+problem.
+
+EOF
+    return
+}
+
+cottage_done() {
+    cat << EOF
+
+The cottage is all set to go.
+
+EOF
+    return
+}
+
+station_done() {
+    cat << EOF
+
+The Police Station
+
+EOF
 }
 
 bank_needs_route() {
@@ -198,21 +267,71 @@ EOF
     return
 }
 
-bank_done() {
+place_needs_route() {
     cat << EOF
 
-It looks like the bank computer is all set up!!  You should go let the teller 
-know that the network is good to go.
+If you remember before, we said the second thing a computer needs to 
+communicate is a route.
+
+It looks like that computer only has a route for networks that start with 
+10.0.100!  The test network starts with 10.0.140 so the computer doesn't know 
+where to send that traffic.  
+
+One way we can fix that is to tell the computer that if we don't have a route 
+we should send the traffic to a gateway.  Gateway's are special computers like 
+routers that can figure out where your traffic is supposed to go.  In the city 
+network the gateway is at 10.0.100.1.  We can make that the default route by 
+running the command: 
+    'ip route add default via 10.0.100.1 dev city20'.
+
+Again the dev tells the computer which interface to send the traffic out of and
+the add specifies the route we're adding.  Here we specify default because this
+is the route we send to when nothing else matches, or the default.
 
 EOF
     return
 }
 
-place_done() {
+workshop_needs_route() {
     cat << EOF
 
-It looks like the place computer is all set up!!  You should go let the person 
-know that the network is good to go.
+The Workshop needs a route
+
+EOF
+    return
+}
+
+tower_needs_route() {
+    cat << EOF
+
+The tower needs a route
+
+EOF
+    return
+}
+
+farm_needs_route() {
+    cat << EOF
+
+The Farm needs a route
+
+EOF
+    return
+}
+
+cottage_needs_route() {
+    cat << EOF
+
+The Cottage needs a route
+
+EOF
+    return
+}
+
+station_needs_route() {
+    cat << EOF
+
+The Police Station needs a route
 
 EOF
     return
@@ -315,7 +434,7 @@ elif [ -f ~/.router0 ]; then
             ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city10")
             ADDR_SET=$(ip a | grep -o "10.0.100.25/24 scope global city10")
             # if router0 is done they don't need help
-            if [ -f ~/.router0 ]; then
+            if [ -f ~/.router0 ] && [ -f ~/.city ]; then
                 done_with_city
             elif ! [ -z "$ROUTE_SET" ]; then
                 bank_done
@@ -328,10 +447,10 @@ elif [ -f ~/.router0 ]; then
         city2)
             ROUTE_SET=$(ip route | grep -o "default via 10.0.100.1 dev city20")
             ADDR_SET=$(ip a | grep -o "10.0.100.36/24 scope global city20")
-            if [ -f ~/.router0 ]; then
+            if [ -f ~/.router0 ] && [ -f ~/.city ]; then
                 done_with_city    
             elif ! [ -z "$ROUTE_SET" ]; then
-                    place_done
+                place_done
             elif ! [ -z "$ADDR_SET" ]; then
                 place_needs_route
             else
@@ -342,7 +461,7 @@ elif [ -f ~/.router0 ]; then
             ROUTE_SET=$(ip route | grep -o "default via 10.0.110.1 dev castle10")
             ADDR_SET=$(ip a | grep -o "10.0.110.196/24 scope global castle10")
             # if router1 is done they don't need help
-            if [ -f ~/.router1 ]; then
+            if [ -f ~/.router1 ] && [ -f ~/.castle ]; then
                 done_with_castle
             elif ! [ -z "$ROUTE_SET" ]; then
                 workshop_done
@@ -421,12 +540,40 @@ elif [ -f ~/.router0 ]; then
         router)
             if [ -f ~/.router0 ] && [ -f ~/.router1 ] && [ -f ~/.router2 ] && [ -f ~/.router3 ]; then
                 # all the router stuff is done
+                not_help
             elif [ -f ~/.router0 ] && [ -f ~/.router1 ] && [ -f ~/.router2 ]; then
                 # need to set up router3
+                ADDR_SET=$(ip a | grep -o "10.0.130.1/24 scope global router3")
+                # if they ran ip route
+                if ! [ -z "$ADDR_SET" ]; then
+                    router3_set
+                    touch ~/.router3
+                    sed "s/#router3 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
+                else 
+                    router3_start
+                fi
             elif [ -f ~/.router0 ] && [ -f ~/.router1 ]; then
                 # need to set up router2
+                ADDR_SET=$(ip a | grep -o "10.0.120.1/24 scope global router2")
+                # if they ran ip route
+                if ! [ -z "$ADDR_SET" ]; then
+                    router2_set
+                    touch ~/.router2
+                    sed "s/#router2 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
+                else 
+                    router2_start
+                fi
             elif [ -f ~/.router0 ]; then
                 # need to set up router1
+                ADDR_SET=$(ip a | grep -o "10.0.110.1/24 scope global router1")
+                # if they ran ip route
+                if ! [ -z "$ADDR_SET" ]; then
+                    router1_set
+                    touch ~/.router1
+                    sed "s/#router1 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
+                else 
+                    router1_start
+                fi
             else
                 not_help
             fi
@@ -445,9 +592,10 @@ elif [ $NS = "router" ]; then
     IP_ADDR=$(cat ~/.bash_history | grep -o "ip a.*")
 
     # if they ran ip route
-    if ! [ -z "$IP_ROUTE" ] && ! [ -z "$ADDR_SET"]; then
+    if ! [ -z "$IP_ROUTE" ] && ! [ -z "$ADDR_SET" ]; then
         ran_ip_route
         touch ~/.router0
+        sed "s/#router0 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
     # if router0 is properly set
     elif ! [ -z "$ADDR_SET" ]; then
         ip_address_set

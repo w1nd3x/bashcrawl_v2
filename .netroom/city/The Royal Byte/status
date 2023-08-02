@@ -14,7 +14,7 @@
 #
 
 get_secrets() {
-    input="~/.secrets.txt"
+    input="$(pwd ~)/.secrets.txt"
     secretArray=()
     while read -r line
     do
@@ -102,21 +102,27 @@ On_IWhite='\033[0;107m'   # White
 printf "\nNetwork Status\n\n"
 bank=$(command ip netns exec test ping -c1 -W1 10.0.100.25 | grep -o from 2> /dev/null)
 place=$(command ip netns exec test ping -c1 -W1 10.0.100.36 | grep -o from 2> /dev/null)
+router0=$(command ip netns exec router ip address show dev router0 | grep -o 10.0.100.1 2> /dev/null)
 if [ ! -z $place ] && [ ! -z $bank ]; then
     ONE=$ID
     TWO=$ID
     printf "City:    $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
 else
     printf "City:    $On_IRed  $Color_Off\n\n"
-    if [ ! -z $bank ]; then
-        printf "\tBank:        $On_IGreen  $Color_Off\n\n"
+    if [ ! -z $rouer0 ]; then
+        printf "\tRouter0:         $On_IGreen  $Color_Off\n\n"
     else
-        printf "\tBank:        $On_IRed  $Color_Off\n\n"
+        printf "\tRouter0:         $On_IRed  $Color_Off\n\n"
+    fi
+    if [ ! -z $bank ]; then
+        printf "\tBig Bank:        $On_IGreen  $Color_Off\n\n"
+    else
+        printf "\tBig Bank:        $On_IRed  $Color_Off\n\n"
     fi
     if [ ! -z $place ]; then 
-        printf "\tPlace:       $On_IGreen  $Color_Off\n\n"
+        printf "\tFactory Donut:   $On_IGreen  $Color_Off\n\n"
     else
-        printf "\tPlace:       $On_IRed  $Color_Off\n\n"
+        printf "\tFactory Donut:   $On_IRed  $Color_Off\n\n"
     fi
 fi
 

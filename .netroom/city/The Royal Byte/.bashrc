@@ -71,7 +71,7 @@ connect() {
   NS=$(command ip netns identify)
   if [ -z "${NS}" ]; then
     # the user is currently in the default ns so they can connect
-    CURR=$(basename $(pwd))
+    CURR="$(basename "$(pwd)")"
     case $CURR in
       router)
         export MACHINE=router
@@ -94,10 +94,10 @@ connect() {
       cottage)
         export MACHINE=village2
       ;;
-      station)
+      "Police Station")
         export MACHINE=town1
       ;;
-      capitol)
+      "No Bucks")
         export MACHINE=town2
       ;;
       *)

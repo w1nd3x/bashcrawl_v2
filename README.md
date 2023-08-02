@@ -6,4 +6,12 @@ This is a game to teach you the basics of using a Linux terminal.
 
 To start playing, open a terminal.
 
-`sudo ./bashcrawl start <student id>`
+`sudo ./bashcrawl start Basic`
+
+
+## Play different levels
+
+There are three levels to play through:
+- Basic - `sudo ./bashcrawl start Basic`
+- Advanced - `sudo ./bashcrawl start Advanced`
+- Net - `sudo ./bashcrawl start Net`
