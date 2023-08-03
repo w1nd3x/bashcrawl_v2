@@ -14,62 +14,80 @@
 #
 # 
 
-if ! test -f .facility_intro ; then
+facility_intro() {
+	cat << EOF
 
-	cat << disarray
-You are reminded of a rainforest as you walk into the building of the Network Company. 
-Wires hang from the ceiling, some looping back up into the rafters, others hanging all 
-the way down to the floor. Many electronics are beeping, some are flashing, and all of
-them don't seem to be working as intended. 
+You are reminded of a rainforest as you walk into the building of the Network 
+Company. Wires hang from the ceiling, some looping back up into the rafters, 
+others hanging all the way down to the floor. Many electronics are beeping, 
+some are flashing, and all of them don't seem to be working as intended. 
 
-And, above it all, the air almost seems to be sticky. It's at least 10 degrees warmer
-in the lobby alone, and the space in front of you almost seems to be shimmering.
-This area is definitely a WIP, but you can't tell if there's anyone actually working it.
+And, above it all, the air almost seems to be sticky. It's at least 10 degrees 
+warmer in the lobby alone, and the space in front of you almost seems to be 
+shimmering. This area is definitely a WIP, but you can't tell if there's anyone 
+actually working it.
 
-In the back, you see a dim light reflected from behind an opaque rectangle, and it seems
-to be changing color every so often. You walk toward it, and realize that it's a computer
-monitor! Upon getting even closer, you can start to hear the sounds of someone frantically
-typing away at the screen... (1/2)
-disarray
-touch .facility_intro
+In the back, you see a dim light reflected from behind an opaque rectangle, and 
+it seems to be changing color every so often. You walk toward it, and realize 
+that it's a computer monitor! Upon getting even closer, you can start to hear 
+the sounds of someone frantically typing away at the screen... 
 
-elif ! test -f .purchase_in_prog ; then
-	cat << buymepls
-When you round the edge of the screen, you see a thick pair of spectacles attached to a
-supremely focused face. He almost jumps out of his seat when he notices you shoulder surfing
-him, but recovers quickly. 
+EOF
 
-He is the system administrator, or sysadmin, of the Network Company. He's the last remaining
-employee in what was once a great enterprise. He tells you the companies tale of woe, how they fell
-from grace into poverty when no one in their medieval world wanted to buy a computer and hook it up
-to the world-wide-web :(. 
+}
 
-While you're talking to this down-on-his-luck chap, an idea pops into your head. What if you bought
-the company? With your terminal know-how, you should be able to get this failing business back on its feet!
-Ideas and innovations race through your head, so much so that you fail to hear the sysadmin say that
-the company was never profitable, even in its prime.
+purchase_in_prog() {
+	cat << EOF
 
-That probably explains his shock when you offer to buy the company outright. You tell him to name his price, 
-and once he recovers from his stasis, he tells you a number that definitely justifies a trip to the banker.
-Someone's gotta take out a loan! (2/2)
-buymepls
+When you round the edge of the screen, you see a thick pair of spectacles 
+attached to a supremely focused face. He almost jumps out of his seat when he 
+notices you shoulder surfing him, but recovers quickly. 
 
-touch .purchase_in_prog
-elif test -f .done ; then
-	echo "The sysadmin is already packing up to leave before you even sit down"
-elif test -f ../Bank/.accounts_totalled ; then
-	cat << bought
-When you show the sysadmin all the paperwork that the banker gave you to purchase the Network Company, 
-a tear comes to his eye. He happily hands over the keyboard to you, and voila!
+He is the system administrator, or sysadmin, of the Network Company. He's the 
+last remaining employee in what was once a great enterprise. He tells you the 
+companies tale of woe, how they fell from grace into poverty when no one in 
+their medieval world wanted to buy a computer and hook it up to the 
+world-wide-web :(. 
 
+While you're talking to this down-on-his-luck chap, an idea pops into your 
+head. This is what everyone wants!  A way to communicate with people no matter 
+wher they are!! What if you bought the company? With your terminal know-how, 
+you should be able to get this failing business back on its feet! Ideas and 
+innovations race through your head, so much so that you fail to hear the 
+sysadmin say that the company was never profitable, even in its prime.
 
+That probably explains his shock when you offer to buy the company outright. 
+You tell him to name his price, and once he recovers from his stasis, he tells 
+you a number that definitely justifies a trip to the banker. Someone's gotta 
+take out a loan!
+EOF
 
+}
+
+bought() {
+	cat << EOF
+
+When you show the sysadmin all the paperwork that the banker gave you to 
+purchase the Network Company, a tear comes to his eye. He happily hands over 
+the keyboard to you, and voila!
 
 
 Well done, CEO.
-bought
-touch .done
 
+EOF
+}
+
+if ! test -f .facility_intro ; then
+	facility_intro
+	touch .facility_intro
+elif ! test -f .purchase_in_prog ; then
+	purchase_in_prog
+	touch .purchase_in_prog
+elif test -f .done ; then
+	echo "The sysadmin is already packing up to leave before you even sit down"
+elif test -f ../Bank/.four ; then
+	bought
+	touch .done
 else
 	echo "The sysadmin anxiously awaits what the banker says"
 fi

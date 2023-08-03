@@ -13,94 +13,276 @@
 # We're happy to provide hints.
 #
 
-# farmer lost something you need to find with grep / find
-if  ! test -f report.txt; then
+greeting() {
 	cat << EOF
 
-You see a farmer lost in thought and leaning
-against a rake.  As you approach the farmer
-snaps out of their daze and looks up at you.
+You see a farmer lost in thought and leaning against a rake.  As you approach 
+the farmer snaps out of their daze and looks up at you.
 
-When you ask what's wrong the farmer informs
-you that their daughter left to the next 
-town over and they haven't been able to find the 
-plans for the new field since.
+When you ask what's wrong the farmer informs you that their daughter left to 
+the next town over and they haven't been able to find the plans for the new 
+field since.
 
-Maybe she left them in the fields...
+Maybe she left them in the east fields...
+
+You should consult with man to see if there is a way to 'find' the report.
 
 EOF
-rm -r fields/grains 2> /dev/null
-rm -r fields/vegetables 2> /dev/null
-rm -r fields/fruits 2> /dev/null
-rm -r fields/herbs 2> /dev/null
-rm -r fields/spices 2> /dev/null
-crops="grains herbs spices fruits vegetables"
-grains="barley wheat sorghum rice millet rye"
-herbs="rosemary dill mint basil chives oregano"
-spices="cumin nutmeg pepper fennel chili mustard"
-fruits="grape strawberry blueberry kiwi dragonfruit banana"
-vegetables="pumpkin lettuce leek squash radish spinach"
-echo -en "FARM STRUCTURE:\n\n" > report.txt.tmp
-for c in $crops; do
-	for g in ${!c}; do
-		mkdir -p "fields/$c/$g"
-		report_text="-"
-		for i in $(seq 1 $(expr $RANDOM % 90 + 10)); do
-			#report_text+="$i-"
-			report_text+="X-"
-			echo "Well, it's a plant and some dirt." > "fields/$c/$g/plot_$i"
-			echo "Don't quite know what you expected" >> "fields/$c/$g/plot_$i"
-			echo " " >> "fields/$c/$g/plot_$i"
-			head -n20 /dev/urandom >> "fields/$c/$g/plot_$i" 
-		done
-		echo  -en "$report_text\n" >> report.txt.tmp
-	done
-done
+}
 
-report_path="fields/"
-crop=$(expr $RANDOM % 5)
-num=$(expr $RANDOM % 6)
-crop_arr=($crops)
-report_path+="${crop_arr[$crop]}/"
-crop_arr=(${!crop_arr[$crop]})
-report_path+="${crop_arr[$num]}"
-#echo $report_path
-mv report.txt.tmp "$report_path/report.txt"
-
-num=$(ls $report_path | wc -l)
-plot_num=$(expr $RANDOM % $num)
-echo "If you are reading this, let the good Professor Benjamin know that ENS Metcalf will be getting the last laugh for murdering Fernando and Alonzo" >> "$report_path/plot_$plot_num"
-
-elif test -f .sheptalk_4 ; then
-	cat << donezo
-The farmer returns to where you are to thank you one last time for your efforts.
-He insists that they have much work to do, and while appreciative, 
-your presence is not making it any easier. It's tough to see him like this,
-so you decide to head on out from the village.
-donezo
-
-else
-
+goodbye() {
 	cat << EOF
 
-The farmer looks visibly relieved. 
-He tells you to go talk to the farm-hand,
+The farmer returns to where you are to thank you one last time for your 
+efforts. He insists that they have much work to do, and while appreciative, 
+your presence is not making it any easier.
+
+He wistfully looks over his fields and muses that if only he had some way to 
+communicate with his daughter, as things are now he just doesn't have the time
+to leave and visit her.
+
+You decide to leave the farmer to his musings, it seems like the nearby town 
+may be a good place to continue your research.
+
+EOF
+}
+
+success() {
+	cat << EOF
+
+The farmer looks visibly relieved. He tells you to go talk to the farm-hand,
 as they've been looking for the plans for a while.
 
-You try to compliment the farmer on the sheer size of his enterprise, 
-but he's having none of it. 
-They're not a particularly prideful type, these farmers. 
+You try to compliment the farmer on the sheer size of his enterprise, but he's 
+having none of it. They're not a particularly prideful type, these farmers. 
 
-Before you can say much more to him, he trudges off, closing the gate behind him.
-Looks like you won't be able to return to the miles of crops he calls home anytime soon.
+Before you can say much more to him, he trudges off, closing the gate behind 
+him. Looks like you won't be able to return to the miles of crops he calls home 
+anytime soon.
+
+EOF
+}
+
+
+east_correct() {
+	cat << EOF
+
+The farmer looks visibly relieved, but it seems like something else is weighing
+on him.  When you inquire further he tells you that was just the first of
+multiple lost reports.
+
+He asks you to check the west field if you have a spare moment.
+
+EOF
+	return
+}
+
+west_correct() {
+	cat << EOF
+
+The farmer thanks you for your continued diligence.  He tells you there is yet
+another missing report in the north fields if you have but one extra moment.
+
+EOF
+	return
+}
+
+north_correct() {
+	cat << EOF
+
+The farmer is starting to look much more vibrant. He looks like he's about to 
+ask you for something else so you turn and head towards the south field. You 
+don't make it more than a few steps when the farmer calls out that the south 
+field is empty right now, but if I still have time there's another report in 
+left field.
+
+EOF
+	return
+}
+
+left_correct() {
+	cat << EOF
+
+The farmer violently shakes your hand, thanking you for your hard work.  He 
+STILL looks like he has something to ask you.  When you press him, the farmer
+asks you to speak with the farm-hand about analyzing all the reports.
+
+EOF
+}
+
+please_rtfm() {
+	cat << EOF
+
+The farmer looks up and tells you that before you keep asking him how to find 
+that report you should talk to man about the 'find' command.
+
+EOF
+	return
+}
+
+prompt_help() {
+	cat << EOF
+
+I'm a little pressed for time, but it looks like you're struggling a bit. I 
+know the fields pretty big, would you like me to lend a hand?  (y / n)
+
+EOF
+	return
+}
+
+find_hint() {
+	cat << EOF
+
+You can use the find command to quickly identify the locations of files.  The 
+way to use it here is:
+	find <directory> <expression>
+
+The directory we want to search is east_fields.
+
+There are a bunch of expressions you can use in find, but the one I find most 
+helpful is '-iname <pattern>'.  iname matches things in a case insensitive way, 
+and pattern is just the word you are looking for.  The find command will look 
+for an exact match of the pattern, so to tell it that anything can come before 
+the word you can start the pattern with * and to tell it that anything can come
+after you end the pattern with *. So "*report*" should work here.
+
+EOF
+}
+
+suit_yourself() {
+	cat << EOF
+
+Well alright, if you're sure.  Good luck with the search.
+
+EOF
+}
+
+no_more_hints() {
+	cat << EOF
+
+The farmer looks up, slightly exasperated and tells you that while he 
+appreciates all your help, unless you have the next report he doesn't have time
+to chat.
 
 EOF
 
-rm -r fields/grains 2> /dev/null
-rm -r fields/vegetables 2> /dev/null
-rm -r fields/fruits 2> /dev/null
-rm -r fields/herbs 2> /dev/null
-rm -r fields/spices 2> /dev/null
+}
+
+# Creates a field with a report hidden in it
+# 
+# $1: Name of the field
+# $2: header, trailer, both, random
+#
+# @return: none
+#
+make_field() {
+	FIELD_NAME=$1
+	EXTRA_TEXT=$2
+	
+	INJECT=""
+	rm -rf $FIELD_NAME >/dev/null
+	mkdir $FIELD_NAME >/dev/null
+	
+	crops="grains herbs spices fruits vegetables"
+	grains=$(echo "barley wheat sorghum rice millet rye" | cut -F $(seq -s , $(($RANDOM%4+2))))
+	herbs=$(echo "rosemary dill mint basil chives oregano" | cut -F $(seq -s , $(($RANDOM%4+2))))
+	spices=$(echo "cumin nutmeg pepper fennel chili mustard" | cut -F $(seq -s , $(($RANDOM%4+2))))
+	fruits=$(echo "grape strawberry blueberry kiwi dragonfruit banana" | cut -F $(seq -s , $(($RANDOM%4+2))))
+	vegetables=$(echo "pumpkin lettuce leek squash radish spinach" | cut -F $(seq -s , $(($RANDOM%4+2))))
+	
+	if [ $EXTRA_TEXT = "header" ] || [ $EXTRA_TEXT = "both" ]; then 
+		echo -en "FARM STRUCTURE:\n\n" > report.txt.tmp
+	else
+		echo -en "" > report.txt.tmp
+	fi
+	for c in $crops; do
+		for g in ${!c}; do
+			mkdir -p "$FIELD_NAME/$c/$g"
+			report_text="-"
+			for i in $(seq 1 $(expr $RANDOM % 90 + 10)); do
+				#report_text+="$i-"
+				report_text+="X-"
+				echo "Well, it's a plant and some dirt." > "$FIELD_NAME/$c/$g/plot_$i"
+				echo "Don't quite know what you expected" >> "$FIELD_NAME/$c/$g/plot_$i"
+				echo " " >> "$FIELD_NAME/$c/$g/plot_$i"
+				head -n20 /dev/urandom >> "$FIELD_NAME/$c/$g/plot_$i" 
+			done
+			if [ $EXTRA_TEXT = "random" ] && [ -z $INJECT ]; then 
+				echo -en "This set of plots needs special attention\n" >> report.txt.tmp
+				INJECT="Done"
+			fi
+			echo  -en "$report_text\n" >> report.txt.tmp
+		done
+	done
+
+	report_path="$FIELD_NAME/"
+	crop=$(expr $RANDOM % 5)
+	num=$(expr $RANDOM % 6)
+	crop_arr=($crops)
+	report_path+="${crop_arr[$crop]}/"
+	crop_arr=(${!crop_arr[$crop]})
+	report_path+="${crop_arr[$num]}"
+	#echo $report_path
+	if [ $EXTRA_TEXT = "trailer" ] || [ $EXTRA_TEXT = "both" ]; then 
+		echo -en "This report is the sole property of Faraway Farms\nAny attempt to copy any portion of this report or use it in a way to damage or discredit the farm\nor any of it's employees is illegal and punishable by Kingdom Law\n" >> report.txt.tmp
+	fi
+	mv report.txt.tmp "$report_path/$FIELD_NAME-report.txt"
+
+	num=$(ls $report_path | wc -l)
+	plot_num=$(expr $RANDOM % $num)
+	echo "If you are reading this, let the good Professor Benjamin know that ENS Metcalf will be getting the last laugh for murdering Fernando and Alonzo" >> "$report_path/plot_$plot_num"
+	return
+}
+
+# farmer lost something you need to find with grep / find
+if test -f .farm_done ; then
+	goodbye
+elif test -d left_field; then
+	if test -f left_field-report.txt; then
+		left_correct
+		rm -rf left_field 2>/dev/null
+		touch .farm_done
+	else
+		no_more_hints
+	fi
+elif test -d north_fields; then
+	if test -f north_fields-report.txt; then
+		north_correct
+		rm -rf north_fields 2>/dev/null
+		make_field "left_field" "random"
+	else
+		no_more_hints
+	fi
+elif test -d west_fields; then
+	if test -f west_fields-report.txt; then
+		west_correct
+		rm -rf west_fields 2>/dev/null
+		make_field "north_fields" "both"
+	else
+		no_more_hints
+	fi
+elif ! test -d east_fields; then
+	greeting
+	make_field "east_fields" "header"
+elif test -d east_fields; then
+	if test -f east_fields-report.txt; then
+		east_correct
+		rm -rf east_fields 2>/dev/null
+		make_field "west_fields" "trailer"
+	else
+		RTFM=$(cat ~/.bash_history | grep -o "man find")
+		if test -z "$RTFM"; then
+			please_rtfm
+		else
+			prompt_help
+			read RESP
+			if [ "$RESP" = 'y' ] || [ "$RESP" = 'Y' ]; then
+				find_hint
+			else
+				suit_yourself
+			fi
+		fi
+	fi
 fi
 
 #

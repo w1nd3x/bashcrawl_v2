@@ -25,7 +25,7 @@
 25. Noah Lewis - 10800 - Rainforest Conservation - Loan Date: 2023-05-08
 26. Evelyn Hall - 9300 - Secret Agent Training - Loan Date: 2023-06-19
 27. Lucas Baker - 12900 - Extreme Mountain Climbing - Loan Date: 2023-02-15
-28. Scarlett Hill - 5600 - Deep-Sea Exploration - Loan Date: 2023-03-17
+28. Scarlett Hill - 5600 - Deep Sea Exploration - Loan Date: 2023-03-17
 29. Logan Adams - 8700 - Luxury Yacht Purchase - Loan Date: 2023-05-27
 30. Victoria Allen - 11400 - Castle Restoration - Loan Date: 2023-06-08
 31. Caleb Parker - 6200 - Space Colony Fund - Loan Date: 2023-01-23
@@ -41,10 +41,10 @@
 41. Zoey Phillips - 8600 - Ultimate Gaming PC Setup - Loan Date: 2023-05-03
 42. Alexander Coleman - 11300 - Immortality Research - Loan Date: 2023-06-24
 43. Riley Flores - 6400 - Uncharted Island Expedition - Loan Date: 2023-02-18
-44. Mila Washington - 14300 - Diamond-Encrusted Gadget Collection - Loan Date: 2023-04-09
+44. Mila Washington - 14300 - Diamond Encrusted Gadget Collection - Loan Date: 2023-04-09
 45. Mason Cruz - 4800 - Personal Submarine - Loan Date: 2023-05-05
 46. Ava Perry - 9400 - Supervillain Lair Construction - Loan Date: 2023-06-06
-47. Jacob Cooper - 12800 - Time-Traveling DeLorean Purchase - Loan Date: 2023-01-31
+47. Jacob Cooper - 12800 - Time Traveling DeLorean Purchase - Loan Date: 2023-01-31
 48. Natalie Edwards - 5000 - Magical Potions Research - Loan Date: 2023-03-21
 49. Benjamin Morris - 10600 - Jurassic Park Creation - Loan Date: 2023-04-18
 50. Chloe Turner - 8000 - Luxury Suborbital Vacation - Loan Date: 2023-06-22
@@ -56,7 +56,7 @@
 56. Amelia Powell - 5400 - Olympic Gold Training - Loan Date: 2023-05-18
 57. Elijah Kelly - 8800 - Giant Robot Creation - Loan Date: 2023-06-28
 58. Scarlett Phillips - 11900 - Legendary Creature Expedition - Loan Date: 2023-01-19
-59. Amelia Mitchell - 6100 - High-Tech Treehouse - Loan Date: 2023-03-27
+59. Amelia Mitchell - 6100 - High Tech Treehouse - Loan Date: 2023-03-27
 60. Michaela Diaz - 14700 - Haunted Shipwreck Exploration - Loan Date: 2023-04-15
 61. William Wood - 4600 - Interstellar Vacation - Loan Date: 2023-06-23
 62. Evelyn Bryant - 9600 - El Dorado Quest - Loan Date: 2023-01-13
@@ -67,7 +67,7 @@
 67. Landon Carter - 6700 - Luxury Spaceship Purchase - Loan Date: 2023-03-08
 68. Abigail Wright - 14200 - Underwater Atlantis Expedition - Loan Date: 2023-04-14
 69. James Murphy - 4900 - Moon Base Vacation Resort - Loan Date: 2023-05-24
-70. Grace Gray - 9800 - Time-Traveling Adventure - Loan Date: 2023-06-29
+70. Grace Gray - 9800 - Time Traveling Adventure - Loan Date: 2023-06-29
 71. Alexander Parker - 12400 - Dragon Taming Training - Loan Date: 2023-01-20
 72. Emily Collins - 5500 - Supernatural Powers Training - Loan Date: 2023-04-04
 73. Benjamin Allen - 8900 - Invisibility Potion Creation - Loan Date: 2023-05-06
@@ -78,7 +78,7 @@
 78. Evelyn Turner - 9000 - Ancient Artifact Exhibition - Loan Date: 2023-01-27
 79. Carter Powell - 13000 - Suborbital Space Vacation - Loan Date: 2023-03-07
 80. Isabella Kelly - 5700 - Deep Sea Monster Discovery - Loan Date: 2023-04-22
-81. Daniel Carter - 8300 - Time-Traveling Train Invention - Loan Date: 2023-06-03
+81. Daniel Carter - 8300 - Time Traveling Train Invention - Loan Date: 2023-06-03
 82. Scarlett Sanchez - 11800 - Space Colony Construction - Loan Date: 2023-01-30
 83. Harper Butler - 6000 - Legendary Treasure Salvage - Loan Date: 2023-03-13
 84. Mia Hill - 14600 - Magical Flying Carpet - Loan Date: 2023-04-23

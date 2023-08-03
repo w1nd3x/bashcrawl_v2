@@ -13,183 +13,142 @@
 # We're happy to provide hints.
 #
 # the shepherd needs to know if the compost bin you brought him is safe for his animals
+
+report_findings() {
+    cat << EOF
+
+Hm, are you ready to report your findings? Please, let me know, is there any 
+$1 in the compost [y/n]?  
+
+EOF
+}
+
+report_level() {
+	cat << EOF
+
+Uh oh. Well, how much is in there? Maybe it's below the acceptable levels...
+How much $1 is in the compost?
+
+EOF
+}
+
+report_correct() {
+	cat << EOF
+
+Ok, that'll play. We can work with that. Can you get back to me and let me know
+if there is any $1 in the compost?
+
+EOF
+
+}
+
+DDT_none() {
+	cat << EOF
+
+Are you sure there's nothing? You know, my good friend **grep** smith once told
+he me could find any needle in a haystack if you just give him a "-a". That 
+seems like a good place to look..
+
+EOF
+	return
+}
+
+final_correct() {
+	cat << EOF
+
+Satisfactory. You've done me a service today. Carry on. I believe the farm-hand
+could use some more help sifting through those inane reports. It would be 
+proper of you to lend him a hand.
+
+EOF
+}
+
+acquaintance() {
+	cat << EOF
+
+Ahhhh, the princess. Charmed to finally make your acquaintance. I am Sult, the 
+shepherd of this two-horse farm. I see you've brought me some compost. I'm 
+pleased with this.
+
+Now, I unfortunately cannot make use of any second-rate compost. The land 
+deserves the absolute best. 
+
+Can you please comb through the compost and tell me if there are any pesticides 
+in there? common pesticides include "DDT", "Chlorpyrifos", and "Aldrin"
+
+I'll give you a second to comb through the compost to check. I'm seething with 
+jealousy knowing you get the honor...
+
+EOF
+}
+
+
 if ! test -f report.txt; then
 	cat << no_report
+
 Princess, as much as I am for casual conversation, I would advise you go speak 
 to the head of this farm before you engage with me. 
 
 Cheers.
+
 no_report
-elif ! test -f farm-hands-scribbles.txt; then
+elif ! test -f north-scribbles.txt; then
 	cat << EOF
+
 Princess, do you happen to know if there is any compost around here?
 I believe the farm-hand mentioned something about having some on hand.
 Plese let me know when you find some.
+
 EOF
 elif ! test -f .sheptalk_1; then
-	cat << EOF
-Ahhhh, the princess. Charmed to finally make your acquaintance. 
-I am Sult, the shepherd of this two-horse farm. I see you've
-brought me some compost. I'm pleased with this.
 
-Now, I unfortunately cannot make use of any second-rate compost. 
-The land deserves the absolute best. 
-
-Can you please comb through the compost and tell me if there are
-any pesticides in there? common pesticides include "DDT", "Chlorpyrifos", and "Aldrin"
-
-I'll give you a second to comb through the compost to check.
-I'm seething with jealousy knowing you get the honor...
-EOF
-
-touch .sheptalk_1
+	touch .sheptalk_1
 
 elif ! test -f .sheptalk_2; then
-    cat << EOF
-Hm, are you ready to report your findings? Please, let me know, 
-is there any DDT in the compost [y/n]?  
-EOF
-
-is_DDT=""
-while [[ -z $is_DDT ]]; do
-   read is_DDT
-done
-
-if [ $is_DDT != "y" ] ; then
-	cat << EOF
-Are you sure there's nothing? You know, my good friend **grep** smith once told he me
-could find any needle in a haystack if you just give him a "-a". That seems like a good place to look..
-
-Is there any DDT in there [y/n]? 
-EOF
-
-is_DDT=
-while [[ -z $is_DDT ]]; do
-   read is_DDT
-done
-
-fi
-while [ $is_DDT != "y" ] ; do
-	echo "Right. I'm not saying I don't believe you, but can you please go and take another look?"
-	is_DDT=
-	while [[ -z $is_DDT ]]; do
-	   read is_DDT
-	done
-done
-	cat << EOF
-Uh oh. Well, how much is in there? Maybe it's below the acceptable levels...
-How much DDT is in the compost?
-EOF
-
-DDT=
-while [[ -z $DDT ]]; do
-   read DDT
-done
-if [ $DDT -ne $(grep -oa "DDT" compost_bin | wc -l) ] ; then
-	cat << EOF 
-Let's run that one back princess. If you're having trouble,
-our good friend grep has some helpful options you can look at.
-try looking at what happens if you make him say "-o"
-EOF
-DDT=
-while [[ -z $DDT ]]; do
-   read DDT
-done
-fi
-
-while [ $DDT -ne $(grep -oa "DDT" compost_bin | wc -l) ] ; do
-	echo "Are you sure about that? Try again, I don't want to have to throw out this bin."
-	DDT=
-	while [[ -z $DDT ]]; do
-	   read DDT
-	done
-done
-	cat << EOF
-Ok, that'll play. We can work with that. Can you get back to me and let me know
-if there is any Chlorpyrifos in the compost?
-EOF
-
-touch .sheptalk_2
-
+	report_findings "DDT"
+	read RESP
+	if [ $RESP != "y" ] ; then
+		DDT_none
+	else
+		report_level "DDT"
+		read RESP
+		if [ $RESP -ne $(grep -oa "DDT" compost_bin | wc -l) ]; then
+			echo "Are you sure about that? Try again, I don't want to have to throw out this bin."
+		else
+			report_correct "Chlorpyrifos"
+			touch .sheptalk_2
+		fi
+	fi	
 elif ! test -f .sheptalk_3; then
-	cat << EOF
-Ok, what you got for me. Is there any Chlorpyrifos in the bin [y/n]?
-EOF
-
-is_Chlor=
-while [[ -z $is_Chlor ]]; do
-   read is_Chlor
-done
-while [ $is_Chlor != "y" ] ; do
-	echo "I don't trust like that. Can you double check again for me?"
-	is_Chlor=
-	while [[ -z $is_Chlor ]]; do
-	   read is_Chlor
-	done
-done
-
-cat << EOF
-Uh oh. Well, how much is in there? Maybe it's below the acceptable levels...
-How much Chlorpyrifos is in the compost?
-EOF
-
-Chlor=
-while [[ -z $Chlor ]]; do
-   read Chlor
-done
-while [ $Chlor -ne $(grep -oa "Chlorpyrifos" compost_bin | wc -l) ] ; do
-	echo "Are you sure about that? Try again, I don't want to have to throw out this bin."
-	Chlor=
-	while [[ -z $Chlor ]]; do
-	   read Chlor
-	done
-done
-	cat << EOF
-Ok, that'll play. We can work with that. Can you get back to me and let me know
-if there is any Aldrin in the compost?
-EOF
-
-touch .sheptalk_3
-
+	report_findings "Chlorpyrifos"
+	read RESP
+	if [ $RESP != "y" ]; then
+		echo "I don't trust like that. Can you double check again for me?"
+	else
+		report_level "Chlorpyrifos"
+		read RESP
+		if [ $RESP -ne $(grep -oa "Chlorpyrifos" compost_bin | wc -l) ]; then
+			echo "Are you sure about that? Try again, I don't want to have to throw out this bin."
+		else
+			report_correct "Aldrin"
+			touch .sheptalk_3
+		fi
+	fi
 elif ! test -f .sheptalk_4; then
-	cat << EOF
-Ok, what you got for me. Is there any Aldrin in the bin [y/n]?
-EOF
-
-is_Aldrin=
-while [[ -z $is_Aldrin ]]; do
-   read is_Aldrin
-done
-while [ $is_Aldrin != "y" ] ; do
-	echo "I don't trust like that. Can you double check again for me?"
-	is_Aldrin=
-	while [[ -z $is_Aldrin ]]; do
-	   read is_Aldrin
-	done
-done
-
-cat << EOF
-Uh oh. Well, how much is in there? Maybe it's below the acceptable levels...
-How much Aldrin is in the compost?
-EOF
-
-Aldrin=
-while [[ -z $Aldrin ]]; do
-   read Aldrin
-done
-while [ $Aldrin -ne $(grep -oa "Aldrin" compost_bin | wc -l) ] ; do
-	echo "Are you sure about that? Try again, I don't want to have to throw out this bin."
-	Aldrin=
-	while [[ -z $Aldrin ]]; do
-	   read Aldrin
-	done
-done
-	cat << EOF
-Satisfactory. You've done me a service today. Carry on. I believe the farmer is headed back this way,
-it would be proper of you to make his acquaintance one more time before you departed.
-EOF
-touch .sheptalk_4
-
+	report_findings "Aldrin"
+	read RESP
+	if [ $RESP != "y" ]; then
+		echo "I don't trust like that. Can you double check again for me?"
+	else
+		report_level "Aldrin"
+		read RESP
+		if [ $RESP -ne $(grep -oa "Aldrin" compost_bin | wc -l) ]; then
+			echo "Are you sure about that? Try again, I don't want to have to throw out this bin."
+		else
+			final_correct
+			touch .sheptalk_4
+		fi
+	fi
 else
 	cat << EOF
 

@@ -1,0 +1,33 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+# 
+
+prompt_for_help() {
+    cat << EOF
+
+You're looking a little lost.  I know questioning criminals can be pretty 
+rough, but we really need the assistance. Do you need some help getting 
+started?  (y / n)
+
+EOF
+
+}
+
+
+
+
+if ! test -f statement.txt; then
+    prompt_for_help
+fi

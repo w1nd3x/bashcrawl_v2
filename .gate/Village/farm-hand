@@ -13,131 +13,427 @@
 # We're happy to provide hints.
 #
 
-# farm-hand needs to know how many different columns of crops there are listed in the report,
-# as well as the total number of plots
-if  ! test -f report.txt; then
-	cat << nonstarter
-Howdy do, princess! As much as I'd love to sit down and chat,
-I'd advise you come back and talk to me once you've talked to my boss [the farmer] and gotten the report!
-
-Take care!
-nonstarter
-
-elif ! test -f farm-hands-scribbles.txt; then
-    cat << rows
-Gee, that's a mighty-fine report you got there! Tell ya what though, 
-I've got both my hands full here, would you mind helping me out with a few facts?
-
-The farmer is insisting that I order a new sign for each row of crops,
-but with his rate of expansion, I don't even know how much we have! 
-Can you remind me how many rows of crops we have? If you don't know off the top of your head,
-I would advise you hit "CTRL+C" and come back and talk to me once you do!
-
-(You can always hit CTRL+C to send an interrupt signal to a running process, usually killing it)
-
-How many rows of crops are in the farm?
-
-rows
-
-read row_guess
-if [ ! $row_guess -eq 30 ] ; then
-	cat << bad_guess
-Not sure so about that one, majesty. Listen, I'll let you in on a little secret: 
-The farmer has invested in the new "-l" upgrade for his "wc" tool,
-why don't you try using those on the report?
-
-Try again:
-bad_guess
-read row_guess
-
-fi
-
-while [ ! $row_guess -eq 30 ] ; do
-	echo "ehhhh, pretty sure that's not it. Wanna give it another go?"
-	read row_guess
-done
-	cat << correct
-Hey I think that's it! alrightttt, I'll go ahead and place that order! 
-In the meantime, here's my rough sketch of the fields [farm-hands-scribbles.txt]. 
-Talk to me again in a second once you've looked over the sketch, and I'll have another question for you. TTYL!
-
-correct
-
-cat report.txt | tr -dc 'X' > farm-hands-scribbles.txt
-
-elif ! test -f compost_bin; then
-	cat << compost
-Back again, thanks for not abandoning me. The farmer is preparing for a massive overhaul of each and every plot, 
-meaning he needs a complete inventory of the number of the number of plots he has.
-Now, I would think that a farmer would normally have something like that on hand,
-but he's been a little all over the place since his daughter went missing. She was really the rock around here.
-
-Can you let me know how many plots there are in the fields?
-I'm pretty sure you can do this with either the official report 
-or my chicken-scratch, but it may be easier with the latter.
-
-How many plots are in the field?
-compost
-
-num_plots=$(cat farm-hands-scribbles.txt | wc -c )
-read plot_guess
-
-if [ ! $plot_guess -eq $num_plots ] ; then
-	cat << bad_plot
-I kinda remember a different number than that. I know that my handwriting isn't the best,
-but I know those scribbles contain the correct number of plots. Why don't you try using
-another feature of your "wc" tool, one that'll let you count the number of X's!
-
-Try again: 
-bad_plot
-
-	read plot_guess
-	fi
-
-while [ ! $plot_guess -eq $num_plots ] ; do
-	echo "nah, that can't be it... I'm pretty sure I'll recognize the number. Keep guessing!"
-	read plot_guess
-done
-
+nonstarter() {
 	cat << EOF
 
-Hey now, that's it! You've been such a big help, thank you so much.
-Things around here have been rather bleak. I try to stay positive, but you know, 
-there's only so much that one person can do. 
+Howdy do, princess! As much as I'd love to sit down and chat, I'd advise you 
+come back and talk to me once you've talked to my boss [the farmer] and gotten 
+the report!
 
-Here, would you mind doing one last favor for me?
-The shepherd has been asking around for a bin of compost to put in his field,
-do you think you could give this bin to him?  
-I would do it myself, but, to be honest, he give me the heebie-jeebies.
+Take care!
+
+EOF
+	return
+}
+
+prompt_fixup_east() {
+    cat << rows
+
+The farm-hand looks at east_fields-report.txt.
+
+Gee, that's a mighty-fine report you got there! Tell ya what though, I've got 
+both my hands full here, would you mind helping me out with a few facts?
+
+The farmer always adds a bunch of random stuff to the reports that no one even
+needs.  Could you get rid of the first two lines of that file?  I don't need to
+know that the report is the FARM_STRUCTURE, I alredy do.
+
+If you can remove those lines and save it to a file named [east-report.txt],
+well that'd just be swell.
+
+rows
+}
+
+prompt_fixup_west() {
+    cat << EOF
+
+The farm-hand looks at west_fields-report.txt.
+
+Awwww shoot, that farmer went and did it again!  But this time he added a
+buncha legalese to the bottom of the report.  Who even reads all that?
+
+Think you could do me another solid and get rid of those lines?  I'd be awful
+grateful.
+
+If you can make those changes and save it to a file named [west-report.txt],
+well that'd just be swell.
+
+EOF
+}
+
+prompt_fixup_north() {
+	cat << EOF
+
+The farm-hand looks at north_fields-report.txt.
+
+That guy can't even settle on a standard format.  No wonder we never know how 
+many crops we're growing.  It looks like this time he added that header AND the
+legalese.  Think you could fix it up for me?
+
+If you can make those changes and save it to a file named [north-report.txt],
+well that'd just be swell.
+
+I'd be real impressed if you could manage it all with one command.
+
+EOF
+}
+
+prompt_fixup_left() {
+	cat << EOF
+
+Thanks for helping out the shepherd, I really appreciate what you've done.
+
+If you could help me out with this last report though that'd be great.
+
+The farm-hand looks at left_field-report.txt.
+
+Well butter my biscuit, this time he just added a buncha junk right in the
+middle of the report.  How is anyone sposed to work like this??
+
+Think you can fix this one up for me too?
+
+If you can make those changes and save it to a file named [left-report.txt],
+well that'd just be swell.
+
+EOF
+
+}
+
+rows_bad_guess() {
+	cat << EOF
+
+Not sure so about that one, majesty. Listen, I'll let you in on a little 
+secret: 
+The farmer has invested in the new "-l" upgrade for his "wc" tool, why don't 
+you try using those on the report?
+
+EOF
+}
+
+rows_correct() {
+		cat << EOF
+
+Hey I think that's it! Alrightttt, I'll go ahead and place that order! 
+
+Talk to me again in a second if you have the time, I've got something else I 
+need help with.
+
+EOF
+	return
+}
+
+compost_output() {
+	cat << EOF
+
+Hey!! Thanks for all your help so far. If you still have time, if you could
+take this compost and talk to the shepherd, he's been asking to get it for his
+fields for ages.
+
+I would do it myself, but to be honest, he gives me the heebie-jeebies.
 
 Cheers!
 
 EOF
 
-for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
-	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
-	echo -n "DDT" >> compost_bin
-	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
-done
+}
 
-for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
-	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
-	echo -n "Chlorpyrifos" >> compost_bin
-	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
-done
-for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
-	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
-	echo -n "Aldrin" >> compost_bin
-	head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
-done
+help_shepherd() {
+	cat << EOF
 
+Have you helped the shepherd yet?
+
+EOF
+}
+
+count_plots() {
+	cat << EOF
+
+Thanks for not abandoning me. The farmer is preparing for a massive overhaul of 
+each and every plot, meaning he needs a complete inventory of the number of the 
+number of plots he has.
+
+You'd think a farmer would have something like that on hand, but he's been a 
+little all over the place since his daughter left. She was really the rock 
+around here.
+
+Can you let me know how many plots there are in the fields?  I'm pretty sure 
+you can do this with either the official report or my chicken-scratch, but it 
+may be easier with the latter.
+
+How many plots are in the field?
+
+EOF
+
+}
+
+bad_plot() {
+cat << EOF
+
+That doesn't seem quite right. I know that my handwriting isn't the best, but I 
+know those scribbles contain the correct number of plots. 
+
+Why don't you try using another feature of your "wc" tool, one that'll let you 
+count the number of X's!
+
+EOF
+}
+
+report_fixed() {
+	cat << EOF
+
+That's perfect!  Now that's a report you can work with!
+
+EOF
+}
+
+prompt_rows() {
+	cat << EOF
+
+Do you think you can go back through the report and let me know how many rows 
+are in the report?
+
+EOF
+}
+
+fixup_again() {
+	cat << EOF
+
+Well sorry there, but that doesn't look quite right to me.  Why don't you give 
+it another go.
+
+EOF
+}
+
+east_fixup_help() {
+	cat << EOF
+
+You can send the output of a command into a file using the '>' operator.  
+
+Also, you may want to talk to man about the 'tail' command and how you can use 
+it to start printing later in a file.
+
+Don't forget to save it to [east-report.txt].
+
+EOF
+}
+
+west_fixup_help() {
+	cat << EOF
+
+You can send the output of a command into a file using the '>' operator.
+
+Also, you may want to talk to man about the 'head' command and how you can use
+it to stop printing at a certain point in a file.
+
+Don't forget to save it to [west-report.txt].
+
+EOF
+}
+
+north_fixup_help() {
+	cat << EOF
+
+You can take the output of one command and use it as the input to another
+command using the '|' operator.
+
+If you combine the two commands you used earlier to stop printing at a
+certain point and start printing at a certain point I think you'll be able 
+to fix this file.
+
+Don't forget to save it to [north-report.txt].
+
+EOF
+}
+
+left_fixup_help() {
+	cat << EOF
+
+I heard that the shepherd introduced you to 'grep'.  It's a real handy command.
+
+You may want to talk to man about using it to select all the lines except the
+one you use grep to search for.
+
+Don't forget to save it to [left-report.txt].
+
+EOF
+}
+
+
+# farm-hand needs to know how many different columns of crops there are listed in the report,
+# as well as the total number of plots
+if  ! test -f east_fields-report.txt || ! test -f west_fields-report.txt || ! test -f north_fields-report.txt || ! test -f left_field-report.txt; then
+	nonstarter
+elif ! test -f east-scribbles.txt; then
+	if ! test -f .east.orig; then
+		prompt_fixup_east
+		cp east_fields-report.txt .east.orig
+	elif ! test -f .east.fixup; then
+		tail -n +3 .east.orig > .east.orig.tmp
+		if test -f east-report.txt; then
+			FIXUP=$(diff .east.orig.tmp east-report.txt)
+		else
+			FIXUP="NOPE"
+		fi
+		rm .east.orig.tmp
+		if [ -z "$FIXUP" ]; then
+			report_fixed
+			prompt_rows
+			touch .east.fixup
+		else
+			fixup_again
+			east_fixup_help
+		fi
+	else
+		correct=$(cat east-report.txt | wc -l)
+		printf "\n\nHow many rows were there?\n\n"
+		read row_guess
+		if [ ! $row_guess -eq $correct ] ; then
+			rows_bad_guess
+		else
+			rows_correct
+			cat east-report.txt | tr -dc 'X' > east-scribbles.txt
+			rm .east.orig
+			rm .east.fixup
+		fi
+	fi
+elif ! test -f west-scribbles.txt; then
+	if ! test -f .west.orig; then
+		prompt_fixup_west
+		cp west_fields-report.txt .west.orig
+	elif ! test -f .west.fixup; then
+		head -n -3 .west.orig > .west.orig.tmp
+		if test -f west-report.txt; then
+			FIXUP=$(diff .west.orig.tmp west-report.txt)
+		else
+			FIXUP="NOPE"
+		fi
+		rm .west.orig.tmp
+		if [ -z "$FIXUP" ]; then
+			report_fixed
+			prompt_rows
+			touch .west.fixup
+		else
+			fixup_again
+			west_fixup_help
+		fi
+	else
+		correct=$(cat west-report.txt | wc -l)
+		printf "\n\nHow many rows were there?\n\n"
+		read row_guess
+		if [ ! $row_guess -eq $correct ] ; then
+			rows_bad_guess
+		else
+			rows_correct
+			cat west-report.txt | tr -dc 'X' > west-scribbles.txt
+			rm .west.orig
+			rm .west.fixup
+		fi
+	fi
+elif ! test -f north-scribbles.txt; then
+	if ! test -f .north.orig; then
+		prompt_fixup_north
+		cp north_fields-report.txt .north.orig
+	elif ! test -f .north.fixup; then
+		tail -n +3 .north.orig | head -n -3 > .north.orig.tmp
+		if test -f north-report.txt; then
+			FIXUP=$(diff .north.orig.tmp north-report.txt)
+		else
+			FIXUP="NOPE"
+		fi
+		rm .north.orig.tmp
+		if [ -z "$FIXUP" ]; then
+			report_fixed
+			prompt_rows
+			touch .north.fixup
+		else
+			fixup_again
+			north_fixup_help
+		fi
+	else
+		correct=$(cat north-report.txt | wc -l)
+		printf "\n\nHow many rows were there?\n\n"
+		read row_guess
+		if [ ! $row_guess -eq $correct ] ; then
+			rows_bad_guess
+		else
+			rows_correct
+			cat north_fields-report.txt | tr -dc 'X' > north-scribbles.txt
+			rm .north.orig
+			rm .north.fixup
+		fi
+	fi
+elif ! test -f compost_bin; then
+	compost_output
+	for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
+		head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+		echo -n "DDT" >> compost_bin
+		head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+	done
+
+	for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
+		head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+		echo -n "Chlorpyrifos" >> compost_bin
+		head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+	done
+	for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
+		head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+		echo -n "Aldrin" >> compost_bin
+		head -n$(expr $RANDOM % 50) /dev/random | head -c -$(expr $RANDOM % 25) >> compost_bin
+	done
+elif ! test -f .sheptalk_4; then
+	help_shepherd
+elif ! test -f left-scribbles.txt; then
+	if ! test -f .left.orig; then
+		prompt_fixup_left
+		cp left_fields-report.txt .left.orig
+	elif ! test -f .left.fixup; then
+		grep -v -e "special" > .left.orig.tmp
+		if test -f left-report.txt; then
+			FIXUP=$(diff .left.orig.tmp left-report.txt)
+		else
+			FIXUP="NOPE"
+		fi
+		rm .left.orig.tmp
+		if [ -z "$FIXUP" ]; then
+			report_fixed
+			prompt_rows
+			touch .left.fixup
+		else
+			fixup_again
+			left_fixup_help
+		fi
+	else
+		correct=$(cat left-report.txt | wc -l)
+		printf "\n\nHow many rows were there?\n\n"
+		read row_guess
+		if [ ! $row_guess -eq $correct ] ; then
+			rows_bad_guess
+		else
+			rows_correct
+			cat left-report.txt | tr -dc 'X' > left-scribbles.txt
+			rm .left.orig
+			rm .left.fixup
+		fi
+	fi
+elif ! test -f .final; then
+	if ! test -f .plot; then
+		count_plots
+		touch .plot
+	else
+		num_plots=$(cat east-scribbles.txt west-scribbles.txt north-scribbles.txt left-scribbles.txt | wc -c )
+		read plot_guess
+		if [ ! $plot_guess -eq $num_plots ] ; then
+			bad_plot
+		else 
+			plot_correct
+			rm .plot
+		fi
 else
 	cat << EOF
 
-Argh, I love this job but I swear it'll be the death of me someday!
-Either that, or I'll end up with nothing behind the eyes like my boss.
-
-Ya know, he used to be able to light up a room like no one else.
+Argh, I love this job but I wish I had a way to talk to my family.  They're all
+living back in the city and it's such a pain to travel all the way back just to 
+say hi...
 
 Anyways, I'll talk to you soon...
 

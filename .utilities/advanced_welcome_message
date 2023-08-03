@@ -1,24 +1,22 @@
-This is the Welcome Message for the 
-Advanced Room
-# =====================
-# Welcome to bashcrawl!
-# =====================
+# ================================
+# Welcome to Advanced Command Line
+# ================================
 
-# This is a game to teach you the basics of using a POSIX (Linux, BSD,
-# UNIX) terminal, like the one where you are reading this message now.
+# This is a game to teach you some advanced features while using a POSIX 
+# (Linux, BSD, UNIX) terminal like redirection and pipelining.
 # 
-# You are the princess of the castle and have suffered a fairly severe 
-# blow to the head.  
+# Now that you've freed the castle from it's enslavement you've realized that 
+# you want more than castle life has to offer, you want to start an empire.
 #
-# You no longer have any memory of the castle you live in, but you do 
-# remember that there is chocolate in the kitchens... 
-# and you are very hungry.  
+# The first thing you've decided to do is figure out what people really want.  
+# If you can provide them with their deepest wishes, bringing everyone into the 
+# fold should be a cakewalk. 
 # 
-# Luckily each room of the castle has a scroll with helpful 
-# instructions about getting around.  
+# There is a small 'Village' nearby and you may be able to make a start on your 
+# empire there.
 #
-# You can read the scroll with the command:
-# 
-#   cat scroll
+# Luckily your faithful manservant man has decided to stick it out with you.  
+#
+
 
 

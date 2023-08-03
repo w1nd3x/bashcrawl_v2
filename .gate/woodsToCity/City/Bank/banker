@@ -12,92 +12,209 @@
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
 #
-# 
+#
+
+banker_intro() {
+	cat << EOF
+
+When you walk into the bank, you are blown away by how homey the interior 
+feels. Maybe that's how they intended it, so you'd feel at home when you gave 
+away your money. Either way, you are set at ease when the banker walks up to 
+you. He's got an easy smile, a nicely pressed suit, and an outstretched hand.
+
+You get to talking about your voyage so far, from your trials in the castle to 
+the strange townspeople outside the city. He effortlessly guides the 
+conversation toward finances, and before you know it you are admitting that 
+things have been a little harder money-wise. He, being the gentlemen banker, 
+offers to help you out in any way he can, provided you open an account with 
+him.
+
+EOF
+}
+
+waiting() {
+	cat << EOF
+
+Something about accounts snaps you out of his trap, and you realize what's 
+going on. Flustered but newly confident, you decline his offer, and throw out 
+some excuses why you have to leave before he can talk you into something else. 
+That banker seems like a good guy to have on your team, but you're unsure if he 
+is on anyone's but his own...
+
+EOF
+}
+
+task_begun() {
+		cat << EOF
+
+The banker nods slowly as you unfold your plan to purchase the Network Company, 
+a smile slowly creeping across his face. Once you are done talking, he spreads 
+his arms wide, and says "Let's go into business together!" 
+
+He does have a slight problem though. You noticed earlier a large stack of 
+papers with the heading 'accounts' on it, and he picks them up and hands them 
+to you.
+
+He says a board meeting is starting soon and he needs multiple reports from 
+these accounts to present.  He doesn't have enough time to prepare your loan 
+proposal for the board and finish all the reports. If you can work out the 
+reports, he'll take care of that loan proposal.
+
+EOF
+}
+
+report_one() {
+	cat << EOF
+
+*******************************************************************************
+Report 1: 
+1) Use whatever tool you can at your disposal to isolate the last names from 
+   'accounts.txt'
+2) Sort the list of names in alphabetical order.
+2) Save the alphabetized list to a seperate file named report_one.txt.
+*******************************************************************************
+
+EOF
+}
+
+report_two() {
+	cat << EOF
+
+*******************************************************************************
+Report 2: 
+1) Use whatever tool you can at your disposal to isolate the dollar amounts 
+   from 'accounts.txt'
+2) You can use the following command to total up numbers in a file on separate
+   lines: 
+    awk '{ sum += \$1 } END { print sum }' <file>
+3) Save the total to a seperate file named report_two.txt.
+*******************************************************************************
+
+EOF
+}
+
+report_three() {
+	cat << EOF
+
+*******************************************************************************
+Report 3: 
+1) Use whatever tool you can at your disposal to isolate the dates from 
+   'accounts.txt'
+2) Sort the dates from the Newest to the Oldest
+3) Save the output to a seperate file named report_two.txt.
+*******************************************************************************
+
+EOF
+}
+
+report_four() {
+	cat << EOF
+
+*******************************************************************************
+Report 4: 
+1) Use whatever tool you can at your disposal to isolate the reason each loan 
+   was taken out in 'accounts.txt'
+2) Identify any items that were purchased more than once.
+3) Save the output to a seperate file named report_four.txt.
+*******************************************************************************
+
+EOF
+}
+
+correct() {
+	cat << EOF
+
+Great work, that's exactly what I needed!
+
+Here's the next report.
+
+EOF
+}
+
+done_deal() {
+	cat << EOF
+
+As you lay the final report down in front of the banker, he dramatically
+inputs the last character for your proposal.
+
+ALRIGHT! The banker is overjoyed that he can finally put that to rest, and 
+within the hour, you have the money you need to purchase the Network Company.
+
+EOF
+}
 
 if ! test -f .banker_intro ; then
-	cat << account?
-When you walk into the bank, you are blown away by how homey the interior feels.
-Maybe that's how they intended it, so you'd feel at home when you gave away your money.
-Either way, you are set at ease when the banker walks up to you. He's got an easy smile, 
-a nicely pressed suit, and an outstretched hand.
-
-You get to talking about your voyage so far, from your trials in the castle to the strange
-townspeople outside the city. He effortlessly guides the conversation toward finances, 
-and before you know it you are admitting that things have been a little harder money-wise. 
-He, being the gentlemen banker, offers to help you out in any way he can, provided you open 
-an account with him.
-account?
-touch .banker_intro
-
+	banker_intro
+	touch .banker_intro
 fi
 
 if ! test -f ../NetworkCompany/.purchase_in_prog; then
-	cat << waiting
-
-Something about accounts snaps you out of his trap, and you realize what's going on. Flustered but
-newly confident, you decline his offer, and throw out some excuses why you have to leave
-before he can talk you into something else. That banker seems like a good guy to have on your team, 
-but you're unsure if he is on anyone's but his own...
-waiting
-
-
+	waiting
 elif ! test -f .task_begun ; then
-	cat << task
-
-The banker nods slowly as you unfold your plan to purchase the Network Company, a smile slowly creeping across
-his face. Once you are done talking, he spreads his arms wide, and says "Let's go into business together!"
-He does have one teensy thing for you to do though. You noticed earlier a large stack of papers with the heading
-'accounts' on it, and he picks them up and hands them to you.
-
-He says that if you can tell him the total outstanding balance from all the loans that he has given to people, 
-then he will have no problem lending whatever amount you need.
-
-***********************************************************************************************************
-Your task: 
-1) use whatever tool you can at your disposal to isolate the dollar amounts from 'accounts.txt'
-2) you can use the following command to total up line-delimited numbers in a file: 
-    awk '{ sum += $1 } END { print sum }' <file>
-3) come back and talk to the banker and see if you've got the right number!
-***********************************************************************************************************
-
-task
-
-touch .task_begun
-
-elif ! test -f .accounts_totalled ; then
-	cat << number
-The banker is ready for a number.
-
-Total amount of money lent:
-number
-money=
-while [[ -z $money ]]; do
-   read money
-done
-if [ $money -ne 913200 ] ; then
-	cat << nah
-That isn't right... you need to ***cut*** out the specific field, 
-The -d and -f flags are your friends! Don't be afraid to try and
-mess up.
-nah
-
-fi
-
-while [ $money -ne 913200 ] ; do
-	echo "Are you sure about that? Give it another shot:"
-	money=
-	while [[ -z $money ]]; do
-	   read money
-	done
-done
-	cat << done_deal
-ALRIGHT! The banker is overjoyed that he can finally put that to rest, and within the hour, 
-you have the money you need to purchase the Network Company.
-done_deal
-touch .accounts_totalled
-
+	task_begun
+	touch .task_begun
+	report_one
+elif ! test -f .one; then
+	elif ! test -f report_one.txt; then
+		printf "\n\nThe banker looks up from the loan paperwork and issues a quick reminder of what you need to do.\n\n"
+		report_one
+	elif test -f report_one.txt; then
+		cut -d ' ' -f 3 accounts.txt  | sort > .report_one.tmp
+		CORRECT=$(diff report_one.txt .report_one.tmp)
+		rm .report_one.tmp
+		if [ -z "$CORRECT" ]; then
+			correct
+			report_two
+			touch .one
+		else
+			report_one_incorrect
+		fi
+elif ! test -f .two; then
+	if ! test -f report_two.txt; then
+		printf "\n\nThe banker looks up from the loan paperwork and issues a quick reminder of what you need to do.\n\n"
+		report_two
+	elif test -f report_two.txt
+		cut -d ' ' -f 5 accounts.txt | awk '{ sum += $1 } END { print sum }' > .report_two.tmp
+		CORRECT=$(diff report_two.txt .report_two.tmp)
+		rm .report_two.tmp
+		if [ -z "$CORRECT" ]; then
+			correct
+			report_three
+			touch .two
+		else
+			report_two_incorrect
+	fi
+elif ! test -f .three; then
+	if ! test -f report_three.txt; then
+		printf "\n\nThe banker looks up from the loan paperwork and issues a quick reminder of what you need to do.\n\n"
+		report_three
+	elif test -f report_three.txt; then
+		cut -d '-' -f 4,5,6 accounts.txt | sort -r > .report_three.tmp
+		CORRECT=$(diff report_three.txt .report_three.tmp)
+		rm .report_three.tmp
+		if [ -z "$CORRECT" ]; then
+			correct
+			report_four
+			touch .three
+		else
+			report_three_incorrect
+	fi
+elif ! test -f .four; then
+	if ! test -f report_four.txt; then
+		printf "\n\nThe banker looks up from the loan paperwork and issues a quick reminder of what you need to do.\n\n"
+		report_four
+	elif test -f report_four.txt; then
+		cut -d '-' -f 3 accounts.txt | sort | uniq -d > .report_four.tmp
+		CORRECT=$(diff report_four.txt .report_four.tmp)
+		rm .report_four.tmp
+		if [ -z "$CORRECT" ]; then
+			done_deal
+			touch .four
+		else
+			report_four_incorrect
+	fi
 else
-	echo "woohoo, business partner!"
+	echo "Woohoo, business partner!"
 fi
 
 #

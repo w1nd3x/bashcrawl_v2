@@ -12,120 +12,9 @@
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
 #
-# 
-if ! test -f ../PoliceStation/confession.txt; then
-	cat << carpenter_intro
-The woodshop appears to have a permanent haze to it as you walk in, presumably from the
-thin layer of sawdust over everything. Various planks of wood rest against the back corner,
-next to a large workbench with every sort of saw and blade fixed to its scored surface. 
+#
 
-The carpenter is hard at work in a dark-stained throne of a chair sanding what appears to be
-an ornately designed salt shaker when you walk in, and he doesn't immediately give too much 
-indication that he's even noticed you.
-
-Once you enter beyond the threshold of the shop, however, the floorboards under you begin to 
-creak terrbily, and the carpenter's head inches upward until his eyes meet yours.
-
-Once they do, you see the jolly light in them. He jumps to his feet, enthusiastically greets you,
-and begins to show you around the shop before you can get a word in.
-carpenter_intro
-
-if test -f ../Smith/.blacksmith_quest_begun ; then
-	cat << carpenter_test
-
-During a brief pause in his speech, you quickly ask if he knows anything about the blacksmith's missing anvil. 
-He says that it's mighty unfortuante, but that he doesn't know anything about it. He indicates 
-around his shop, and asks if it looks like he would have much use for such equipment. You have to
-admit, he has a point.
-carpenter_test
-
-fi
-	cat << carpenter_intro_2
-
-When the carpenter feels confident that he's shown you everything in his possession, he asks if you're ready to apprentice with him. 
-Completely caught off guard, you let him know that you're just visiting, and that, while flattered, have no plans to work
-with wood.
-carpenter_intro_2
-
-touch .carpenter_intro
-
-elif ! test -f .job_start ; then
-
-	cat << job_intro_
-When the carpenter sees you walk in with an air of authority and the arrest warrant in your hand, it's as if 
-he knows the game is done. He walks over to you, hands in pockets, and confesses everything. How he'd been looking
-for something to ruin the metal-workers business for years, and when Sam showed up on his doorstep, it was just too
-good of an opportunity to pass up. 
-
-He does have one request, however, which you find odd for someone about to be arrested. He says that he won't give 
-up the location of the anvil unless you first sort through his massive job ledger. He says that it hasnt' been sorted
-in years, and that there is a ton of duplicate jobs on there. Sort through it, he says, and then he will reveal the anvil.
-
-[save the sorted, duplicate-removed ledger into the 'sorted_ledger.txt' file]
-job_intro_
-
-job=("Home Renovation - Johnson Residence"
-     "Outdoor Deck Construction - Smith Backyard"
-     "Church Restoration - St. Mark's Parish"
-     "Custom Furniture - Thompson Residence"
-     "Roof Repair - Anderson Warehouse"
-     "Outdoor Pergola - Williams Garden"
-     "School Classroom Expansion - Green Valley Academy"
-     "Wood Carving - St. Patrick's Cathedral"
-     "Recording Studio Upgrade - SoundWave Studios"
-     "Playground Structure - City Park"
-     "Residential Fence Installation - Davis Property"
-     "Retail Store Shelving - Fashion Mart"
-     "Window Replacement - Hilltop Apartments"
-     "Exhibition Booth Design - Art Expo 2023"
-     "Residential Door Refinishing - Baker Home"
-     "Wooden Signage - Riverside Café"
-     "Commercial Shelving - Tech Solutions Inc."
-     "Bookcase Assembly - Local Library"
-     "Flooring Installation - Sunnydale Gymnasium"
-     "Retail Display Cabinets - Modern Trends Boutique"
-     "Handrail Replacement - Metro Station"
-     "Garden Shed Construction - Wilson Garden"
-     "Floating Shelves - Artisan Coffee House"
-     "Restaurant Booths - Gourmet Bistro"
-     "Patio Furniture Restoration - Johnson Patio"
-     "Wooden Stage Design - Community Theater"
-     "Attic Insulation - Taylor Residence"
-     "Retail Kiosk Construction - Mall Plaza"
-     "Wooden Planter Boxes - Urban Park Project"
-     "Historic Home Preservation - Roosevelt House"
-)
-get_random_index() {
-    local array_length="${#job[@]}"
-    local random_index=$((RANDOM % array_length))
-    echo "$random_index"
-}
-
-# Main script
-for ((i = 1; i <= 1000; i++)); do
-    random_index=$(get_random_index)
-    random_entry="${job[$random_index]}"
-    echo "$random_entry" >> ledger.txt
-done
-
-touch .job_start
-elif test -f .carpe_done-em ; then
-	cat << carpenter_done
-The empty shop seems a little eerie. Hopefully someone maintains it until the carpenter returns.
-carpenter_done
-
-elif test -f sorted_ledger.txt ; then 
-
-if cmp -s "sorted_ledger.txt" ".sl"; then
-	cat << carpenter_arrest
-The carpenter thanks you for your work by sticking his hands out. Not sure what he was really thinking, you were never
-given handcuffs. But it's a good gesture. He appreciates your work, and seems pretty confident that he'll be back to start
-working through the jobs he has. Weirdly confident...
-
-Before you leave, he opens up one of the wood panels on the floor, revealing a hidden compartment with a big ol shiny anvil contained
-within. At last!
-carpenter_arrest
-if ! test -f .anvil_created ; then
+create_anvil() {
 echo "
   .-------..___
   '-._     :_.-'
@@ -136,21 +25,205 @@ echo "
  \\   |     /   \\
  |   \\     )_.-'LGB
  '-._/__..-'" > anvil.txt
-touch .anvil_created
-fi 
-touch .carpe_done-em
+}
+
+carpenter_intro() {
+    cat << EOF
+The woodshop appears to have a permanent haze to it as you walk in, presumably 
+from the thin layer of sawdust over everything. Various planks of wood rest 
+against the back corner, next to a large workbench with every sort of saw and 
+blade fixed to its scored surface. 
+
+The carpenter is hard at work in a dark-stained throne of a chair sanding what 
+appears to be an ornately designed salt shaker when you walk in, and he doesn't 
+immediately give too much indication that he's even noticed you.
+
+Once you enter beyond the threshold of the shop, however, the floorboards under 
+you begin to creak terrbily, and the carpenter's head inches upward until his 
+eyes meet yours.
+
+Once they do, you see the jolly light in them. He jumps to his feet, 
+enthusiastically greets you, and begins to show you around the shop before you 
+can get a word in.
+
+EOF
+}
+
+carpenter_test() {
+	cat << EOF
+
+During a brief pause in his speech, you quickly ask if he knows anything about 
+the blacksmith's missing anvil. He says that it's mighty unfortuante, but that 
+he doesn't know anything about it. He indicates around his shop, and asks if it 
+looks like he would have much use for such equipment. You have to admit, he has
+a point.
+
+EOF
+}
+
+carpenter_intro_2() {
+	cat << EOF
+
+When the carpenter feels confident that he's shown you everything in his 
+possession, he asks if you're ready to apprentice with him. Completely caught 
+off guard, you let him know that you're just visiting, and that, while 
+flattered, have no plans to work with wood.
+
+EOF
+}
+carpenter_recruit() {
+    cat << EOF
+
+The carpenter looks up from his work at your approach and smiles a toothy grin.
+
+He begins rummaging around the shop pulling out random pieces of equipment and 
+talking without pause about the techniques you'll need to know as his 
+apprentice.
+
+You back out of the room slowly so as not to catch his notice.
+
+EOF
+}
+ledger_intro() {
+    cat << EOF
+
+When the carpenter sees you walk in with an air of authority and the arrest 
+warrant in your hand, it's as if he knows the game is done. He walks over to 
+you, hands in pockets, and confesses everything. How he'd been looking for 
+something to ruin the metal-workers business for years, and when Sam showed up 
+on his doorstep, it was just too good of an opportunity to pass up. 
+
+He does have one request, however, which you find odd for someone about to be 
+arrested. He says that he won't give up the location of the anvil unless you 
+first sort through his massive job ledger. He says that it hasn't been sorted 
+in years, and that there is a ton of duplicate jobs on there. Sort through it, 
+he says, and then he will reveal the anvil.
+
+[save the sorted, duplicate-removed ledger into the 'sorted_ledger.txt' file]
+
+EOF
+}
+
+carpenter_arrest() {
+    	cat << EOF
+
+The carpenter thanks you for your work by sticking his hands out. Not sure what 
+he was really thinking, you were never given handcuffs. But it's a good 
+gesture. He appreciates your work, and seems pretty confident that he'll be 
+back to start working through the jobs he has. Weirdly confident...
+
+Before you leave, he opens up one of the wood panels on the floor, revealing a 
+hidden compartment with a big ol shiny anvil contained within. At last!
+
+EOF
+}
+carpenter_work() {
+    cat << EOF
+
+The carpenter looks at you weirdly, as you are the one standing between his 
+freedom and imprisonment. It's probably time to get to work sorting out that 
+ledger [into sorted_ledger.txt]
+
+EOF
+
+}
+
+ledger_incorrect() {
+    cat << EOF
+
+The carpenter expresses that he is pretty sure there is still more refinement 
+that can be done on the ledger. Get back to work!
+
+EOF
+}
+
+carpenter_done() {
+cat << EOF
+
+The empty shop seems a little eerie. Hopefully someone maintains it until the 
+carpenter returns.
+
+EOF
+}
+
+if ! test -f ../PoliceStation/confession.txt; then
+    if ! test -f .carpenter_intro; then
+	    carpenter_intro
+        if test -f ../Smith/.blacksmith_quest_begun ; then
+            carpenter_test
+        else
+            carpenter_intro_2
+            touch .carpenter_intro
+        fi
+    else
+        carpenter_recruit
+    fi
+elif ! test -f .job_start ; then
+    ledger_intro
+
+    job=("Home Renovation - Johnson Residence"
+        "Outdoor Deck Construction - Smith Backyard"
+        "Church Restoration - St. Mark's Parish"
+        "Custom Furniture - Thompson Residence"
+        "Roof Repair - Anderson Warehouse"
+        "Outdoor Pergola - Williams Garden"
+        "School Classroom Expansion - Green Valley Academy"
+        "Wood Carving - St. Patrick's Cathedral"
+        "Recording Studio Upgrade - SoundWave Studios"
+        "Playground Structure - City Park"
+        "Residential Fence Installation - Davis Property"
+        "Retail Store Shelving - Fashion Mart"
+        "Window Replacement - Hilltop Apartments"
+        "Exhibition Booth Design - Art Expo 2023"
+        "Residential Door Refinishing - Baker Home"
+        "Wooden Signage - Riverside Café"
+        "Commercial Shelving - Tech Solutions Inc."
+        "Bookcase Assembly - Local Library"
+        "Flooring Installation - Sunnydale Gymnasium"
+        "Retail Display Cabinets - Modern Trends Boutique"
+        "Handrail Replacement - Metro Station"
+        "Garden Shed Construction - Wilson Garden"
+        "Floating Shelves - Artisan Coffee House"
+        "Restaurant Booths - Gourmet Bistro"
+        "Patio Furniture Restoration - Johnson Patio"
+        "Wooden Stage Design - Community Theater"
+        "Attic Insulation - Taylor Residence"
+        "Retail Kiosk Construction - Mall Plaza"
+        "Wooden Planter Boxes - Urban Park Project"
+        "Historic Home Preservation - Roosevelt House"
+    )
+    get_random_index() {
+        local array_length="${#job[@]}"
+        local random_index=$((RANDOM % array_length))
+        echo "$random_index"
+    }
+
+    # Main script
+    for ((i = 1; i <= 1000; i++)); do
+        random_index=$(get_random_index)
+        random_entry="${job[$random_index]}"
+        echo "$random_entry" >> ledger.txt
+    done
+
+    touch .job_start
+elif test -f .carpe_done-em ; then
+    carpenter_done
+
+elif test -f sorted_ledger.txt ; then 
+
+    if cmp -s "sorted_ledger.txt" ".sl"; then
+        carpenter_arrest
+        if ! test -f .anvil_created ; then
+            create_anvil
+            touch .anvil_created
+        fi 
+        touch .carpe_done-em
+    else
+        ledger_incorrect
+    fi
 
 else
-	cat << not_quite
-The carpenter expresses that he is pretty sure there is still more refinement that can be done on the ledger. Get back to work!
-not_quite
-fi
-
-else
-	cat << freedom?
-The carpenter looks at you weirdly, as you are the one standing between his freedom and imprisonment. 
-It's probably time to get to work sorting out that ledger [into sorted_ledger.txt]
-freedom?
+	carpenter_work
 fi
 
 

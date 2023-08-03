@@ -13,6 +13,9 @@
 # We're happy to provide hints.
 #
 # 
+
+
+
 if ! test -f .henry_intro; then
 	cat << henry_intro
 The first cell consists of nothing more than a shoddily-made rack, a toilet, and concrete walls.
