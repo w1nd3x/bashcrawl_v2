@@ -142,6 +142,17 @@ exit() {
   NS=$(command ip netns identify)
   if [ -z "${NS}" ]; then
     # the user is currently in the default ns so they can exit
+    head -n -3 ~/.bashrc > ~/.bashrc.tmp
+    for i in "$(alias)"; do
+      ADDED=$(grep -o "$i" ~/.bashrc)
+      if [ -z "$ADDED" ]; then
+        echo $i >> ~/.bashrc.tmp
+      fi
+    done
+    echo "clear" >> ~/.bashrc.tmp
+    echo "cd \"$(pwd)\"" >> ~/.bashrc.tmp
+    echo "echo \"Welcome back!\"" >> ~/.bashrc.tmp
+    mv ~/.bashrc.tmp ~/.bashrc
     command exit
   else
     # the user is not in the default namespace so they must disconnect first

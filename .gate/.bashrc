@@ -60,6 +60,22 @@ progress() {
   cat ~/.progress
 
 }
+
+exit() {
+  head -n -3 ~/.bashrc > ~/.bashrc.tmp
+  for i in "$(alias)"; do
+    ADDED=$(grep -o "$i" ~/.bashrc)
+    if [ -z "$ADDED" ]; then
+      echo $i >> ~/.bashrc.tmp
+    fi
+  done
+  echo "clear" >> ~/.bashrc.tmp
+  echo "cd \"$(pwd)\"" >> ~/.bashrc.tmp
+  echo "echo \"Welcome back!\"" >> ~/.bashrc.tmp
+  mv ~/.bashrc.tmp ~/.bashrc
+  command exit
+}
+
 clear
 cd gate
 cat /advanced_welcome_message
