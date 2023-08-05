@@ -16,13 +16,12 @@
 greeting() {
     cat << EOF
 
-Guess what!?!
+Hey, good to see you again!  I managed to get out and get a job!
 
-I've started an online business.  I'm selling my frying pan upgrades to the 
-whole kingdom!
+So I tried to set up that IP Address thing that the manual talked about,
+but the more I did it the worse everything seemed to get.  
 
-At least I would be if the network were up.  Think you can 'connect' and 
-figure out what's going on?
+Do you think you can 'connect' and figure it out.
 
 EOF
     return
@@ -31,17 +30,23 @@ EOF
 connected() {
 cat << EOF
 
-Great, you're in!
+Awesome.  The original company said I should have an IP Address of 
+10.0.130.121. 
 
-My computer is supposed to be at 10.0.110.196.
+I really thought I had fixed it...
 
 EOF
     return
 }
 
 prompt_for_hint() {
-    printf "Did you need some help?\n\n"
-    printf "You can check out this manual if you'd like. (y/n) "
+    cat << EOF
+
+Did you need some help?
+
+You can check out this manual if you'd like.  (y/n)
+
+EOF
 }
 
 no_hint() {
@@ -57,8 +62,12 @@ ip_set() {
 
     cat << EOF
 
-Silly me.  Who knows how I could have messed that up.  Thanks for fixing up my 
-ip address.
+Oh, I guess I had the wrong address.  Well you know I got pretty close.  Do you
+know if I can get to the city router?  
+
+Most of the people I need to communicate with are in other parts of the 
+kingdom.
+
 EOF
     return
 }
@@ -84,16 +93,8 @@ EOF
     return
 }
 
-workshop_routed() {
+store_routed() {
     cat << EOF
-
-Amazing!!! It connects.  Technology is something else.
-
-So about that online business...
-
-I tried to set up a storefront, but I can't figure out what port it's on.  Do 
-you think you could help me out with that?
-
 EOF
     return
 }
@@ -116,28 +117,10 @@ EOF
     return
 }
 
-router1_setup() {
-    cat << EOF
 
-I don't think there's much you can do here until you set up the city router 
-for our network.  Talk to the technician if you need help.
-
-EOF
-}
-
-prompt_set_route() {
-    cat << EOF
-Do you think you could take a look at my connection to the test computer now?
-
-It seems like I'm still not quite connected up to the rest of the network.
-
-EOF
-}
-
-MYNS="castle1"
-MYIP="10.0.110.196"
-BAD_ADDR="10.110.0.196"
-MYGATEWAY="10.0.110.1"
+MYNS="town2"
+MYIP="10.0.130.121"
+MYGATEWAY="10.0.130.1"
 TEST="10.0.140.42"
 NS=$(command ip netns identify)
 if ! [ -f ~/.router1 ]; then
@@ -147,18 +130,18 @@ elif ! [ -f .done ]; then
         greeting
     elif [ "$NS" = "$MYNS" ]; then
         ADDR_SET=$(ip a | grep -o "$MYIP/24 scope global ${MYNS}0")
-        BAD_ADDR=$(ip a | grep -o "$BADIP/24 scope global ${MYNS}0")
         PING=$(cat ~/.bash_history | grep -o "ping .* $MYGATEWAY")
         PING2=$(cat ~/.bash_history | grep -o "ping .* $TEST")
         ROUTE_SET=$(ip route | grep -o "default via $MYGATEWAY dev ${MYNS}0")
+        IP_UP=$(command ip netns exec $MYNS ping -c1 -W1 $MYIP | grep -o from 2> /dev/null)
         ROUTE_UP=$(command ip netns exec test ping -c1 -W1 $TEST | grep -o from 2> /dev/null)
-        if [ -z "$ADDR_SET" ] || ! [ -z "$BAD_ADDR" ]; then
+        if [ -z "$ADDR_SET" ] || [ -z "$IP_UP" ]; then
             connected
             if [ -f .first ]; then
                 prompt_for_hint
                 if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
                     if [ -z "$ADDR_SET" ]; then ip_add_hint; fi
-                    if [ -z "$BAD_ADDR" ]; then ip_del_hint; fi
+                    if [ -z "$IP_UP" ]; then ip_del_hint; fi
                 else
                     no_hint
                 fi
@@ -166,12 +149,8 @@ elif ! [ -f .done ]; then
                 touch .first
             fi
         elif [ -z "$ROUTE_SET" ] || [ -z "$ROUTE_UP" ]; then
-            if ! [ -f .second ]; then
-                ip_set
-                touch .second
-                prompt_set_route
-            else
-                prompt_set_route
+            ip_set
+            if [ -f .second ]; then
                 prompt_for_hint
                 if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
                     if [ -z "$ROUTE_SET" ]; then route_add_hint; fi
@@ -179,7 +158,14 @@ elif ! [ -f .done ]; then
                 else
                     no_hint
                 fi
+            else
+                touch .second
             fi
+            workshop_routed
+            touch .done
+            rm .ping
+            rm .connected
+            # edit .start.sh to save progress
         else
             workshop_routed
             touch .done

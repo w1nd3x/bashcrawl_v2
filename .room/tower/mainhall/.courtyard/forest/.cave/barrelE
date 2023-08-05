@@ -15,7 +15,7 @@
 
 if test -f "./Secret Hideout/scroll"; then
     printf "\nThe switch has already been flipped!\n\n"
-    exit
+    command exit
 fi
 cat << EOF
 

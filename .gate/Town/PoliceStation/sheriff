@@ -169,27 +169,36 @@ elif ! test -f .sheriff_intro; then
 	fi
 elif ! test -f confession.txt ; then
 	if test -f Hallway/Cell_1/statement.txt ; then
-		if [[ 7 -eq $(cat Hallway/Cell_1/statement.txt | wc -l) ]] ; then
+		Hallway/Cell_1/head-case_henry | head -n 7 > .henry.tmp
+		DIFF=$(diff .henry.tmp Hallway/Cell_1/statement.txt)
+		rm .henry.tmp
+		if [ -z $DIFF ] ; then
 			henry_good
 		else
 			statement_bad "Henry"
 		fi
 	fi
 	if test -f Hallway/Cell_2/statement.txt ; then
-		if [[ 9 -eq $(cat Hallway/Cell_2/statement.txt | wc -l) ]] ; then
+		Hallway/Cell_2/tail-bone_teresa | tail -n 9 > .teresa.tmp
+		DIFF=$(diff .teresa.tmp Hallway/Cell_2/statement.txt)
+		rm .teresa.tmp
+		if [ -z $DIFF ] ; then
 			teresa_good
 		else
 			statement_bad "Teresa"
 		fi
 	fi
 	if test -f Hallway/Cell_3/statement.txt ; then
-		if cmp -s ".sam_stmt" "Hallway/Cell_3/statement.txt"; then
+		Hallway/Cell_3/sort-a-uniq-ue-sam | sort | uniq > .sam.tmp
+		DIFF=$(diff .sam.tmp Hallway/Cell_3/statement.txt)
+		rm .sam.tmp
+		if [ -z $DIFF ]; then
 			sam_good
 		else
 			statement_bad "Sam"
 		fi
 	fi
-	printf "\n\nThe sheriff looks up, back down, continues idly clicks around the computer.\n\n"
+	printf "\n\nThe sheriff looks up, back down, then continues to idly click around the computer.\n\n"
 
 elif ! test -f .sheriff_sad ; then
 	sheriff_sad
@@ -197,6 +206,7 @@ touch .sheriff_sad
 
 else
 	echo "The sheriff doesn't even look up from her work when you walk in."
+	echo "\nMaybe you should try your luck in the 'City'"
 fi
 
 #

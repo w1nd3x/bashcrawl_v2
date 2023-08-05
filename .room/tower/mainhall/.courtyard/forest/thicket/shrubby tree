@@ -14,9 +14,7 @@
 #
 if test -d ../cave; then
     printf "\nThe path has already been revealed.\n\n"
-    exit 0
-fi
-if test -f ../canopy/.solved; then
+elif test -f ../canopy/.solved; then
     cat << EOF
 A light shines up from the canopy and the thicket 
 as you place your palm against the false tree.
@@ -24,7 +22,7 @@ as you place your palm against the false tree.
 Something new has been revealed in the forest.
 
 EOF
-mv ../.cave ../cave
+    mv ../.cave ../cave
 else 
     cat << EOF
 This tree is definitely fake, but there is no

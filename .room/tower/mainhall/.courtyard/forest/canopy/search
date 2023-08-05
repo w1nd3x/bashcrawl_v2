@@ -50,7 +50,7 @@ EOF
 #
 if [ -f .solved ]; then
     printf "\nThe altar continues to shine, pointing into the thicket\n\n"
-    exit 0
+    command exit 0
 fi
 if [ -f circle ] && [ -f square ] && [ -f diamond ]; then
     if [ "\$(cat circle)" = "REAL OBJECT" ] && [ "\$(cat square)" = "REAL OBJECT" ] && [ "\$(cat diamond)" = "REAL OBJECT" ]; then

@@ -15,7 +15,7 @@
 source ~/.combat
 if [ -f .solved ]; then
     printf "\nGreat work, you've solved this room!\n\n"
-    exit 0
+    command exit 0
 fi
 if [ -f .correct ]; then
     COR=$(cat .correct)

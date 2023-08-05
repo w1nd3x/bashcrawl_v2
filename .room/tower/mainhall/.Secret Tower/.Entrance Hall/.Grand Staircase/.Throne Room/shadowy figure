@@ -15,46 +15,46 @@
 source ~/.combat
 if test -f "Sad Witch"; then
     printf "\nThe Evil Witch continues to sob as a small pool continues to form around her.\n\n"
-    exit
+    command exit
 elif test -f "Happy Witch"; then
     printf "\nThe Evil Witch laughs maniacally while holding the hair you gave her.\n\n"
-    exit
+    command exit
 fi
 
 if ! grep -o tanuki ~/.stats &>/dev/null; then
     printf "\nYou attempt to approach the throne but you are thrown back \n\n"
     printf "\nYou see the image of a tanuki that for an unexplainable reason reminds you of the kitchens.\n\n"
-    exit 0
+    command exit 0
 fi
 
 if ! grep -o hedgehog ~/.stats &>/dev/null; then
     printf "\nYou attempt to approach the throne but you are thrown back \n\n"
     printf "\nYou see the image of a hedgehog that for an unexplainable reason reminds you of the library.\n\n"
-    exit 0
+    command exit 0
 fi
 
 if ! grep -o corgi ~/.stats &>/dev/null; then
     printf "\nYou attempt to approach the throne but you are thrown back \n\n"
     printf "\nYou see the image of a corgi that for an unexplainable reason reminds you of the forest.\n\n"
-    exit 0
+    command exit 0
 fi
 
 if ! grep -o star ~/.stats &>/dev/null; then
     printf "\nYou attempt to approach the throne but you are thrown back \n\n"
     printf "\nYou see the image of a star that reminds you of the observatory.\n\n"
-    exit 0
+    command exit 0
 fi
 
 if ! grep -o controller ~/.stats &>/dev/null; then
     printf "\nYou attempt to approach the throne but you are thrown back \n\n"
     printf "\nYou see the image of a controller that reminds you of traps.\n\n"
-    exit 0
+    command exit 0
 fi
 
 if ! grep -o HanoiTower ~/.stats &>/dev/null; then
     printf "\nYou attempt to approach the throne but you are thrown back \n\n"
     printf "\nYou see the image of a tower.\n\n"
-    exit 0
+    command exit 0
 fi
 
 # start the encounter

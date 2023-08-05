@@ -1,7 +1,77 @@
-# Ctrl + C to exit
-# Ctrl + Z to background
-#
-#
-#
-#
-#
+                   On Interrupts in the Command Line of Bash
+
+Harken, noble troubadours of the digital realm, for I shall regale thee with 
+tales of the fabled "interrupts" that grace the command line of Bash, the 
+venerable shell of Unix lore. In this epoch of computing, when thou art engaged 
+in executing a command, lo and behold, interruptions may beset thee!
+
+
+    SIGINT - The Rumbling of a Noble Signal
+
+SIGINT, short for "Signal Interrupt," is a formidable interruption that befalls 
+thee when thou summon the valorous Ctrl+C. When engaged in an arduous task, 
+SIGINT shall bequeath thee the grace of a swift and merciful termination. As 
+the keystrokes resound through the terminal, the running command shall heed 
+this signal and relinquish its mortal coil, returning thee to the sanctuary of 
+the command prompt.
+
+Summary: SIGINT is a signal triggered by pressing Ctrl+C in the command line. 
+It quickly stops the running command and returns you to the command prompt.
+
+
+    SIGQUIT - The Cry for an Honorable End
+
+Amidst thy quest in the realm of Bash, should thou yearn for a more resolute 
+departure, lo, SIGQUIT shall heed thy call. Through the forceful embrace of 
+Ctrl+, thou shalt command SIGQUIT to intercede and terminate the program with 
+vigor. Fear not, for it shall also bestow upon thee a trace of the program's 
+final moments, a glimpse into its fleeting existence.
+
+Summary: SIGQUIT, activated by pressing Ctrl+, terminates the program 
+forcefully and provides a trace of its final moments.
+
+
+    SIGTSTP - The Sleep of a Command
+
+Behold, SIGTSTP, the signal of temporary reprieve! When thou unleash the might 
+of Ctrl+Z upon thy command, SIGTSTP shall cast it into the realm of slumber, 
+suspending its execution with benevolence. The command shall rest peacefully, 
+allowing thee to tend to other matters ere thou awaken it to continue its 
+ordained duty.
+
+Summary: SIGTSTP, invoked by pressing Ctrl+Z, temporarily suspends the 
+execution of a command, allowing you to attend to other tasks before resuming 
+it.
+
+
+    SIGTERM - The Final Decree
+
+Heed this warning, ye denizens of the terminal, for SIGTERM approaches as a 
+harbinger of finality! When a process encounters the might of SIGTERM, it shall 
+relinquish its hold on existence, accepting its imminent demise. Yet, in its 
+parting, it is granted the opportunity to undertake final actions before bowing 
+to the inexorable force of cessation.
+
+Summary: SIGTERM is a signal that commands a process to gracefully terminate, 
+giving it a chance to perform final actions before ending.
+
+
+    Epilogue
+
+Thus, in the tapestry of the command line, these interrupts serve as both 
+blessings and curses. They grant thee dominion over the processes that dwell 
+within the kingdom of Bash, allowing thee to control and shape their destiny. 
+Yet, beware the consequences of their invocation, for the realm of computing is 
+not without peril. May thou wield these powers judiciously and journey forth 
+with wisdom in thy quest for command line mastery.
+
+Summary: These interrupts in the Bash command line bestow power and control 
+over processes but require caution in their usage to avoid potential 
+consequences in the digital realm. Wield them wisely in your quest for 
+command line mastery.
+
+
+
+
+
+

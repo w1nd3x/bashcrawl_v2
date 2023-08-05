@@ -46,7 +46,7 @@ if [ "$RESP" = "y" -o "$RESP" = "Y" ] ;then
         return
     else
         printf "It doesn't look like you have a weapon to upgrade\n"
-        exit 0
+        command exit 0
     fi
     cat <<eof
 

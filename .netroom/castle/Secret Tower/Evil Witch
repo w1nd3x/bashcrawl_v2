@@ -120,23 +120,92 @@ EOF
     return
 }
 
+router1_setup() {
+    cat << EOF
+
+I don't think there's much you can do here until you set up the city router 
+for our network.  Talk to the technician if you need help.
+
+EOF
+}
+
+port_success() {
+    cat << EOF
+
+Let me check........
+
+Excellent!  Now all my conspirat... friends will be able to connect.  I really 
+appreciate the help.
+
+EOF
+
+}
+
+port_failure() {
+    cat << EOF
+
+Let me check........
+
+That doesn't seem to be the right port.  I can't connect to my server on it.
+
+EOF
+}
+
+port_hint() {
+    cat << EOF
+
+Take a look at the 'ss' command.  If you are running a server on your computer
+that program is using a socket to 'listen'.  See if there's a way to figure out
+what sockets are listening on the computer you are connected to.
+
+EOF
+
+}
+
+ping_aftermath() {
+    cat << EOF
+
+Well that doesn't seem to work.  It looks like you still need to set up a 
+route on my network.
+
+EOF
+}
+
+connected_hint() {
+
+    cat << EOF
+
+Remember you set the ip address on an interface using the ip address command.
+The option you will usually need to add, but if an address is already there you
+will need to use the delete option first to remove the old address.
+
+The difference between running an add command and a delete command is just
+swapping out add for delete or vice versa.
+
+Ex: 
+    'ip address add 143.150.12.20/24 dev eth0'
+    'ip address delete 143.150.12.20/24 dev eth0
+
+EOF
+}
+
 
 NS=$(command ip netns identify)
-if [ -f .done ]; then
-    complete
-elif ! [ -f ~/.router1 ]; then
+if ! [ -f ~/.router1 ]; then
     router1_setup
-elif [ -z "${NS}" ]; then
-    greeting
-else
-    if [ "$NS" = "castle2" ]; then
+elif ! [ -f .done ]; then
+    if [ -z "$NS" ]; then 
+        greeting
+    elif [ "$NS" = "castle2" ]; then
         ADDR_SET=$(ip a | grep -o "10.0.110.169/24 scope global castle20")
         PING=$(cat ~/.bash_history | grep -o "ping .* 10.0.110.1")
         PING2=$(cat ~/.bash_history | grep -o "ping .* 10.0.140.42")
         ROUTE_SET=$(ip route | grep -o "default via 10.0.110.1 dev castle20")
         if ! [ -z "$ROUTE_SET" ]; then
-            complete
+            tower_routed
             touch .done
+            rm .ping
+            rm .connected
             # edit .start.sh to save progress
         elif ! [ -z "$PING2" ] && [ -f .ping ]; then
             ping_aftermath
@@ -168,4 +237,29 @@ else
     else
         wrong_connection
     fi
+elif ! [ -f .task_done ]; then
+    if ! [ -f .repeat ]; then
+        tower_routed
+        touch .repeat
+    else
+        PORT=$(ss -l | tr -s ' ' | tr ':' ' ' |  grep "0.0.0.0" | cut -d ' ' -f 6)
+        printf "\nDid you figure out what port my server is on? (y / n) "
+        read RESP
+        if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+            printf "Great, what port is it: "
+            read RESP
+            if [ "$RESP" = "$PORT" ]; then
+                port_success
+                touch .task_done
+                rm .repeat
+            else
+                port_failure
+                port_hint
+            fi
+        else
+            port_hint
+        fi
+    fi
+else
+    complete
 fi

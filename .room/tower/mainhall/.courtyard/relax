@@ -20,7 +20,7 @@ You've already taken your break.
 It's time to get that chocolate.
 
 EOF
-    exit 0
+    command exit 0
 fi
 
 if test -f chair; then

@@ -24,7 +24,7 @@ You sift through the rags left behind by the thief.
 You find nothing of interest.
 
 eof
-    exit 0
+    command exit 0
 fi
 
 # start the thief encounter

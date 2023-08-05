@@ -11,7 +11,21 @@
 # When you're ready to continue playing the game, though, stick to
 # the scrolls. If you're stuck, ask your instructor.
 # We're happy to provide hints.
-# 
+#
+
+gameover() {
+    printf "\nYou have been defeated.\n\n"
+    COINS=$(awk '/Purse:/ { print $2 }' ~/.stats)
+    if [ $COINS -gt 5 ]; then
+        let COINS=COINS-5
+        printf "You lost 5 coins in the flight\n"
+        sed "s/Purse:.*/Purse: $COINS/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+    fi
+    MAX_HP=$(awk '/HP:/ { print $4 }' ~/.stats)
+    sed "s/HP: .*/HP: 1 \/ $(echo $MAX_HP)/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
+    printf "\nYou've lost five coins and you only have 1 HP. You should\nconsider going to get a drink before you continue your adventure.\n\n"
+
+}
 
 # This is the function that initiates combat (might want 
 # a better name).
@@ -66,7 +80,7 @@ get_secrets() {
 
 resolve() {
     HP=$(awk '/HP:/ { print $2 }' ~/.stats)   
-    export ATK=3
+    export ATK=1
     export DEF=0
     export ENEMYHP=$3
     if grep  -q -o 'frying pan' ~/.stats; then
@@ -74,7 +88,7 @@ resolve() {
     elif grep -q -o 'seasoned pan' ~/.stats; then
         ATK=7
     elif grep -q -o 'enchanted pan' ~/.stats; then
-        ATK=9
+        ATK=10
     elif grep -q -o 'flaming pan' ~/.stats; then
         ATK=12
     elif grep -q -o 'nuclear pan' ~/.stats; then
@@ -107,7 +121,7 @@ resolve() {
         let HP=HP-$DAMAGE
         sed "s/HP: .*\//HP: $(echo $HP) \//" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
         if [ "$HP" -le 0 ]; then
-            printf "You have been defeated.\n\n\nGAME OVER!\n\n"
+            printf "You have been defeated.\n\n"
             gameover
             return 0
         fi

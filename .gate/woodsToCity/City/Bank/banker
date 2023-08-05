@@ -77,6 +77,32 @@ Report 1:
 EOF
 }
 
+report_incorrect() {
+	cat << EOF
+
+The banker looks over the report and slowly shakes his head.  That isn't quite
+right.  
+
+He suggests you look over the cut command, specifically the -d and -f options.
+
+EOF
+}
+
+report_three_incorrect() {
+	cat << EOF
+
+The banker looks over the report and slowly shakes his head.  That isn't quite
+right.  
+
+He suggests you look over the cut command, specifically the -d and -f options.
+
+He off-handedly comments that you don't have to use whitespace as a delimiter,
+sometimes other characters work well.  Also, you can select multiple fields 
+with -f by separating the numbers with commas ex. 4,5,6
+
+EOF
+}
+
 report_two() {
 	cat << EOF
 
@@ -99,7 +125,7 @@ report_three() {
 *******************************************************************************
 Report 3: 
 1) Use whatever tool you can at your disposal to isolate the dates from 
-   'accounts.txt'
+   'accounts.txt'.  They should be in the format 'Loan Date: YYYY-MM-DD'.
 2) Sort the dates from the Newest to the Oldest
 3) Save the output to a seperate file named report_two.txt.
 *******************************************************************************
@@ -155,7 +181,7 @@ elif ! test -f .task_begun ; then
 	touch .task_begun
 	report_one
 elif ! test -f .one; then
-	elif ! test -f report_one.txt; then
+	if ! test -f report_one.txt; then
 		printf "\n\nThe banker looks up from the loan paperwork and issues a quick reminder of what you need to do.\n\n"
 		report_one
 	elif test -f report_one.txt; then
@@ -167,13 +193,15 @@ elif ! test -f .one; then
 			report_two
 			touch .one
 		else
-			report_one_incorrect
+			report_incorrect
+			report_one
 		fi
+	fi
 elif ! test -f .two; then
 	if ! test -f report_two.txt; then
 		printf "\n\nThe banker looks up from the loan paperwork and issues a quick reminder of what you need to do.\n\n"
 		report_two
-	elif test -f report_two.txt
+	elif test -f report_two.txt; then
 		cut -d ' ' -f 5 accounts.txt | awk '{ sum += $1 } END { print sum }' > .report_two.tmp
 		CORRECT=$(diff report_two.txt .report_two.tmp)
 		rm .report_two.tmp
@@ -182,7 +210,9 @@ elif ! test -f .two; then
 			report_three
 			touch .two
 		else
-			report_two_incorrect
+			report_incorrect
+			report_two
+		fi
 	fi
 elif ! test -f .three; then
 	if ! test -f report_three.txt; then
@@ -198,6 +228,8 @@ elif ! test -f .three; then
 			touch .three
 		else
 			report_three_incorrect
+			report_three
+		fi
 	fi
 elif ! test -f .four; then
 	if ! test -f report_four.txt; then
@@ -211,7 +243,9 @@ elif ! test -f .four; then
 			done_deal
 			touch .four
 		else
-			report_four_incorrect
+			report_incorrect
+			report_four
+		fi
 	fi
 else
 	echo "Woohoo, business partner!"

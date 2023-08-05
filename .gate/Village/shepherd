@@ -83,7 +83,7 @@ EOF
 }
 
 
-if ! test -f report.txt; then
+if ! test -f .farm_done; then
 	cat << no_report
 
 Princess, as much as I am for casual conversation, I would advise you go speak 
@@ -101,7 +101,7 @@ Plese let me know when you find some.
 
 EOF
 elif ! test -f .sheptalk_1; then
-
+	acquaintance
 	touch .sheptalk_1
 
 elif ! test -f .sheptalk_2; then

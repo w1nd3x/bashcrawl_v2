@@ -78,7 +78,6 @@ if [ $# -ne 0 ]; then
             read RESP
             if [ "$RESP" = "y" -o "$RESP" = "Y" ]; then
               rm -rf .jail
-              rm .stats
               printf "Your previous progress has been removed\n"
               exit 0
             else
@@ -148,7 +147,6 @@ cleanup() {
     # restore the old HOME variable
     export HOME=$OLD_HOME
     if test $TYPE = 0; then
-      cp .jail/room/tower/mainhall/.stats .stats 2>/dev/null
       # destroy all the folders for the game
       sudo rm -rf ./.jail/{bin,lib64,lib,dev,etc,usr,proc,sys,dev,var}
     elif test $TYPE = 1; then
@@ -215,21 +213,6 @@ done
 
 case $TYPE in
   0)
-    # Check if the player stats file exists (for old games)
-    STATFILE=./.stats   # Create a variable for the stats file
-    if ! test -f "$STATFILE"; then
-      # the file doesn't exist so we'll create it and populate
-      # it with the starting information
-      # This uses what's known as a heredoc, it starts with a '<<' 
-      # followed by a delimiting operator.  In this case the delimiting 
-      # operator is EOF.
-      cat << EOF > .stats
-HP: 15 / 15
-Inventory: 
-Purse: 0
-Modifier:
-EOF
-    fi 
 
     # Set a new HOME environment variable.  When we open the new 
     # shell for the game it will pull from the bashrc in the new
@@ -242,8 +225,8 @@ EOF
       echo "Starting a new game"
       cp -r .room .jail/room
       cp ./.utilities/welcome_message .jail
+      cp ./.utilities/.secrets.txt $JAIL/$HOME
     fi
-    cp .stats .jail/room/tower/mainhall/.stats
 
     ;;
   1)
@@ -259,6 +242,7 @@ EOF
       echo "Starting a new game"
       cp -r .gate $JAIL/gate
       cp ./.utilities/advanced_welcome_message $JAIL
+      cp ./.utilities/.secrets.txt $JAIL/$HOME
     fi
     ;;
   2)
@@ -269,8 +253,9 @@ EOF
       cp -r .netroom $JAIL/crossroad
       cp ./.utilities/net_welcome_message $JAIL
       cp ./.utilities/start.sh $JAIL/.start.sh
+      cp ./.utilities/.secrets.txt $JAIL/$HOME
     fi
-    export HOME="/crossroad/city/The Royal Byte/"
+    export HOME="/crossroad/City/The_Royal_Byte/"
     chmod +x $JAIL/.start.sh
     sudo $JAIL/.start.sh
     touch $JAIL/dev/null
@@ -283,8 +268,6 @@ EOF
     done
     ;;
 esac
-
-
 
 # copy over stuff so man works
 mkdir -p $JAIL/usr/share/man

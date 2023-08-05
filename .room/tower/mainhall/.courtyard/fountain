@@ -14,7 +14,7 @@
 #
 if grep  -q -o 'blessing' ~/.stats; then
     printf "\nThe fountain appears more intricate after you placed the necklace.\n\n"
-    exit 0
+    command exit 0
 fi
 cat << EOF
 

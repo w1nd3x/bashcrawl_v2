@@ -51,12 +51,88 @@ EOF
 blacksmith_success() {
 	cat << EOF
 
-The blacksmith is overjoyed to get his anvil back, and within minutes, is 
-already putting it to good use. As you leave the building, you can hear the 
-loud sounds of metal on metal. You hope you can find something that speaks to 
-you like smithing speaks to that man.
+The blacksmith is overjoyed to get his anvil back, but as he moves to light his
+forge his joy turns once again to sadness.  When you ask what the problem is he
+confides that while his anvil was missing he failed to keep up with his daily 
+preventive maintenance on the forge.  Now it's full of garbage instead of the 
+high quality coal that he needs.
+
+He has a bin at the side of the room filled with 'High-Quality Coal', but he
+hasn't cleaned up that either.  He asks you to move all the 'High-Quality Coal'
+from the bin and move it into the forge.
 
 EOF
+}
+
+blacksmith_complete() {
+	cat << EOF
+
+The blacksmith stands next to you and smiles at the forge. He pats you on the 
+back approvingly and almost knocks you into the forge.
+
+He thanks you and tears up for a moment telling you he wishes he could let his
+mom know.  She lives in the city and he just doesn't have the time to go and 
+detail this arduous experience.
+
+Within minutes he is already putting the recovered anvil and restored forge to 
+good use. As you leave the building, you can hear the loud sounds of metal on 
+metal. You hope you can find something that speaks to you like smithing speaks 
+to that man.
+
+EOF
+}
+
+blacksmith_try_again() {
+	cat << EOF
+
+The blacksmith stands next to you and frowns down at the forge.  He tells you 
+that in no uncertain terms is this forge fit for work yet.  He recommends you 
+review some of the commands you've used up until now.
+
+EOF
+
+}
+
+blacksmith_done() {
+	cat << EOF
+
+The blacksmith looks up from his forge and smiles as you enter.  He laments
+that he has no way to let his mom know about how much you've helped him as she
+lives all the way in the city and he just doesn't have the time to step away
+and let her know.
+
+You may try heading to the 'City' yourself.
+
+EOF
+
+}
+
+
+
+generate_coal() {
+	# generate garbage first
+	for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
+		echo $RANDOM | md5sum | head -c 32 >> bin
+		echo $RANDOM | md5sum | head -c 32 >> bin
+		echo "" >> bin
+	done
+
+	# Now generate some High-Quality Coal and intersperse it with
+	# other types of coal
+	for i in $(seq 1 $(expr $(expr $RANDOM % 100) + 50)); do
+		echo "High-Quality Coal" >> bin
+		if [ $(($RANDOM % 4)) = 0 ]; then echo "Low-Quality Coal" >> bin; fi
+		if [ $(($RANDOM % 4)) = 0 ]; then echo "Coal" >> bin; fi
+		if [ $(($RANDOM % 4)) = 0 ]; then echo "Medium-Quality Coal" >> bin; fi
+		if [ $(($RANDOM % 4)) = 0 ]; then echo "Just Really Bad Coal" >> bin; fi
+	done
+
+	# generate some garbage at the end
+	for i in $(seq 1 $(expr $(expr $RANDOM % 8) + 3)); do
+		echo $RANDOM | md5sum | head -c 32 >> bin
+		echo $RANDOM | md5sum | head -c 32 >> bin
+		echo "" >> bin
+	done
 }
 
 if ! test -f anvil.txt; then
@@ -66,9 +142,22 @@ if ! test -f anvil.txt; then
 	else
 		blacksmith_waiting
 	fi
-else
+elif ! test -f .coal; then
 	blacksmith_success
-
+	generate_coal
+	touch .coal
+elif ! test -f .done; then
+	grep "High-Quality Coal" bin > .forge.tmp
+	DIFF=$(diff .forge.tmp forge)
+	rm .forge.tmp
+	if [ -z "$DIFF" ]; then
+		blacksmith_complete
+		touch .done
+	else
+		blacksmith_try_again
+	fi
+else
+	blacksmith_done
 fi
 
 #

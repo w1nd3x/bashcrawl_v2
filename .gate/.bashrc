@@ -56,27 +56,8 @@ apropos() {
     echo "Nothing appropriate"
   fi
 }
-gameover () {
-    # create the remains of the princess
-    echo "You see a very fancy dress lying on the floor." > dress
-    echo "You find the following items littered around the dress:  " >> dress
-    echo $(sed "s/HP: .*$//; s/Inventory: //" ~/.stats) >> dress
-
-    curr=`basename $PWD`
-    while [ "$curr" != "room" ]; do
-        cd .. &> /dev/null
-        curr=`basename $PWD`
-    done
-    MAX_HP=$(awk '/HP:/ { print $4 }' ~/.stats)
-    HP=$(awk '/HP:/ { print $2 }' ~/.stats)
-    sed "s/HP: .*/HP: $(echo $MAX_HP) \/ $(echo $MAX_HP)/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
-    printf "Your butler Man has rushed you back to your rooms.\n"
-    COINS=$(awk '/Purse:/ { print $2 }' ~/.stats)
-    if [ $COINS -gt 5 ]; then
-        let COINS=COINS-5
-        printf "You lost 5 coins in the flight\n"
-        sed "s/Purse:.*/Purse: $COINS/" ~/.stats > ~/.stats.tmp && mv ~/.stats.tmp ~/.stats
-    fi
+progress() {
+  cat ~/.progress
 
 }
 clear

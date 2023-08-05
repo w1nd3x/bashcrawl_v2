@@ -14,7 +14,7 @@
 #
 
 get_secrets() {
-    input="$(pwd ~)/.secrets.txt"
+    input="/crossroad/City/The_Royal_Byte/.secrets.txt"
     secretArray=()
     while read -r line
     do
@@ -132,15 +132,17 @@ if [ ! -z $shop ] && [ ! -z $tower ]; then
     ONE=$ID
     TWO=$ID
     printf "Castle:  $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
+    printf "\tWorkshop:    $On_IGreen  $Color_Off  Castle1Task\n\n"
+    printf "\tTower:       $On_IGreen  $Color_Off  Castle2Task\n\n"
 else
     printf "Castle:  $On_IRed  $Color_Off\n\n"
     if [ ! -z $shop ]; then
-        printf "\tWorkshop:    $On_IGreen  $Color_Off\n\n"
+        printf "\tWorkshop:    $On_IGreen  $Color_Off  Castle1Task\n\n"
     else
         printf "\tWorkshop:    $On_IRed  $Color_Off\n\n"
     fi
     if [ ! -z $tower ]; then 
-        printf "\tTower:       $On_IGreen  $Color_Off\n\n"
+        printf "\tTower:       $On_IGreen  $Color_Off  Castle2Task\n\n"
     else
         printf "\tTower:       $On_IRed  $Color_Off\n\n"
     fi
@@ -152,15 +154,17 @@ if [ ! -z $farm ] && [ ! -z $cottage ]; then
     ONE=$ID
     TWO=$ID
     printf "Village: $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
+    printf "\tFarm:        $On_IGreen  $Color_Off  Village1Task\n\n"
+    printf "\tCottage:     $On_IGreen  $Color_Off  Village2Task\n\n"
 else
     printf "Village: $On_IRed  $Color_Off\n\n"
     if [ ! -z $farm ]; then
-        printf "\tFarm:        $On_IGreen  $Color_Off\n\n"
+        printf "\tFarm:        $On_IGreen  $Color_Off  Village1Task\n\n"
     else
         printf "\tFarm:        $On_IRed  $Color_Off\n\n"
     fi
     if [ ! -z $cottage ]; then 
-        printf "\tCottage:     $On_IGreen  $Color_Off\n\n"
+        printf "\tCottage:     $On_IGreen  $Color_Off  Village2Task\n\n"
     else
         printf "\tCottage:     $On_IRed  $Color_Off\n\n"
     fi
@@ -172,16 +176,18 @@ if [ ! -z $station ] && [ ! -z $capitol ]; then
     ONE=$ID
     TWO=$ID
     printf "Town:    $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
+    printf "\tPolice Station:     $On_IGreen  $Color_Off  Town1Task\n\n"
+    printf "\tNo Bucks:           $On_IGreen  $Color_Off  Town2Task\n\n"
 else
     printf "Town:    $On_IRed  $Color_Off\n\n"
         if [ ! -z $station ]; then
-        printf "\tStation:     $On_IGreen  $Color_Off\n\n"
+        printf "\tPolice Station:     $On_IGreen  $Color_Off  Town1Task\n\n"
     else
-        printf "\tStation:     $On_IRed  $Color_Off\n\n"
+        printf "\tPolice Station:     $On_IRed  $Color_Off\n\n"
     fi
     if [ ! -z $capitol ]; then 
-        printf "\tCapitol:  $On_IGreen  $Color_Off\n\n"
+        printf "\tNo Bucks:           $On_IGreen  $Color_Off  Town2Task\n\n"
     else
-        printf "\tCapitol:  $On_IRed  $Color_Off\n\n"
+        printf "\tNo Bucks:           $On_IRed  $Color_Off\n\n"
     fi
 fi

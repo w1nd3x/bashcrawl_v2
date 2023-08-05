@@ -23,7 +23,7 @@ You sift through the pieces of the statue.
 You find nothing of interest.
 
 eof
-    exit 0
+    command exit 0
 fi
 
 cat << eof

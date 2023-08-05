@@ -133,38 +133,87 @@ else
         PING=$(cat ~/.bash_history | grep -o "ping .* 10.0.120.1")
         PING2=$(cat ~/.bash_history | grep -o "ping .* 10.0.140.42")
         ROUTE_SET=$(ip route | grep -o "default via 10.0.120.1 dev village20")
-        if ! [ -z "$ROUTE_SET" ]; then
-            complete
-            touch .done
-            # edit .start.sh to save progress
-        elif ! [ -z "$PING2" ] && [ -f .ping ]; then
-            ping_aftermath
-        elif [ -f .ping ]; then
-            prompt_for_hint
-            read RESP
-            if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
-                ping_hint
-            else
-                no_hint
-            fi
-        elif ! [ -z "$PING" ] && ! [ -z "$ADDR_SET" ]; then
-            ping_success
-            touch .ping
-        elif ! [ -z "$ADDR_SET" ]; then
-            ip_set
-        elif [ -f .connected ]; then
-            prompt_for_hint
-            read RESP
-            if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
-                connected_hint
-            else
-                no_hint
-            fi
-        elif ! [ -z "${NS}" ]; then
+
+MYNS="village2"
+MYIP="10.0.130.111"
+MYGATEWAY="10.0.120.1"
+TEST="10.0.140.42"
+NS=$(command ip netns identify)
+if ! [ -f ~/.router1 ]; then
+    router1_setup
+elif ! [ -f .done ]; then
+    if [ -z "${NS}" ]; then
+        greeting
+    elif [ "$NS" = "$MYNS" ]; then
+        ADDR_SET=$(ip a | grep -o "$MYIP/24 scope global ${MYNS}0")
+        PING=$(cat ~/.bash_history | grep -o "ping .* $MYGATEWAY")
+        PING2=$(cat ~/.bash_history | grep -o "ping .* $TEST")
+        ROUTE_SET=$(ip route | grep -o "default via $MYGATEWAY dev ${MYNS}0")
+        IP_UP=$(command ip netns exec $MYNS ping -c1 -W1 $MYIP | grep -o from 2> /dev/null)
+        ROUTE_UP=$(command ip netns exec test ping -c1 -W1 $TEST | grep -o from 2> /dev/null)
+        if [ -z "$ADDR_SET" ] || [ -z "$IP_UP" ]; then
             connected
-            touch .connected
+            if [ -f .first ]; then
+                prompt_for_hint
+                if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
+                    if [ -z "$ADDR_SET" ]; then ip_add_hint; fi
+                    if [ -z "$IP_UP" ]; then ip_del_hint; fi
+                else
+                    no_hint
+                fi
+            else
+                touch .first
+            fi
+        elif [ -z "$ROUTE_SET" ] || [ -z "$ROUTE_UP" ]; then
+            ip_set
+            if [ -f .second ]; then
+                prompt_for_hint
+                if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
+                    if [ -z "$ROUTE_SET" ]; then route_add_hint; fi
+                    if [ -z "$ROUTE_UP" ]; then route_del_hint; fi
+                else
+                    no_hint
+                fi
+            else
+                touch .second
+            fi
+            workshop_routed
+            touch .done
+            rm .ping
+            rm .connected
+            # edit .start.sh to save progress
+        else
+            workshop_routed
+            touch .done
+            rm .first .second
+            # edit .start.sh to save progress
         fi
     else
         wrong_connection
     fi
+elif ! [ -f .task_done ]; then
+    if ! [ -f .repeat ]; then
+        workshop_routed
+        touch .repeat
+    else
+        SECRET=$(nc XX.XX.XX.XX XXXX)
+        printf "\nDid you get that info for me? (y / n) "
+        read RESP
+        if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+            printf "Great, what is it: "
+            read RESP
+            if [ "$RESP" = "$SECRET" ]; then
+                nc_success
+                touch .task_done
+                rm .repeat
+            else
+                nc_failure
+                nc_hint
+            fi
+        else
+            nc_hint
+        fi
+    fi
+else
+    complete
 fi

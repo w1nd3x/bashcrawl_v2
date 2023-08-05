@@ -175,6 +175,24 @@ know those scribbles contain the correct number of plots.
 Why don't you try using another feature of your "wc" tool, one that'll let you 
 count the number of X's!
 
+You may also try seeing what cat does when you give it more than one file.
+
+EOF
+}
+
+plot_correct() {
+	cat << EOF
+
+That looks perfect!!!
+
+Thank you for all your help. I never would have managed all this without you!
+
+Now if only I could get a little bit more time I might be able to run to the
+city for a few days to meet new people. If only I didn't have to travel so far
+to meet new people...
+
+Oh, sorry. Well thanks for all the help!
+
 EOF
 }
 
@@ -385,9 +403,9 @@ elif ! test -f .sheptalk_4; then
 elif ! test -f left-scribbles.txt; then
 	if ! test -f .left.orig; then
 		prompt_fixup_left
-		cp left_fields-report.txt .left.orig
+		cp left_field-report.txt .left.orig
 	elif ! test -f .left.fixup; then
-		grep -v -e "special" > .left.orig.tmp
+		grep -v -e "special" .left.orig > .left.orig.tmp
 		if test -f left-report.txt; then
 			FIXUP=$(diff .left.orig.tmp left-report.txt)
 		else
@@ -421,19 +439,24 @@ elif ! test -f .final; then
 		touch .plot
 	else
 		num_plots=$(cat east-scribbles.txt west-scribbles.txt north-scribbles.txt left-scribbles.txt | wc -c )
+		printf "\n\nSo how many plots are there in all four fields?\n\n"
 		read plot_guess
 		if [ ! $plot_guess -eq $num_plots ] ; then
 			bad_plot
 		else 
 			plot_correct
 			rm .plot
+			touch .final
 		fi
+	fi
 else
 	cat << EOF
 
 Argh, I love this job but I wish I had a way to talk to my family.  They're all
 living back in the city and it's such a pain to travel all the way back just to 
 say hi...
+
+You may want to check out the 'Town' next.
 
 Anyways, I'll talk to you soon...
 

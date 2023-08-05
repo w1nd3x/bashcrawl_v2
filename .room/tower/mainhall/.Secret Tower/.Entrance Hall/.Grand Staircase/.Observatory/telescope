@@ -80,7 +80,6 @@ if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
     fi
 else
     printf "\n\nMaybe some other time.\n\n"
-    exit 0
 fi
 #
 #
