@@ -426,7 +426,7 @@ if [ -f ~/.complete ]; then
 elif [ -f ~/.router0 ]; then
     if [ -z "${NS}" ]; then
         help_not_connected
-        exit
+        command exit
     else
         help_connected
     fi
