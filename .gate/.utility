@@ -20,9 +20,9 @@ get_secrets() {
     do
 	secretArray+=("$line")
     done < "$input"
-    index=$(expr $1 + 1337)
-    index=$(expr $index - 64017)
-    index=$(expr $index % ${#secretArray[@]})
+    numArray=()
+    RANDOM=$ID; for ((i=0;i<1000;i++)); do numArray+=("$RANDOM"); done
+    index=$(echo "${numArray[$1]} % ${#secretArray[@]}" | bc)
     echo "${secretArray[$index]}"
 }
 

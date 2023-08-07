@@ -16,7 +16,7 @@ if [[ $(/usr/bin/id -u) -ne 0 ]]; then
 fi
 
 if [ -z "${ID}" ]; then
-    export ID=0
+    export ID=99
 fi
 
 usage() {
@@ -223,9 +223,9 @@ case $TYPE in
       echo "Resuming your previous game, good luck!"
     else
       echo "Starting a new game"
-      cp -r .room .jail/room
+      cp -r .room $JAIL/room
       cp ./.utilities/welcome_message .jail
-      cp ./.utilities/.secrets.txt $JAIL/$HOME
+      cp ./.utilities/.secrets.txt ${JAIL}${HOME}
     fi
 
     ;;
@@ -242,10 +242,11 @@ case $TYPE in
       echo "Starting a new game"
       cp -r .gate $JAIL/gate
       cp ./.utilities/advanced_welcome_message $JAIL
-      cp ./.utilities/.secrets.txt $JAIL/$HOME
+      cp ./.utilities/.secrets.txt ${JAIL}${HOME}
     fi
     ;;
   2)
+    export HOME="/crossroad/City/The_Royal_Byte/"
     if test -d $JAIL/crossroad; then
       echo "Resuming your previous game, good luck!"
     else
@@ -253,9 +254,9 @@ case $TYPE in
       cp -r .netroom $JAIL/crossroad
       cp ./.utilities/net_welcome_message $JAIL
       cp ./.utilities/start.sh $JAIL/.start.sh
-      cp ./.utilities/.secrets.txt $JAIL/$HOME
+      cp ./.utilities/.secrets.txt ${JAIL}${HOME}
     fi
-    export HOME="/crossroad/City/The_Royal_Byte/"
+    
     chmod +x $JAIL/.start.sh
     sudo $JAIL/.start.sh
     touch $JAIL/dev/null

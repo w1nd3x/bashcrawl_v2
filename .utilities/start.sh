@@ -88,8 +88,6 @@ ip netns exec village2 ip addr add 111.0.120.10/23 dev village20
 
 # Bad IPs for town
 ip netns exec town1 ip addr add 10.10.130.173/24 dev town10
-ip netns exec town1 ip addr add 10.130.130.173/24 dev town10
-ip netns exec town1 ip addr add 10.20.130.173/24 dev town10
 ip netns exec town2 ip addr add 20.20.20.10/24 dev town20
 
 #city1 ip netns exec city1 ip addr add 10.0.100.25/24 dev city10
@@ -220,6 +218,8 @@ ip netns exec castle1 python3 ./.utilities/storefront.py > /dev/null &
 ip netns exec castle2 python3 ./.utilities/evil_chat.py > /dev/null &
 ip netns exec test1 python3 ./.utilities/farm_listener.py > /dev/null &
 ip netns exec test python3 ./.utilities/crime_chat.py > /dev/null &
+ip netns exec test1 python3 ./.utilities/cottage_listener.py > /dev/null &
+ip netns exec city1 python3 ./.utilities/florian_forwards.py > /dev/null &
 
 
 

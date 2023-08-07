@@ -241,6 +241,8 @@ elif ! test -f .four; then
 		rm .report_four.tmp
 		if [ -z "$CORRECT" ]; then
 			done_deal
+			CHECKPOINT="$(get_secrets 32)_$(get_secrets 33)"
+        	printf "Checkpoint 7: $CHECKPOINT\n" >> ~/.progress
 			touch .four
 		else
 			report_incorrect

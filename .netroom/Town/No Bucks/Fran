@@ -13,191 +13,74 @@
 # We're happy to provide hints.
 #
 
-greeting() {
-    cat << EOF
-
-Hey, good to see you again!  I managed to get out and get a job!
-
-So I tried to set up that IP Address thing that the manual talked about,
-but the more I did it the worse everything seemed to get.  
-
-Do you think you can 'connect' and figure it out.
-
-EOF
-    return
-}
-
-connected() {
-cat << EOF
-
-Awesome.  The original company said I should have an IP Address of 
-10.0.130.121. 
-
-I really thought I had fixed it...
-
-EOF
-    return
-}
-
-prompt_for_hint() {
-    cat << EOF
-
-Did you need some help?
-
-You can check out this manual if you'd like.  (y/n)
-
-EOF
-}
-
-no_hint() {
-    cat << EOF
-
-If you're sure, but I'm supposed to have a meeting soon... I mean no pressure.
-
-EOF
-    return
-}
-
-ip_set() {
-
-    cat << EOF
-
-Oh, I guess I had the wrong address.  Well you know I got pretty close.  Do you
-know if I can get to the city router?  
-
-Most of the people I need to communicate with are in other parts of the 
-kingdom.
-
-EOF
-    return
-}
-
-ping_success() {
-    cat << EOF
-
-Well thank goodness.  I was worried you wouldn't be able to get me connected.
-
-Now can you make sure I can get to the test computer?  It's at 10.0.140.42.
-
-EOF
-    return
-}
-
-ping_hint() {
-    cat << EOF
-
-Hint:
-You should run the command 'ping -c3 10.0.140.42'
-
-EOF
-    return
-}
-
-store_routed() {
-    cat << EOF
-EOF
-    return
-}
-
-wrong_connection() {
-    cat << EOF
-
-It looks like you're connected to one of the other computers in the kingdom.
-
-EOF
-    return
-}
-
-complete() {
-    cat << EOF
-
-Well it looks like you've fixed everything here.
-
-EOF
-    return
-}
-
-
+source ~/.phrases
+ONE=$(($ID+1**2))
+TWO=$(($ID+2**2))
 MYNS="town2"
 MYIP="10.0.130.121"
+BADIP="20.20.20.10"
 MYGATEWAY="10.0.130.1"
 TEST="10.0.140.42"
-NS=$(command ip netns identify)
-if ! [ -f ~/.router1 ]; then
-    router1_setup
-elif ! [ -f .done ]; then
-    if [ -z "${NS}" ]; then
-        greeting
-    elif [ "$NS" = "$MYNS" ]; then
-        ADDR_SET=$(ip a | grep -o "$MYIP/24 scope global ${MYNS}0")
-        PING=$(cat ~/.bash_history | grep -o "ping .* $MYGATEWAY")
-        PING2=$(cat ~/.bash_history | grep -o "ping .* $TEST")
-        ROUTE_SET=$(ip route | grep -o "default via $MYGATEWAY dev ${MYNS}0")
-        IP_UP=$(command ip netns exec $MYNS ping -c1 -W1 $MYIP | grep -o from 2> /dev/null)
-        ROUTE_UP=$(command ip netns exec test ping -c1 -W1 $TEST | grep -o from 2> /dev/null)
-        if [ -z "$ADDR_SET" ] || [ -z "$IP_UP" ]; then
-            connected
-            if [ -f .first ]; then
-                prompt_for_hint
-                if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
-                    if [ -z "$ADDR_SET" ]; then ip_add_hint; fi
-                    if [ -z "$IP_UP" ]; then ip_del_hint; fi
-                else
-                    no_hint
-                fi
-            else
-                touch .first
-            fi
-        elif [ -z "$ROUTE_SET" ] || [ -z "$ROUTE_UP" ]; then
-            ip_set
-            if [ -f .second ]; then
-                prompt_for_hint
-                if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
-                    if [ -z "$ROUTE_SET" ]; then route_add_hint; fi
-                    if [ -z "$ROUTE_UP" ]; then route_del_hint; fi
-                else
-                    no_hint
-                fi
-            else
-                touch .second
-            fi
-            workshop_routed
-            touch .done
-            rm .ping
-            rm .connected
-            # edit .start.sh to save progress
+# $1: Namespace for the setup
+# $2: IP Address for the setup
+# $3: Bad IP, if there is one
+# $4: Gateway Address
+# $5: Location
+# $6: Greeting, otherwise empty
+generic_setup "$MYNS" "$MYIP" "$BADIP" "$MYGATEWAY" "Town" "$(fran_greeting)"
+if [ -f .done ]; then
+    if ! [ -f .task_done ]; then
+        if ! [ -f .first ]; then
+            cafe_next_task
+            touch .first
         else
-            workshop_routed
-            touch .done
-            rm .first .second
-            # edit .start.sh to save progress
-        fi
-    else
-        wrong_connection
-    fi
-elif ! [ -f .task_done ]; then
-    if ! [ -f .repeat ]; then
-        workshop_routed
-        touch .repeat
-    else
-        PORT=$(ss -l | tr -s ' ' | tr ':' ' ' |  grep "0.0.0.0" | cut -d ' ' -f 6)
-        printf "\nDid you figure out what port my server is on? (y / n) "
-        read RESP
-        if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
-            printf "Great, what port is it: "
+            printf "\nDid you figure out what port Florian is using? (y / n) "
             read RESP
-            if [ "$RESP" = "$PORT" ]; then
-                port_success
-                touch .task_done
-                rm .repeat
+            if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+                nc -w1 -v -n 10.0.110.25 10000-20000 1> /dev/null 2>.out.tmp
+                PORT=$(grep "succeeded" .out.tmp | cut -d ' ' -f 4)
+                rm .out.tmp
+                printf "Great, what port is it on: "
+                read RESP
+                if [ "$RESP" = "$PORT" ]; then
+                    printf "Excellent!! "
+                    if [ -f message.txt ]; then
+                        printf "And I see you saved the message.  Let's take a look...\n"
+                        nc -n 10.0.110.25 $PORT > .out.tmp
+                        DIFF=$(diff .out.tmp message.txt)
+                        if [ -z $DIFF ]; then
+                            cafe_nc_success
+                            touch .task_done
+                            CHECKPOINT="$(get_secrets 58)_$(get_secrets 59)"
+                            sed "s/Town2Task/$CHECKPOINT/" ~/status > ~/status.tmp && mv ~/status.tmp ~/status
+                            chmod +x ~/status
+                        else
+                            printf "That doesn't sound like something Florian would say.  You may want to check again.\n\n"
+                        fi
+                    else
+                        printf "Now do you think you could save that message?  I'm a tad busy at work here.\n\n"
+                    fi
+                else
+                    cafe_nc_failure
+                    prompt_for_hint
+                    read RESP
+                    if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+                        cafe_nc_hint
+                    else
+                        printf "Okay, if you're sure.\n\n"
+                    fi
+                fi
             else
-                port_failure
-                port_hint
-            fi
-        else
-            port_hint
+                prompt_for_hint
+                read RESP
+                if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+                    cafe_nc_hint
+                else
+                    printf "Okay, if you're sure.\n\n"
+                fi
+            fi    
         fi
+    else
+        complete
     fi
-else
-    complete
 fi

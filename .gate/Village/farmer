@@ -13,6 +13,8 @@
 # We're happy to provide hints.
 #
 
+source ~/.utility
+
 greeting() {
 	cat << EOF
 
@@ -62,7 +64,8 @@ anytime soon.
 
 EOF
 }
-
+CHECKPOINT="$(get_secrets 1)_$(get_secrets 2)"
+        printf "Checkpoint 1: $CHECKPOINT\n" >> ~/.progress
 
 east_correct() {
 	cat << EOF
@@ -241,6 +244,8 @@ elif test -d left_field; then
 	if test -f left_field-report.txt; then
 		left_correct
 		rm -rf left_field 2>/dev/null
+		CHECKPOINT="$(get_secrets 20)_$(get_secrets 21)"
+        printf "Checkpoint 1: $CHECKPOINT\n" >> ~/.progress
 		touch .farm_done
 	else
 		no_more_hints

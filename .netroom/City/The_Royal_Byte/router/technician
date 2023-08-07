@@ -161,6 +161,9 @@ help_not_connected() {
 I'm more than happy to help, just connect to whatever network is giving you 
 problems and come talk to me again.
 
+If you've finished up with one of the networks, go ahead and connect to the
+router and we'll get started with the next one.
+
 EOF
     return
 }
@@ -343,6 +346,9 @@ generic_help() {
 You need some help?  Not a problem.  Just connect to whatever network you are 
 having trouble with then come back and talk to me.
 
+If you're ready to set up the next interface on the router just 'connect' here
+and we can get started.
+
 EOF
     return
 }
@@ -391,12 +397,32 @@ EOF
 router_set() {
     cat << EOF
 
-Okay, we need to set up the network for the $1 next.  They should be
-connecting through the interface $2 which should have the address 
-$3.
+Okay, it looks like the interface $2 is all set up!
+
+Now you can head to the $1 and set up their networks!
+
+Remember that their gateway will be $3.
 
 EOF
 
+}
+
+# $1: Location
+# $2: Interface
+# $3: IP Address
+router_start() {
+    LOCATION=$1
+    INTERFACE=$2
+    IP_ADDR=$3
+    cat << EOF
+
+Okay, looks like you're ready to setup the $LOCATION network!
+
+That network is connected to the router through the interface $INTERFACE.
+
+It has the IP address $IP_ADDR.
+
+EOF
 }
 
 # $1: IP Address
@@ -404,15 +430,15 @@ EOF
 # $3: Location
 router_setup() {
     IP_ADDR=$1
-    NUM=$2
+    INTERFACE=$2
+    LOCATION=$3
     ADDR_SET=$(ip a | grep -o "$IP_ADDR/24 scope global $INTERFACE")
-    # if they ran ip route
     if ! [ -z "$ADDR_SET" ]; then
         router_set "$LOCATION" "$INTERFACE" "$IP_ADDR"
         touch ~/.$INTERFACE
         sed "s/#$INTERFACE //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
     else 
-        router2_start
+        router_start "$LOCATION" "$INTERFACE" "$IP_ADDR"
     fi
 }
 
@@ -543,38 +569,11 @@ elif [ -f ~/.router0 ]; then
                 # all the router stuff is done
                 not_help
             elif [ -f ~/.router0 ] && [ -f ~/.router1 ] && [ -f ~/.router2 ]; then
-                # need to set up router3
-                ADDR_SET=$(ip a | grep -o "10.0.130.1/24 scope global router3")
-                # if they ran ip route
-                if ! [ -z "$ADDR_SET" ]; then
-                    router_set "Town" "router3" "10.0.130.1"
-                    touch ~/.router3
-                    sed "s/#router3 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
-                else 
-                    router3_start
-                fi
+                router_setup "10.0.130.1" "router3" "Town"
             elif [ -f ~/.router0 ] && [ -f ~/.router1 ]; then
-                # need to set up router2
-                ADDR_SET=$(ip a | grep -o "10.0.120.1/24 scope global router2")
-                # if they ran ip route
-                if ! [ -z "$ADDR_SET" ]; then
-                    router_set "Village" "router2" "10.0.120.1"
-                    touch ~/.router2
-                    sed "s/#router2 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
-                else 
-                    router2_start
-                fi
+                router_setup "10.0.120.1" "router2" "Village"
             elif [ -f ~/.router0 ]; then
-                # need to set up router1
-                ADDR_SET=$(ip a | grep -o "10.0.110.1/24 scope global router1")
-                # if they ran ip route
-                if ! [ -z "$ADDR_SET" ]; then
-                    router_set "Castle" "router1" "10.0.110.1"
-                    touch ~/.router1
-                    sed "s/#router1 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
-                else 
-                    router1_start
-                fi
+                router_setup "10.0.110.1" "router1" "Castle"
             else
                 not_help
             fi

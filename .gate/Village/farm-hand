@@ -447,6 +447,8 @@ elif ! test -f .final; then
 			plot_correct
 			rm .plot
 			touch .final
+			CHECKPOINT="$(get_secrets 24)_$(get_secrets 25)"
+        	printf "Checkpoint 3: $CHECKPOINT\n" >> ~/.progress
 		fi
 	fi
 else

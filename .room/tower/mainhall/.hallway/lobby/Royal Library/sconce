@@ -143,9 +143,7 @@ sed "s/Inventory:/Inventory: hedgehog,/; s/,\\\\\\\$//" ~/.stats > ~/.stats.tmp 
 NUM=\\\\\\\$(awk '/Treasure:/ { print \\\\\\\$2 }' ~/.progress)
 let NUM=NUM+1
 sed "s/Treasure: .*\//Treasure: \\\\\\\$(echo \\\\\\\$NUM) \//" ~/.progress > ~/.progress.tmp && mv ~/.progress.tmp ~/.progress
-NUM1=\\\\\\\$((\\\\\\\$ID+3))
-NUM2=\\\\\\\$((\\\\\\\$ID+4))
-CHECKPOINT="\\\\\\\$(get_secrets \\\\\\\$NUM1)_\\\\\\\$(get_secrets \\\\\\\$NUM2)"
+CHECKPOINT="\\\\\\\$(get_secrets 3)_\\\\\\\$(get_secrets 4)"
 printf "Checkpoint 2: \\\\\\\$CHECKPOINT\n" >> ~/.progress
 mv ~/.workshop ~/workshop
 else

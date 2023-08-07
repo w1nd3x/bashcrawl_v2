@@ -165,9 +165,7 @@ eof
 
 EOF
         chmod +x chocolate
-        NUM1=$(($ID+7))
-        NUM2=$(($ID+8))
-        CHECKPOINT="$(get_secrets $NUM1)_$(get_secrets $NUM2)"
+        CHECKPOINT="$(get_secrets 7)_$(get_secrets 8)"
         printf "Checkpoint 4: $CHECKPOINT\n" >> ~/.progress       
     fi
 else

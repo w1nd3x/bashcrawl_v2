@@ -13,18 +13,7 @@
 # We're happy to provide hints.
 #
 
-get_secrets() {
-    input="/crossroad/City/The_Royal_Byte/.secrets.txt"
-    secretArray=()
-    while read -r line
-    do
-	secretArray+=("$line")
-    done < "$input"
-    index=$(expr $1 + 1337)
-    index=$(expr $index - 64017)
-    index=$(expr $index % ${#secretArray[@]})
-    echo "${secretArray[$index]}"
-}
+source ~/.phrases
 
 # Reset
 Color_Off='\033[0m'       # Text Reset
@@ -104,22 +93,20 @@ bank=$(command ip netns exec test ping -c1 -W1 10.0.100.25 | grep -o from 2> /de
 place=$(command ip netns exec test ping -c1 -W1 10.0.100.36 | grep -o from 2> /dev/null)
 router0=$(command ip netns exec router ip address show dev router0 | grep -o 10.0.100.1 2> /dev/null)
 if [ ! -z $place ] && [ ! -z $bank ]; then
-    ONE=$ID
-    TWO=$ID
-    printf "City:    $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
+    printf "City:          $On_IGreen  $Color_Off  $(get_secrets 40)_$(get_secrets 41)\n\n"
 else
-    printf "City:    $On_IRed  $Color_Off\n\n"
-    if [ ! -z $rouer0 ]; then
+    printf "City:          $On_IRed  $Color_Off\n\n"
+    if ! [ -z $router0 ]; then
         printf "\tRouter0:         $On_IGreen  $Color_Off\n\n"
     else
         printf "\tRouter0:         $On_IRed  $Color_Off\n\n"
     fi
-    if [ ! -z $bank ]; then
+    if ! [ -z $bank ]; then
         printf "\tBig Bank:        $On_IGreen  $Color_Off\n\n"
     else
         printf "\tBig Bank:        $On_IRed  $Color_Off\n\n"
     fi
-    if [ ! -z $place ]; then 
+    if ! [ -z $place ]; then 
         printf "\tFactory Donut:   $On_IGreen  $Color_Off\n\n"
     else
         printf "\tFactory Donut:   $On_IRed  $Color_Off\n\n"
@@ -128,66 +115,78 @@ fi
 
 shop=$(command ip netns exec test ping -c1 -W1 10.0.110.196 | grep -o from 2> /dev/null)
 tower=$(command ip netns exec test ping -c1 -W1 10.0.110.169 | grep -o from 2> /dev/null)
+router1=$(command ip netns exec router ip address show dev router1 | grep -o 10.0.110.1 2> /dev/null)
 if [ ! -z $shop ] && [ ! -z $tower ]; then
-    ONE=$ID
-    TWO=$ID
-    printf "Castle:  $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
-    printf "\tWorkshop:    $On_IGreen  $Color_Off  Castle1Task\n\n"
-    printf "\tTower:       $On_IGreen  $Color_Off  Castle2Task\n\n"
+    printf "Castle:        $On_IGreen  $Color_Off  $(get_secrets 42)_$(get_secrets 43)\n\n"
+    printf "\tWorkshop:        $On_IGreen  $Color_Off  Castle1Task\n\n"
+    printf "\tTower:           $On_IGreen  $Color_Off  Castle2Task\n\n"
 else
-    printf "Castle:  $On_IRed  $Color_Off\n\n"
-    if [ ! -z $shop ]; then
-        printf "\tWorkshop:    $On_IGreen  $Color_Off  Castle1Task\n\n"
+    printf "Castle:        $On_IRed  $Color_Off\n\n"
+    if ! [ -z $router1 ]; then
+        printf "\tRouter1:         $On_IGreen  $Color_Off\n\n"
     else
-        printf "\tWorkshop:    $On_IRed  $Color_Off\n\n"
+        printf "\tRouter1:         $On_IRed  $Color_Off\n\n"
+    fi
+    if [ ! -z $shop ]; then
+        printf "\tWorkshop:        $On_IGreen  $Color_Off  Castle1Task\n\n"
+    else
+        printf "\tWorkshop:        $On_IRed  $Color_Off\n\n"
     fi
     if [ ! -z $tower ]; then 
-        printf "\tTower:       $On_IGreen  $Color_Off  Castle2Task\n\n"
+        printf "\tTower:           $On_IGreen  $Color_Off  Castle2Task\n\n"
     else
-        printf "\tTower:       $On_IRed  $Color_Off\n\n"
+        printf "\tTower:           $On_IRed  $Color_Off\n\n"
     fi
 fi
 
 farm=$(command ip netns exec test ping -c1 -W1 10.0.120.128 | grep -o from 2> /dev/null)
 cottage=$(command ip netns exec test ping -c1 -W1 10.0.120.111 | grep -o from 2> /dev/null)
+router2=$(command ip netns exec router ip address show dev router2 | grep -o 10.0.120.1 2> /dev/null)
 if [ ! -z $farm ] && [ ! -z $cottage ]; then
-    ONE=$ID
-    TWO=$ID
-    printf "Village: $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
-    printf "\tFarm:        $On_IGreen  $Color_Off  Village1Task\n\n"
-    printf "\tCottage:     $On_IGreen  $Color_Off  Village2Task\n\n"
+    printf "Village:       $On_IGreen  $Color_Off  $(get_secrets 44)_$(get_secrets 45)\n\n"
+    printf "\tFarm:            $On_IGreen  $Color_Off  Village1Task\n\n"
+    printf "\tCottage:         $On_IGreen  $Color_Off  Village2Task\n\n"
 else
-    printf "Village: $On_IRed  $Color_Off\n\n"
-    if [ ! -z $farm ]; then
-        printf "\tFarm:        $On_IGreen  $Color_Off  Village1Task\n\n"
+    printf "Village:       $On_IRed  $Color_Off\n\n"
+    if ! [ -z $router2 ]; then
+        printf "\tRouter2:         $On_IGreen  $Color_Off\n\n"
     else
-        printf "\tFarm:        $On_IRed  $Color_Off\n\n"
+        printf "\tRouter2:         $On_IRed  $Color_Off\n\n"
+    fi
+    if [ ! -z $farm ]; then
+        printf "\tFarm:            $On_IGreen  $Color_Off  Village1Task\n\n"
+    else
+        printf "\tFarm:            $On_IRed  $Color_Off\n\n"
     fi
     if [ ! -z $cottage ]; then 
-        printf "\tCottage:     $On_IGreen  $Color_Off  Village2Task\n\n"
+        printf "\tCottage:         $On_IGreen  $Color_Off  Village2Task\n\n"
     else
-        printf "\tCottage:     $On_IRed  $Color_Off\n\n"
+        printf "\tCottage:         $On_IRed  $Color_Off\n\n"
     fi
 fi
 
 station=$(command ip netns exec test ping -c1 -W1 10.0.130.173 | grep -o from 2> /dev/null) 
 capitol=$(command ip netns exec test ping -c1 -W1 10.0.130.121 | grep -o from 2> /dev/null)
+router3=$(command ip netns exec router ip address show dev router3 | grep -o 10.0.130.1 2> /dev/null)
 if [ ! -z $station ] && [ ! -z $capitol ]; then
-    ONE=$ID
-    TWO=$ID
-    printf "Town:    $On_IGreen  $Color_Off  $(get_secrets $ONE)_$(get_secrets $TWO)\n\n"
-    printf "\tPolice Station:     $On_IGreen  $Color_Off  Town1Task\n\n"
-    printf "\tNo Bucks:           $On_IGreen  $Color_Off  Town2Task\n\n"
+    printf "Town:          $On_IGreen  $Color_Off  $(get_secrets 46)_$(get_secrets 47)\n\n"
+    printf "\tPolice Station:  $On_IGreen  $Color_Off  Town1Task\n\n"
+    printf "\tNo Bucks:        $On_IGreen  $Color_Off  Town2Task\n\n"
 else
-    printf "Town:    $On_IRed  $Color_Off\n\n"
-        if [ ! -z $station ]; then
-        printf "\tPolice Station:     $On_IGreen  $Color_Off  Town1Task\n\n"
+    printf "Town:          $On_IRed  $Color_Off\n\n"
+    if ! [ -z $router3 ]; then
+        printf "\tRouter3:         $On_IGreen  $Color_Off\n\n"
     else
-        printf "\tPolice Station:     $On_IRed  $Color_Off\n\n"
+        printf "\tRouter3:         $On_IRed  $Color_Off\n\n"
+    fi
+        if [ ! -z $station ]; then
+        printf "\tPolice Station:  $On_IGreen  $Color_Off  Town1Task\n\n"
+    else
+        printf "\tPolice Station:  $On_IRed  $Color_Off\n\n"
     fi
     if [ ! -z $capitol ]; then 
-        printf "\tNo Bucks:           $On_IGreen  $Color_Off  Town2Task\n\n"
+        printf "\tNo Bucks:        $On_IGreen  $Color_Off  Town2Task\n\n"
     else
-        printf "\tNo Bucks:           $On_IRed  $Color_Off\n\n"
+        printf "\tNo Bucks:        $On_IRed  $Color_Off\n\n"
     fi
 fi

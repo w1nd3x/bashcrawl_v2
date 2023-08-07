@@ -48,10 +48,13 @@ def start_server(host, port):
     print(f"Server listening on {host}:{port}")
 
     while True:
-        client_socket, client_address = server_socket.accept()
-        print(f"Accepted connection from {client_address[0]}:{client_address[1]}")
-        client_handler = threading.Thread(target=handle_client_connection, args=(client_socket,))
-        client_handler.start()
+        try:
+            client_socket, client_address = server_socket.accept()
+            print(f"Accepted connection from {client_address[0]}:{client_address[1]}")
+            client_handler = threading.Thread(target=handle_client_connection, args=(client_socket,))
+            client_handler.start()
+        except:
+            print("Just keep going")
 
 if __name__ == "__main__":
     port_modifier = os.getenv('ID')

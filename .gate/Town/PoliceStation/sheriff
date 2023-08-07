@@ -202,6 +202,8 @@ elif ! test -f confession.txt ; then
 
 elif ! test -f .sheriff_sad ; then
 	sheriff_sad
+	CHECKPOINT="$(get_secrets 26)_$(get_secrets 27)"
+    printf "Checkpoint 4: $CHECKPOINT\n" >> ~/.progress
 touch .sheriff_sad
 
 else

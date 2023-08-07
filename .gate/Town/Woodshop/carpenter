@@ -216,6 +216,8 @@ elif test -f sorted_ledger.txt ; then
         if ! test -f .anvil_created ; then
             create_anvil
             touch .anvil_created
+            CHECKPOINT="$(get_secrets 28)_$(get_secrets 29)"
+            printf "Checkpoint 5: $CHECKPOINT\n" >> ~/.progress
         fi 
         touch .carpe_done-em
     else

@@ -41,26 +41,43 @@ EOF
 }
 
 prompt_for_hint() {
-    cat << EOF
+    printf "Did you need some help?\n\n"
 
-Did you need some help?
+    printf "You can check out this manual if you'd like. (y/n) "
 
-I think I kind of remember some network commands.  (y/n)
-
-EOF
 }
 
 connected_hint() {
     cat << EOF
 
-Hint:
-You should run the command 'ip address add 10.0.100.36/24 dev city20'.
+First you should run 'ip address' to figure out what the name of your interface
+is.
+
+Then you should use the add command of 'ip address' to add the ip address to
+the interface
 
 If you set an incorrect ip address you can run: 
     'ip address del <incorrect ip address> dev city20'
 
 EOF
     return
+}
+
+prompt_more_help() {
+    printf "Would you like a little more help? (y/n) "
+}
+
+more_help() {
+    cat << EOF
+
+ip to add: 10.0.100.36
+your interface: city20
+
+You need to run:
+
+    ip address add <ip to add>/24 dev <your interface>
+
+EOF
 }
 
 no_hint() {
@@ -188,6 +205,17 @@ else
             read RESP
             if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
                 connected_hint
+                if [ -f .help1 ]; then
+                    prompt_more_help
+                    read RESP
+                    if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+                        more_help
+                    else
+                        no_hint
+                    fi
+                else
+                    touch .help1
+                fi     
             else
                 no_hint
             fi

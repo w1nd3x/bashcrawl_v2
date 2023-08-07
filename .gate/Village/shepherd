@@ -14,6 +14,8 @@
 #
 # the shepherd needs to know if the compost bin you brought him is safe for his animals
 
+source ~/.utility
+
 report_findings() {
     cat << EOF
 
@@ -147,6 +149,8 @@ elif ! test -f .sheptalk_4; then
 		else
 			final_correct
 			touch .sheptalk_4
+			CHECKPOINT="$(get_secrets 22)_$(get_secrets 23)"
+        	printf "Checkpoint 2: $CHECKPOINT\n" >> ~/.progress
 		fi
 	fi
 else

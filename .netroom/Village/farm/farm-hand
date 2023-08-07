@@ -13,159 +13,60 @@
 # We're happy to provide hints.
 #
 
-greeting() {
-    cat << EOF
-
-Look I know we've had our differences of opinion, but I really need access to 
-the network again so I can meet with my conspirat... support group.  Can you 
-really deny an old lady that?
-
-EOF
-    return
-}
-
-connected() {
-cat << EOF
-
-Thanks for doing this.  I really appreciate you looking beyond our past 
-differences.
-
-My computer is supposed to be at 10.0.110.169.  I thought I had it set up, but 
-it just won't connect.
-
-EOF
-    return
-}
-
-prompt_for_hint() {
-    cat << EOF
-
-Did you need some help?
-
-You can check out this manual if you'd like.  (y/n)
-
-EOF
-}
-
-no_hint() {
-    cat << EOF
-
-If you're sure, but I'm supposed to have a meeting soon... I mean no pressure.
-
-EOF
-    return
-}
-
-ip_set() {
-
-    cat << EOF
-
-Oh, I guess I had the wrong address.  Well you know I got pretty close.  Do you
-know if I can get to the city router?  
-
-Most of the people I need to communicate with are in other parts of the 
-kingdom.
-
-EOF
-    return
-}
-
-ping_success() {
-    cat << EOF
-
-Well thank goodness.  I was worried you wouldn't be able to get me connected.
-
-Now can you make sure I can get to the test computer?  It's at 10.0.140.42.
-
-EOF
-    return
-}
-
-ping_hint() {
-    cat << EOF
-
-Hint:
-You should run the command 'ping -c3 10.0.140.42'
-
-EOF
-    return
-}
-
-cottage_routed() {
-    cat << EOF
-
-Now that you've fixed up my connection there's a thing I need to connect to on 
-port XX at XX.XX.XX.XX.  Think you can help me out.
-
-EOF
-    return
-}
-
-wrong_connection() {
-    cat << EOF
-
-It looks like you're connected to one of the other computers in the kingdom.
-
-EOF
-    return
-}
-
-complete() {
-    cat << EOF
-
-Well it looks like you've fixed everything here.
-
-EOF
-    return
-}
-
-
-NS=$(command ip netns identify)
+source ~/.phrases
+ONE=1
+TWO=2
+MYNS="village1"
+MYIP="10.0.120.128"
+BADIP="120.10.0.128"
+MYGATEWAY="10.0.120.1"
+TEST="10.0.140.42"
+# $1: Namespace for the setup
+# $2: IP Address for the setup
+# $3: Bad IP, if there is one
+# $4: Gateway Address
+# $5: Location
+# $6: Greeting, otherwise empty
+generic_setup "$MYNS" "$MYIP" "$BADIP" "$MYGATEWAY" "Village" "$(farm_hand_greeting)"
 if [ -f .done ]; then
-    complete
-elif ! [ -f ~/.router2 ]; then
-    router2_setup
-elif [ -z "${NS}" ]; then
-    greeting
-else
-    if [ "$NS" = "village1" ]; then
-        ADDR_SET=$(ip a | grep -o "10.0.120.128/24 scope global village10")
-        PING=$(cat ~/.bash_history | grep -o "ping .* 10.0.120.1")
-        PING2=$(cat ~/.bash_history | grep -o "ping .* 10.0.140.42")
-        ROUTE_SET=$(ip route | grep -o "default via 10.0.120.1 dev village10")
-        if ! [ -z "$ROUTE_SET" ]; then
-            complete
-            touch .done
-            # edit .start.sh to save progress
-            sed "s/#village1 //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
-        elif ! [ -z "$PING2" ] && [ -f .ping ]; then
-            ping_aftermath
-        elif [ -f .ping ]; then
-            prompt_for_hint
+    if ! [ -f .task_done ]; then
+        if ! [ -f .first ]; then
+            farm_next_task
+            touch .first
+        else
+            SECRET="flag{farm-friends-forever}"
+            printf "\nDid you get that info for me? (y / n) "
             read RESP
-            if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
-                ping_hint
+            if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+                printf "Great, what is it: "
+                read RESP
+                if [ "$RESP" = "$SECRET" ]; then
+                    farm_nc_success
+                    touch .task_done
+                    CHECKPOINT="$(get_secrets 52)_$(get_secrets 53)"
+                    sed "s/Village1Task/$CHECKPOINT/" ~/status > ~/status.tmp && mv ~/status.tmp ~/status
+                    chmod +x ~/status
+                else
+                    farm_nc_failure
+                    prompt_for_hint
+                    read RESP
+                    if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+                        farm_nc_hint
+                    else
+                        printf "Okay, if you're sure.\n\n"
+                    fi
+                fi
             else
-                no_hint
-            fi
-        elif ! [ -z "$PING" ] && ! [ -z "$ADDR_SET" ]; then
-            ping_success
-            touch .ping
-        elif ! [ -z "$ADDR_SET" ]; then
-            ip_set
-        elif [ -f .connected ]; then
-            prompt_for_hint
-            read RESP
-            if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
-                connected_hint
-            else
-                no_hint
-            fi
-        elif ! [ -z "${NS}" ]; then
-            connected
-            touch .connected
+                prompt_for_hint
+                read RESP
+                if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+                    farm_nc_hint
+                else
+                    printf "Okay, if you're sure.\n\n"
+                fi
+            fi    
         fi
     else
-        wrong_connection
+        complete
     fi
 fi

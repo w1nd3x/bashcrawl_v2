@@ -152,6 +152,8 @@ elif ! test -f .done; then
 	rm .forge.tmp
 	if [ -z "$DIFF" ]; then
 		blacksmith_complete
+		CHECKPOINT="$(get_secrets 30)_$(get_secrets 31)"
+        printf "Checkpoint 1: $CHECKPOINT\n" >> ~/.progress
 		touch .done
 	else
 		blacksmith_try_again

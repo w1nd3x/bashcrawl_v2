@@ -1,6 +1,7 @@
 
 import socket
 import threading
+import random
 
 messages = [
     "Did you see? The princess crushed the witch! Now she's CEO of a networking company. Not cool!",
@@ -48,13 +49,16 @@ def start_server(host, port):
     print(f"Server listening on {host}:{port}")
 
     while True:
-        client_socket, client_address = server_socket.accept()
-        print(f"Accepted connection from {client_address[0]}:{client_address[1]}")
-        client_handler = threading.Thread(target=handle_client_connection, args=(client_socket,))
-        client_handler.start()
+        try:
+            client_socket, client_address = server_socket.accept()
+            print(f"Accepted connection from {client_address[0]}:{client_address[1]}")
+            client_handler = threading.Thread(target=handle_client_connection, args=(client_socket,))
+            client_handler.start()
+        except:
+            print("Just keep going")
 
 if __name__ == "__main__":
-    host = "localhost"  # Change this to your server's IP address if needed
-    port = 12345  # Choose any available port number
+    host = "0.0.0.0"  # Change this to your server's IP address if needed
+    port = random.randint(8000,20000)  # Choose any available port number
 
     start_server(host, port)

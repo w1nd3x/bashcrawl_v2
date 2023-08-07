@@ -13,51 +13,49 @@
 # We're happy to provide hints.
 #
 
-
 source ~/.phrases
 ONE=1
 TWO=2
-MYNS="village2"
-MYIP="10.0.120.111"
-BADIP="111.0.120.10"
-MYGATEWAY="10.0.120.1"
+MYNS="castle2"
+MYIP="10.0.110.169"
+BADIP="10.169.110.10"
+MYGATEWAY="10.0.110.1"
 TEST="10.0.140.42"
+
 # $1: Namespace for the setup
 # $2: IP Address for the setup
 # $3: Bad IP, if there is one
 # $4: Gateway Address
 # $5: Location
 # $6: Greeting, otherwise empty
-generic_setup "$MYNS" "$MYIP" "$BADIP" "$MYGATEWAY" "Village" "$(shepherd_greeting)"
+generic_setup "$MYNS" "$MYIP" "$BADIP" "$MYGATEWAY" "Castle" "$(Evil_Witch_greeting)"
 if [ -f .done ]; then
     if ! [ -f .task_done ]; then
         if ! [ -f .first ]; then
-            cottage_next_task
+            tower_next_task
             touch .first
         else
-            if [ -f message.txt ]; then
-                nc -l 8085 > .msg.tmp
-                DIFF=$(diff .msg.tmp message.txt)
-                rm .msg.tmp
-                if [ -z $DIFF ]; then
-                    cottage_nc_success
+            PORT=$(ss -l | tr -s ' ' | tr ':' ' ' |  grep "0.0.0.0" | cut -d ' ' -f 6)
+            printf "\nDid you figure out what port my server is on? (y / n) "
+            read RESP
+            if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
+                printf "Great, what port is it: "
+                read RESP
+                if [ "$RESP" = "$PORT" ]; then
+                    tower_port_success
                     touch .task_done
-                    CHECKPOINT="$(get_secrets 54)_$(get_secrets 55)"
-                    sed "s/Village2Task/$CHECKPOINT/" ~/status > ~/status.tmp && mv ~/status.tmp ~/status
+                    CHECKPOINT="$(get_secrets 50)_$(get_secrets 51)"
+                    sed "s/Castle2Task/$CHECKPOINT/" ~/status > ~/status.tmp && mv ~/status.tmp ~/status
                     chmod +x ~/status
                 else
-                    cottage_nc_failure
-                    prompt_for_hint
-                    read RESP
-                    if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ]; then
-                        cottage_nc_hint
-                    fi
+                    port_failure
+                    port_hint
                 fi
             else
-                cottage_nc_hint
+                port_hint
             fi
         fi
     else
-        complete
+        generic_complete
     fi
 fi

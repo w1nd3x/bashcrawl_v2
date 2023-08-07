@@ -1,0 +1,367 @@
+#!/bin/bash
+#
+# If you are reading this, you have wandered out of bounds
+# and are reading the code that drives the game.
+#
+#                    Congratulations!
+#
+# Learning Linux is all about curiosity, so read this code and see
+# if you can figure out what it does.
+#
+# When you're ready to continue playing the game, though, stick to
+# the scrolls. If you're stuck, ask your instructor.
+# We're happy to provide hints.
+#
+get_secrets() {
+    input="/crossroad/City/The_Royal_Byte/.secrets.txt"
+    secretArray=()
+    while read -r line
+    do
+	secretArray+=("$line")
+    done < "$input"
+    numArray=()
+    RANDOM=$ID; for ((i=0;i<1000;i++)); do numArray+=("$RANDOM"); done
+    index=$(echo "${numArray[$1]} % ${#secretArray[@]}" | bc)
+    echo "${secretArray[$index]}"
+}
+
+# Everyone's greetings
+technician_greeting() {
+    printf "placeholder"
+}
+teller_greeting() {
+    printf "placeholder"
+}
+former_sysadmin_greeting() {
+    printf "placeholder"
+}
+Evil_Witch_greeting() {
+    printf "\nLook I know we've had our differences of opinion, but I really need access to\n"
+    printf "the network again so I can meet with my conspirat... support group.  Can you\n"
+    printf "really deny an old lady that?\n\n"
+}
+Kronk_greeting() {
+    printf "\nGuess what!?!\n\n"
+    printf "I've started an online business.  I'm selling my frying pan upgrades to the\n"
+    printf "whole kingdom!\n\n"
+    printf "At least I would be if the network were up.  Think you can 'connect' and\n"
+    printf "figure out what's going on?\n\n"
+}
+farm_hand_greeting() {
+    printf "\nWell how do you do princess!  It's good to see you again.  Do you think you\n"
+    printf "could give me a hand.  The farmer has FINALLY agreed to digitize all those\n"
+    printf "reports, but I'm having trouble getting the network working.  Do you think that\n"
+    printf "you could 'connect' and help me out?\n\n"
+}
+shepherd_greeting() {
+    printf "placeholder"
+}
+farmer_greeting() {
+    printf "placeholder"
+}
+sheriff_greeting() {
+    printf "placeholder"
+}
+blacksmith_greeting() {
+    printf "placeholder"
+}
+carpenter_greeting() {
+    printf "placeholder"
+}
+fran_greeting() {
+    printf "\nHey, good to see you again!  I managed to get out and get a job!\n\n"
+    printf "So I tried to set up that IP Address thing that the manual talked about,\n"
+    printf "but the more I did it the worse everything seemed to get.\n\n"
+    printf "Do you think you can 'connect' and figure it out.\n\n"
+}
+
+
+# $1: The location you are connecting to
+generic_greeting() {
+    printf "\nHey, welcome to $1.  Why don't you go ahead and 'connect'.\n\n"
+}
+
+# $1: The ip address the host is supposed to have
+generic_connected() {
+    printf "\nGreat, you're in!\n\n"
+    printf "My computer is supposed to be at $1.\n\n"
+}
+
+generic_ip_set() {
+    printf "\nSilly me.  Who knows how I could have messed that up.  Thanks for fixing up my\n"
+    printf "ip address.\n\n"
+}
+
+generic_routed() {
+    printf "\nAmazing!!! It connects.  Technology is something else.\n\n"
+}
+
+generic_wrong_connection() {
+    printf "\nIt looks like you're connected to one of the other computers in the kingdom.\n\n"
+}
+
+generic_complete() {
+    printf "\nWell it looks like you've fixed everything here.\n\n"
+}
+
+ping_success() {
+    printf "\nWell thank goodness.  I was worried you wouldn't be able to get me connected.\n\n"
+    printf "Now can you make sure I can get to the test computer?  It's at 10.0.140.42.\n\n"
+}
+
+ping_hint() {
+    printf "\nHint:\n"
+    printf "You should run the command 'ping -c3 10.0.140.42'\n\n"
+}
+
+# $1: The location you need to set up
+router_setup() {
+    printf "\nI don't think there's much you can do here until you set up the $1 router\n"
+    printf "for our network.  Talk to the technician if you need help.\n\n"
+}
+
+prompt_for_hint() {
+    printf "Did you need some help?\n\n"
+    printf "You can check out this manual if you'd like. (y/n) "
+}
+
+no_hint() {
+    printf "\nIf you're sure, but I'm supposed to have a meeting soon... I mean no pressure.\n\n"
+}
+
+ip_add_hint() {
+    printf "\n\nTo add an ip address you need to know what interface you are going to put it\n"
+    printf "on.  To check the interfaces you can use:\n\n"
+    printf "    ip address\n\n"
+    printf "From there you can use the add command of ip address to attach an address to\n"
+    printf "an interface.  It'll look something like:\n\n"
+    printf "    ip address add <ip address>/24 dev <interface>\n\n"
+}
+
+ip_del_hint() {
+    printf "\nI think there might be a bad ip address on my interface.\n\n"
+    printf "You can check with the 'ip address' command.\n\n"
+    printf "You can also remove bad ip addresses with that same command.  You just use\n"
+    printf "delete instead of add.\n\n"
+    printf "If the manual is to be believed it should look something like this:\n\n"
+    printf "    ip address delete <bad ip address>/24 dev <interface>\n\n"
+}
+
+prompt_set_route() {
+    printf "\nDo you think you could take a look at my connection to the test computer now?\n\n"
+    printf "It seems like I'm still not quite connected up to the rest of the network.\n\n"
+}
+
+# $1: The network that the route you're adding is on (ex. 10.0.110)
+route_add_hint() {
+    printf "\nIt looks like we need to setup a default gateway.  A default gateway tells a\n"
+    printf "computer where to send traffic it doesn't have a route for.  Right now the\n"
+    printf "computer knows where to send any traffic starting with $1, but not any\n"
+    printf "of the other traffic.  To fix that we can use the ip route command.\n\n"
+    printf "It should look something like this:\n\n"
+    printf "    ip route add default via <default gateway> dev <interface>\n\n"
+    printf "The default gateway should be the address of the router, and the interface\n"
+    printf "should be the one we have the connects us to the router.\n\n"
+}
+
+route_del_hint() {
+    printf "\nWe can remove a route just like how we added one.  It'll look something like:\n\n"
+    printf "    ip route delete default via <ip address> dev <interface>\n\n"
+}
+
+# Follow-on Tasks for stuff
+workshop_next_task() {
+    printf "\nSo about that online business...\n\n"
+    printf "I tried to set up a storefront, but I can't figure out what port it's on.  Do\n"
+    printf "you think you could help me out with that?\n\n"
+}
+
+tower_next_task() {
+    printf "\nWow.  It all works?  That's kinda surprising.  Well I have a little server\n"
+    printf "program I downloaded off of gregslist.  I can't figure out what port other\n"
+    printf "people are supposed to connect over.  Could you check for me?\n\n"
+}
+
+cottage_next_task() {
+    printf "\nNow that you've fixed up my connection I have a friend who's been trying to\n"
+    printf "reach me. I told them I would be listening for their message on port 8085.\n\n"
+    printf "Could you save the message here as message.txt?\n\n"
+}
+
+farm_next_task() {
+    printf "\nNow that you've fixed up my connection there's a thing I need to connect to on\n"
+    printf "port 8675 at 10.0.140.84.  My friend Flem left a message there for me... You\n"
+    printf "may have to create a login.  Think you can help me out.\n\n"
+}
+
+station_next_task() {
+    printf "\nYour predecessor was a real shady character.  When they set up that test\n"
+    printf "computer the crime rate almost tripled.  Do you think you could scan the ports\n"
+    printf "on that computer and see if anything suspicious pops up?\n\n"
+}
+
+cafe_next_task() {
+    printf "\nDo you think you could do me one more favor? My friend Florian set up a server\n"
+    printf "so we could talk, but I'm stuck here at work. Could you connect to it and see\n"
+    printf "what they wanted to tell me so bad?\n\n"
+    printf "I'm pretty sure it was on a port above 10000.  But you should be able to handle\n"
+    printf "that, right?\n\n"
+    printf "Florian said the server was at 10.0.100.25.\n\n"
+    printf "Once you figure out where that message is could you save it here as\n"
+    printf "message.txt.\n\n"
+}
+
+# Follow-on Task Hints
+port_hint() {
+    printf "\nTo figure out what ports are connected we can use the 'ss' command.  ss stands\n"
+    printf "for socket statistics and it will get us all the info about connections (often\n"
+    printf "called sockets) on our computer.\n\n"
+    printf "To see where a server might be we should look for connections that are\n"
+    printf "listening.  Consult with man and figure out how to get ss to tell you what the\n"
+    printf "listening sockets are.\n\n"
+}
+
+cottage_nc_hint() {
+    printf "placeholder"
+}
+
+farm_nc_hint() {
+    printf "placeholder"
+}
+
+station_nc_hint() {
+    printf "TODO"
+}
+
+cafe_nc_hint() {
+    printf "TODO"
+}
+
+# Follow-on Task Failure Messages
+port_failure() {
+    printf "That doesn't seem right, you may want to check ss again.\n\n"
+}
+
+cottage_nc_failure() {
+    printf "placeholder"
+}
+
+farm_nc_failure() {
+    printf "TODO"
+}
+
+station_nc_failure() {
+    printf "TODO"
+}
+
+cafe_nc_failure() {
+    printf "TODO"
+}
+
+# Follow-on Task Success Messages
+workshop_port_success() {
+    printf "This is amazing!!! I can actually browse through my shop!!\n\n"
+    printf "Thank you for all your help!\n\n"
+    printf "Don't forget to disconnect!\n\n"
+}
+
+tower_port_success() {
+    printf "\nLet me check........\n\n"
+    printf "Excellent!  Now all my conspirat... friends will be able to connect.  I really\n"
+    printf "appreciate the help.\n\n"
+}
+
+cottage_nc_success() {
+    printf "\nYes, very good! I shall devise a proper response to this message.\n\n"
+}
+
+farm_nc_success() {
+    printf "\nStupid Flem, he doesn't know anything.  Thanks for looking into this for me.\n\n"
+    printf "Ummm. Would you mind keeping all this between us princess?\n\n"
+}
+
+station_nc_success() {
+    printf "TODO"
+}
+
+cafe_nc_success() {
+    printf "TODO"
+}
+
+#
+#
+#
+# $1: Namespace for the setup
+# $2: IP Address for the setup
+# $3: Bad IP, if there is one
+# $4: Gateway Address
+# $5: Location
+# $6: Greeting, otherwise empty
+generic_setup() {
+    MYNS="$1"
+    MYIP="$2"
+    BADIP="$3"
+    MYGATEWAY="$4"
+    LOCATION="$5"
+    GREETING="$6"
+    TEST="10.0.140.42"
+    NS=$(command ip netns identify)
+    if ! [ -f ~/.router1 ]; then
+        router_setup $LOCATION
+    elif ! [ -f .done ]; then
+        if [ -z "${NS}" ]; then
+            if [ -z "$GREETING" ]; then
+                generic_greeting "$LOCATION"
+            else
+                printf "$GREETING\n\n"
+            fi
+        elif [ "$NS" = "$MYNS" ]; then
+            ADDR_SET=$(ip a | grep -o "$MYIP/24 scope global ${MYNS}0")
+            BAD_ADDR=$(ip a | grep -o "$BADIP/24 scope global ${MYNS}0")
+            PING=$(cat ~/.bash_history | grep -o "ping .* $MYGATEWAY")
+            PING2=$(cat ~/.bash_history | grep -o "ping .* $TEST")
+            ROUTE_SET=$(ip route | grep -o "default via $MYGATEWAY dev ${MYNS}0")
+            ROUTE_UP=$(command ip netns exec test ping -c1 -W1 $TEST | grep -o from 2> /dev/null)
+            if [ -z "$ADDR_SET" ] || ! [ -z "$BAD_ADDR" ]; then
+                generic_connected "$MYIP"
+                if [ -f .first ]; then
+                    prompt_for_hint
+                    read RESP
+                    if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
+                        if [ -z "$ADDR_SET" ]; then ip_add_hint; fi
+                        if ! [ -z "$BAD_ADDR" ]; then ip_del_hint; fi
+                    else
+                        no_hint
+                    fi
+                else
+                    touch .first
+                fi
+            elif [ -z "$ROUTE_SET" ] || [ -z "$ROUTE_UP" ]; then
+                if ! [ -f .second ]; then
+                    generic_ip_set
+                    touch .second
+                    prompt_set_route
+                else
+                    prompt_set_route
+                    prompt_for_hint
+                    read RESP
+                    if [ "$RESP" = "y" -o "$RESP" = "Y" ];then
+                        if [ -z "$ROUTE_SET" ]; then route_add_hint; fi
+                        if [ -z "$ROUTE_UP" ]; then route_del_hint; fi
+                    else
+                        no_hint
+                    fi
+                fi
+            else
+                generic_routed
+                touch .done
+                rm .first .second
+                # edit .start.sh to save progress
+                sed "s/#$MYNS //" /.start.sh > /.start.sh.tmp && mv /.start.sh.tmp /.start.sh
+            fi
+        else
+            wrong_connection
+        fi
+    fi
+}
+
