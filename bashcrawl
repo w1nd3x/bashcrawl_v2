@@ -199,14 +199,9 @@ cp $(which ss) $JAIL/bin/
 # cp $(which strace) $JAIL/bin/
 for i in $(ldd $JAIL/bin/{file,bash,ip,ping,nc,ss} | sed "s/(.*)//; s/^ *//; s/ *$//; s/\/bin\/.*://; s/ => /=>/" | sort | uniq) 
 do
-    j=$(echo $i | sed "s/=>.*//")
     i=$(echo $i | sed "s/.*=>//")
     if test -f "$i"; then
-        if test $i = $j; then
-            cp $i $JAIL/lib64/
-        else
-            cp --parents $i $JAIL
-        fi
+        cp --parents $i $JAIL
     fi
 done
 
