@@ -1,6 +1,6 @@
 # Welcome!
 
-This is a game to teach you the basics of using a Linux terminal.
+This is a game to teach you the basics of using a Linux terminal.  It is based on the original [bashcrawl CLI game](https://gitlab.com/slackermedia/bashcrawl) from [slackermedia](https://gitlab.com/slackermedia).
 
 ## Try it on your machine
 
